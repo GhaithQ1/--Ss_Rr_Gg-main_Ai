@@ -90,7 +90,7 @@ const Header = () => {
     MyData.profilImage
       ? MyData.profilImage.startsWith("http")
         ? MyData.profilImage
-        : `https://ss-rr-gg-main-ai.vercel.app/user/${MyData.profilImage}`
+        : `https://backendprojecr-production.up.railway.app/user/${MyData.profilImage}`
       : "/image/pngegg.png"
   }
   alt={`Image of ${MyData.name}`}
