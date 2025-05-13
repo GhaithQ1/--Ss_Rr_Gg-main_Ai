@@ -10,6 +10,7 @@ const Create_Bost_choose_the_correct_answer = () => {
   const Navigate = useNavigate();
   const [cookies] = useCookies(["token"]);
   const [errors, setErrors] = useState({});
+      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   const [questions, setQuestions] = useState([
     { question: '', Answer_1: '', Answer_2: '', Answer_3: '', Answer_4: '' }
@@ -77,7 +78,7 @@ const Create_Bost_choose_the_correct_answer = () => {
       });
   
       // إرسال البيانات إلى الخادم
-      await axios.post(`http://localhost:8000/api/v2/post/post_2`, {
+      await axios.post(`${API}/post/post_2`, {
         questions: preparedQuestions
       }, {
         headers: {

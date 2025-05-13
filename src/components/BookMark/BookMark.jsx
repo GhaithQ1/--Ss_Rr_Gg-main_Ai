@@ -30,7 +30,7 @@ import { createPortal } from "react-dom";
 
 const MediaGalleryModal = ({ isOpen, onClose, media, currentIndex, setCurrentIndex }) => {
   if (!isOpen) return null;
-  
+    const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
   const handlePrevious = () => {
     setCurrentIndex(prev => (prev === 0 ? media.length - 1 : prev - 1));
   };
@@ -151,7 +151,7 @@ const BookMark = () => {
     try {
       setrelod_coment(true)
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/create_post_comments/${id}`,
+        `${API}/post/create_post_comments/${id}`,
         {
           comment: commentValue,
         },
@@ -173,7 +173,7 @@ const BookMark = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/v2/auth/get_date_my`, {
+      .get(`${API}/auth/get_date_my`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -197,7 +197,7 @@ const BookMark = () => {
     try {
       setRelod_likee(true);
       await axios.post(
-        `http://localhost:8000/api/v2/post/toggle_post_like/${id}`,
+        `${API}/post/toggle_post_like/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
@@ -216,7 +216,7 @@ const BookMark = () => {
     const fetchMyData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/v2/auth/get_date_my",
+          `${API}/auth/get_date_my`,
           {
             headers: { Authorization: `Bearer ${cookies.token}` },
           }
@@ -238,7 +238,7 @@ const BookMark = () => {
   const bookMarks = async (id) => {
     try {
       await axios.post(
-        `http://localhost:8000/api/v2/auth/toggleSavedPost/${id}`,
+        `${API}/auth/toggleSavedPost/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
@@ -271,7 +271,7 @@ const BookMark = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_3_chick`, // URL الخاص بالـ API
+        `${API}/post/post_3_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -299,7 +299,7 @@ const BookMark = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_2_chick`, // URL الخاص بالـ API
+        `${API}/post/post_2_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -349,7 +349,7 @@ const BookMark = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_4_chick`, // URL الخاص بالـ API
+        `${API}/post/post_4_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,

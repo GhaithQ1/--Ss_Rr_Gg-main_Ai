@@ -12,8 +12,10 @@ const Create_Bost_Ifrem = () => {
   const [errors, setErrors] = useState({});
   const [url,SetUrl] = useState("");
   const [des,SetDes] = useState("");
+        const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
+
   const Ifrem = ()=>{
-    axios.post('http://localhost:8000/api/v2/post/post_6',{
+    axios.post(`${API}/post/post_6`,{
       url,
       des
     },{

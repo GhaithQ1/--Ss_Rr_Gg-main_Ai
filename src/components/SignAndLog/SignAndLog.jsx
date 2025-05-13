@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 const SignAndLog = () => {
     const [Cook, setCookies] = useCookies("token");
     const [isSignUpActive, setIsSignUpActive] = useState(false);
+      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -67,7 +68,7 @@ const SignAndLog = () => {
         if (hasError) return;
 
         try {
-            const response = await axios.post('http://localhost:8000/api/v2/auth/sign_up', {
+            const response = await axios.post(`${API}/auth/sign_up`, {
                 name,
                 email,
                 password,
@@ -101,7 +102,7 @@ const SignAndLog = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8000/api/v2/auth/login', {
+            const response = await axios.post( `${API}/auth/login`, {
                 email,
                 password,
             });

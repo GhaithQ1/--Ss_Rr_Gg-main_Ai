@@ -28,7 +28,7 @@ import Loading_Bookmark from "../Loading_Bookmark/Loading_Bookmark";
 // Facebook-like Modal Gallery Component
 const MediaGalleryModal = ({ isOpen, onClose, media, currentIndex, setCurrentIndex }) => {
   if (!isOpen) return null;
-  
+      
   const handlePrevious = () => {
     setCurrentIndex(prev => (prev === 0 ? media.length - 1 : prev - 1));
   };
@@ -98,6 +98,7 @@ const MediaGalleryModal = ({ isOpen, onClose, media, currentIndex, setCurrentInd
 };
 
 const Bosts = () => {
+    const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
   const audioRefs = useRef([]);
   const [posts, setPosts] = useState([]);
   const [galleryModalOpen, setGalleryModalOpen] = useState(false);
@@ -135,7 +136,7 @@ const Bosts = () => {
     try {
       setrelod_coment(true);
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/create_post_comments/${id}`,
+        `${API}/post/create_post_comments/${id}`,
         {
           comment: commentValue,
         },
@@ -157,7 +158,7 @@ const Bosts = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/api/v2/post`, {
+        const res = await axios.get(`${API}/post`, {
           headers: { Authorization: `Bearer ${cookies.token}` },
         });
         setPosts(res.data.data);
@@ -181,7 +182,7 @@ const Bosts = () => {
     try {
       setRelod_likee(true);
       await axios.post(
-        `http://localhost:8000/api/v2/post/toggle_post_like/${id}`,
+        `${API}/post/toggle_post_like/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
@@ -198,7 +199,7 @@ const Bosts = () => {
     const fetchMyData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/v2/auth/get_date_my",
+          `${API}/auth/get_date_my`,
           {
             headers: { Authorization: `Bearer ${cookies.token}` },
           }
@@ -220,7 +221,7 @@ const Bosts = () => {
     try {
       setrelod_Bookmark(true);
       await axios.post(
-        `http://localhost:8000/api/v2/auth/toggleSavedPost/${id}`,
+        `${API}/auth/toggleSavedPost/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
@@ -253,7 +254,7 @@ const Bosts = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_3_chick`, // URL الخاص بالـ API
+        `${API}/post/post_3_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -281,7 +282,7 @@ const Bosts = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_2_chick`, // URL الخاص بالـ API
+        `${API}/post/post_2_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -331,7 +332,7 @@ const Bosts = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_4_chick`, // URL الخاص بالـ API
+        `${API}/post/post_4_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,

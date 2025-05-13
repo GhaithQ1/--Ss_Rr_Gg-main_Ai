@@ -8,6 +8,7 @@ const Create_menu = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [Mydata, SetMydata] = useState({});
   const [cookies] = useCookies(['token']);
+      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
@@ -16,7 +17,7 @@ const Create_menu = () => {
     const fetchMyData = async () => {
       try {
         const res = await axios.get(
-          'http://localhost:8000/api/v2/auth/get_date_my',
+          `${API}/auth/get_date_my`,
           {
             headers: { Authorization: `Bearer ${cookies.token}` },
           }

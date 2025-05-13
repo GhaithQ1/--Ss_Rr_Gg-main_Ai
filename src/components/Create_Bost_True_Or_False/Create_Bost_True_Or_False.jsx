@@ -11,6 +11,7 @@ const Create_Bost_True_Or_False = () => {
   const [questions, setQuestions] = useState([{ question: '', condition: '' }]); // البداية مع سؤال واحد
   const Navigate = useNavigate();
   const [cookies] = useCookies(["token"]);
+        const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   // تحديث الأسئلة
   const handleQuestionChange = (index, event) => {
@@ -41,7 +42,7 @@ const Create_Bost_True_Or_False = () => {
   };
   // إرسال البيانات إلى الخادم
   const handleSubmit = () => {
-    axios.post('http://localhost:8000/api/v2/post/post_3', {
+    axios.post(`${API}/post/post_3`, {
       questions: questions.map(q => ({
         question: q.question,
         condition: q.condition === 'true' ? true : false

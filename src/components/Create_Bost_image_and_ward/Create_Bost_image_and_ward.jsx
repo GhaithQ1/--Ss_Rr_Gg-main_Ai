@@ -9,6 +9,7 @@ import Chat from "../chat/Chat";
 const Create_Bost_image_and_ward = () => {
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
+        const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   // الحالة لتتبع النماذج المضافة
   const [forms, setForms] = useState([{ image: null, audio: null, word: "" }]);
@@ -49,7 +50,7 @@ const Create_Bost_image_and_ward = () => {
     });
 
     axios
-      .post("http://localhost:8000/api/v2/post/post_1", formData, {
+      .post(`${API}/post/post_1`, formData, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },

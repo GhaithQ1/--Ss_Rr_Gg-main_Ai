@@ -13,6 +13,7 @@ const Create_Bost_image_and_answer = () => {
   const [formErrors, setFormErrors] = useState({});
   const [cookies] = useCookies(['token']);
   const navigate = useNavigate();
+        const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   const addNewQuestion = () => {
     setQuestions([...questions, { img: null, word_1: "", word_2: "", word_3: "", word_4: "", correctWord: "" }]);
@@ -95,7 +96,7 @@ const Create_Bost_image_and_answer = () => {
       });
   
       // إرسال البيانات إلى الخادم
-      await axios.post('http://localhost:8000/api/v2/post/post_4', formData, {
+      await axios.post(`${API}/post/post_4`, formData, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },

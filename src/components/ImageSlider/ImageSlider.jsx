@@ -12,13 +12,14 @@ const ImageSlider = () => {
   const [cookies, setCookies] = useCookies(["token"]);
   const Navigate = useNavigate();
   const { setGatUserById } = useUser();
+      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   const [AllImageShoole, SetAllImageShoole] = useState([]);
   const [load_img, SetLoad_img] = useState(false);
   useEffect(() => {
     SetLoad_img(true)
     axios
-      .get(`http://localhost:8000/api/v2/user`, {
+      .get(`${API}/user`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },

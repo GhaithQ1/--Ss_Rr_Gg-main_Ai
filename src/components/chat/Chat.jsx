@@ -37,7 +37,8 @@ const Chat = () => {
 
   // ====================================================
 
-  const API = 'http://localhost:8000/api/v2';
+      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
+     
 
   const headers = {
     headers: { Authorization: `Bearer ${cookies.token}` },

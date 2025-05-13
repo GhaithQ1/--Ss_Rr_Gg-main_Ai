@@ -42,6 +42,7 @@ const MediaGalleryModal = ({
   setCurrentIndex,
 }) => {
   if (!isOpen) return null;
+     
 
   const handlePrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? media.length - 1 : prev - 1));
@@ -119,6 +120,7 @@ const Profile = () => {
   const [galleryMedia, setGalleryMedia] = useState([]);
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const [galleryModalOpen, setGalleryModalOpen] = useState(false);
+   const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   const Navigate = useNavigate();
 
@@ -160,7 +162,7 @@ const Profile = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/v2/auth/get_date_my`, {
+      .get(`${API}/auth/get_date_my`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -181,7 +183,7 @@ const Profile = () => {
   useEffect(() => {
     if (!user1Id) return; // لا تعمل شي إذا ما وصل الاي دي
     axios
-      .get(`http://localhost:8000/api/v2/post/getUserPosts/${user1Id}`, {
+      .get(`${API}/post/getUserPosts/${user1Id}`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -207,7 +209,7 @@ const Profile = () => {
     try {
       setrelod_coment(true);
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/create_post_comments/${id}`,
+        `${API}/post/create_post_comments/${id}`,
         {
           comment: commentValue,
         },
@@ -230,7 +232,7 @@ const Profile = () => {
     try {
       setRelod_likee(true);
       await axios.post(
-        `http://localhost:8000/api/v2/post/toggle_post_like/${id}`,
+        `${API}/post/toggle_post_like/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
@@ -248,7 +250,7 @@ const Profile = () => {
     const fetchMyData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/v2/auth/get_date_my",
+          `${API}/auth/get_date_my`,
           {
             headers: { Authorization: `Bearer ${cookies.token}` },
           }
@@ -271,7 +273,7 @@ const Profile = () => {
     try {
       setrelod_Bookmark(true);
       await axios.post(
-        `http://localhost:8000/api/v2/auth/toggleSavedPost/${id}`,
+        `${API}/auth/toggleSavedPost/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
@@ -304,7 +306,7 @@ const Profile = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_3_chick`, // URL الخاص بالـ API
+        `${API}/post/post_3_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -332,7 +334,7 @@ const Profile = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_2_chick`, // URL الخاص بالـ API
+        `${API}/post/post_2_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -382,7 +384,7 @@ const Profile = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_4_chick`, // URL الخاص بالـ API
+        `${API}/post/post_4_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -428,7 +430,7 @@ const Profile = () => {
     try {
       setDeleting_Please(true);
       await axios.delete(
-        `http://localhost:8000/api/v2/post/${Confirm_deletionnID}`,
+        `${API}/post/${Confirm_deletionnID}`,
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
         }

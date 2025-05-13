@@ -16,6 +16,7 @@ import EmojiPicker from 'emoji-picker-react';
 import { useNavigate } from "react-router-dom";
 const Chat_AI = () => {
     const Navigate = useNavigate();
+          const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
@@ -131,7 +132,7 @@ const Chat_AI = () => {
     const [loadingTitles, setLoadingTitles] = useState(false);
     // Fetch user data and conversations on component mount
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/v2/auth/get_date_my`, {
+        axios.get(`${API}/auth/get_date_my`, {
             headers: {
                 Authorization: `Bearer ${cookies.token}`,
             },
@@ -181,7 +182,7 @@ const Chat_AI = () => {
 
                             // جلب رسائل المحادثة للحصول على العنوان
                             try {
-                                const response = await axios.get(`http://localhost:8000/api/v2/chat_AI/${conv.id_thread}`, {
+                                const response = await axios.get(`${API}/chat_AI/${conv.id_thread}`, {
                                     headers: {
                                         Authorization: `Bearer ${cookies.token}`,
                                     },
@@ -218,7 +219,7 @@ const Chat_AI = () => {
                         setLoadingTitles(false);
                         
                         // إنشاء محادثة جديدة تلقائياً
-                        const response = await axios.post('http://localhost:8000/api/v2/chat_AI/craete',
+                        const response = await axios.post(`${API}/chat_AI/craete`,
                             { message: 'Start new chat' },
                             {
                                 headers: {
@@ -275,7 +276,7 @@ const Chat_AI = () => {
         setConversationLoading(true);
         setMessages([]); // مسح الرسائل السابقة أثناء التحميل
 
-        axios.get(`http://localhost:8000/api/v2/chat_AI/${activeConversation}`, {
+        axios.get(`${API}/chat_AI/${activeConversation}`, {
             headers: {
                 Authorization: `Bearer ${cookies.token}`,
             },
@@ -523,7 +524,7 @@ const Chat_AI = () => {
                 console.log('No active thread, creating a new one before sending message');
                 
                 // Create a new thread first
-                const threadResponse = await axios.post('http://localhost:8000/api/v2/chat_AI/craete', 
+                const threadResponse = await axios.post(`${API}/chat_AI/craete`, 
                     { message: 'Start new chat' }, 
                     {
                         headers: {
@@ -614,7 +615,7 @@ const Chat_AI = () => {
 
         try {
             // Send message to the API
-            const res = await axios.post("http://localhost:8000/api/v2/chat_AI", formData, {
+            const res = await axios.post(`${API}/chat_AI`, formData, {
                 headers: {
                     Authorization: `Bearer ${cookies.token}`,
                     'Content-Type': 'multipart/form-data'
@@ -661,7 +662,7 @@ const Chat_AI = () => {
             setCreatingNewChat(true);
             
             // إرسال طلب لإنشاء محادثة جديدة
-            const response = await axios.post('http://localhost:8000/api/v2/chat_AI/craete', { message: 'Start new chat' }, {
+            const response = await axios.post(`${API}/chat_AI/craete`, { message: 'Start new chat' }, {
                 headers: {
                     Authorization: `Bearer ${cookies.token}`,
                 },
@@ -744,7 +745,7 @@ const Chat_AI = () => {
         setIsDeleting(true);
         
         try {
-            const response = await axios.delete(`http://localhost:8000/api/v2/chat_AI/${conversationId}`, {
+            const response = await axios.delete(`${API}/chat_AI/${conversationId}`, {
                 headers: {
                     Authorization: `Bearer ${cookies.token}`,
                 },
@@ -838,7 +839,7 @@ const Chat_AI = () => {
             setMessages(prev => [...prev, loadingMessage]);
             // لا نقوم بتفعيل حالة التحميل لتجنب ظهور المؤشر في الأسفل
 
-            const res = await axios.post("http://localhost:8000/api/v2/chat_AI", formData, {
+            const res = await axios.post(`${API}/chat_AI`, formData, {
                 headers: {
                     Authorization: `Bearer ${cookies.token}`,
                     'Content-Type': 'multipart/form-data'

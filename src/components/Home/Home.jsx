@@ -14,12 +14,13 @@ const Home = () => {
 
   const token = window.localStorage.getItem("token");
   const [cookies, setCookies] = useCookies("token");
+      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   useEffect(() => {
     const fetchMyData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/v2/auth/get_date_my",
+          `${API}/auth/get_date_my`,
           {
             headers: { Authorization: `Bearer ${cookies.token}` },
           }

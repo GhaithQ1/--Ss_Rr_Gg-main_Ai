@@ -11,6 +11,7 @@ import Loading_input from "../Loading_input/Loading_input";
 
 export default function UpdateProfile() {
   const Navigate = useNavigate();
+      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   const [cookies] = useCookies(["token"]);
 
@@ -44,7 +45,7 @@ export default function UpdateProfile() {
     setLoadInput(true)
     const fetchUserData = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/v2/auth/get_date_my", {
+        const res = await axios.get(`${API}/auth/get_date_my`, {
           headers: { Authorization: `Bearer ${cookies.token}` },
         });
         setUserData(res.data.data);
@@ -80,7 +81,7 @@ export default function UpdateProfile() {
   
       console.log("Data being sent:", formData);
   
-      await axios.put("http://localhost:8000/api/v2/user", formData, {
+      await axios.put(`${API}/user`, formData, {
         headers: { 
           Authorization: `Bearer ${cookies.token}`,
           "Content-Type": "multipart/form-data",

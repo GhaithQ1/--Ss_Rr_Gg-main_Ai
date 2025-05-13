@@ -9,6 +9,8 @@ import EmojiPicker from "emoji-picker-react";
 import Loading_Chat from "../Loading_Chat/Loading_Chat";
 
 const ChatBetweenUsers = () => {
+        const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
+
   const { userById } = useUser();
   const [reload, setReload] = useState(false);
   const [loadingRequest, setLoadingRequest] = useState(true);
@@ -48,7 +50,7 @@ const ChatBetweenUsers = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/v2/auth/get_date_my", {
+      .get(`${API}/auth/get_date_my`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -98,7 +100,7 @@ const ChatBetweenUsers = () => {
         const lastMessageTime = localStorage.getItem(lastMessageTimeKey) || 0;
         
         const res = await axios.get(
-          `http://localhost:8000/api/v2/chat/${user1Id}/${userById._id}`,
+          `${API}/chat/${user1Id}/${userById._id}`,
           {
             headers: {
               Authorization: `Bearer ${cookies.token}`,
@@ -160,7 +162,7 @@ const ChatBetweenUsers = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:8000/api/v2/chat`,
+        `${API}/chat`,
         {
           user1Id,
           user2Id: userById._id,

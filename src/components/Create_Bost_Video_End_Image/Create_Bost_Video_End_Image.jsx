@@ -12,6 +12,7 @@ const Create_Bost_Video_and_image = () => {
   const [formErrors, setFormErrors] = useState({});
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
+        const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   const [qus1, Setrqs1] = useState("");
 
@@ -70,7 +71,7 @@ const Create_Bost_Video_and_image = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v2/post/post",
+        `${API}/post/post`,
         formData,
         {
           headers: {

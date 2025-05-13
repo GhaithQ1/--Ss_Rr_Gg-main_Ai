@@ -139,11 +139,12 @@ const Get_Shoole_By_Id = () => {
 
   const [relod_Bookmark, setrelod_Bookmark] = useState(false);
 
+      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   useEffect(() => {
     if (!idParams) return; // لا تعمل شي إذا ما وصل الاي دي
     axios
-      .get(`http://localhost:8000/api/v2/user/${idParams}`, {
+      .get(`${API}/user/${idParams}`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -166,7 +167,7 @@ const Get_Shoole_By_Id = () => {
   useEffect(() => {
     if (!idParams) return; // لا تعمل شي إذا ما وصل الاي دي
     axios
-      .get(`http://localhost:8000/api/v2/post/getUserPosts/${idParams}`, {
+      .get(`${API}/post/getUserPosts/${idParams}`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -193,7 +194,7 @@ const Get_Shoole_By_Id = () => {
     try {
       setrelod_coment(true)
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/create_post_comments/${id}`,
+        `${API}/post/create_post_comments/${id}`,
         {
           comment: commentValue,
         },
@@ -217,7 +218,7 @@ const Get_Shoole_By_Id = () => {
     try {
       setRelod_likee(true);
       await axios.post(
-        `http://localhost:8000/api/v2/post/toggle_post_like/${id}`,
+        `${API}/post/toggle_post_like/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
@@ -236,7 +237,7 @@ const Get_Shoole_By_Id = () => {
     const fetchMyData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/v2/auth/get_date_my",
+          `${API}/auth/get_date_my`,
           {
             headers: { Authorization: `Bearer ${cookies.token}` },
           }
@@ -259,7 +260,7 @@ const Get_Shoole_By_Id = () => {
     try {
       setrelod_Bookmark(true);
       await axios.post(
-        `http://localhost:8000/api/v2/auth/toggleSavedPost/${id}`,
+        `${API}/auth/toggleSavedPost/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
@@ -292,7 +293,7 @@ const Get_Shoole_By_Id = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_3_chick`, // URL الخاص بالـ API
+        `${API}/post/post_3_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -320,7 +321,7 @@ const Get_Shoole_By_Id = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_2_chick`, // URL الخاص بالـ API
+        `${API}/post/post_2_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -370,7 +371,7 @@ const Get_Shoole_By_Id = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `http://localhost:8000/api/v2/post/post_4_chick`, // URL الخاص بالـ API
+        `${API}/post/post_4_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,

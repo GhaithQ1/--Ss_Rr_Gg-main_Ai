@@ -9,6 +9,7 @@ import { NavLink } from 'react-router-dom';
 
 const Header = () => {
   const [menuVisible, setMenuVisible] = useState(false);
+      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   const handleProfileClick = () => {
     setMenuVisible(!menuVisible);
@@ -18,7 +19,7 @@ const Header = () => {
   const Navigate = useNavigate();
 
   const logout = () => {
-    axios.put('http://localhost:8000/api/v2/auth/logout', {}, {
+    axios.put(`${API}/auth/logout`, {}, {
       headers: {
         Authorization: `Bearer ${cookies.token}`,
       }
@@ -32,7 +33,7 @@ const Header = () => {
   }
   const [MyData, setMyData] = useState([]);
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/v2/auth/get_date_my`, {
+    axios.get(`${API}/auth/get_date_my`, {
       headers: {
         Authorization: `Bearer ${cookies.token}`,
       },
