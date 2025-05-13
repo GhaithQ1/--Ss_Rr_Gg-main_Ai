@@ -194,7 +194,7 @@ const SignAndLog = () => {
                                     const top = (window.innerHeight - height) / 1;
 
                                     window.open(
-                                        "http://localhost:8000/auth/google",
+                                        "http://backendprojecr-production.up.railway.app/auth/google",
                                         "Google Login",
                                         `width=${width},height=${height},top=${top},left=${left}`
                                     );
