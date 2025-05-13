@@ -977,7 +977,7 @@ const Chat_AI = () => {
                                                         <img
                                                             src={
                                                                 MyData.profilImage
-                                                                    ? MyData.profilImage.startsWith("http")
+                                                                    ? MyData.profilImage.startsWith("https")
                                                                         ? MyData.profilImage
                                                                         : `https://ss-rr-gg-main-ai.vercel.app//user/${MyData.profilImage}`
                                                                     : "/image/pngegg.png"
