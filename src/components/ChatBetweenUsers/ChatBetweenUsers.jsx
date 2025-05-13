@@ -193,7 +193,7 @@ const ChatBetweenUsers = () => {
                 userById.profilImage
                   ? userById.profilImage.startsWith("http")
                     ? userById.profilImage
-                    : `https://ss-rr-gg-main-ai.vercel.app/user/${userById.profilImage}`
+                    : `https://backendprojecr-production.up.railway.app/user/${userById.profilImage}`
                   : "/image/pngegg.png"
               }
               alt={`Image of ${userById.name}`}

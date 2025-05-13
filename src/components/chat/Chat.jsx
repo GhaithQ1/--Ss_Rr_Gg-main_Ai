@@ -205,7 +205,7 @@ const Chat = () => {
                   friend?.profilImage
                     ? friend.profilImage.startsWith("http")
                       ? friend.profilImage
-                      : `https://ss-rr-gg-main-ai.vercel.app/user/${friend.profilImage}`
+                      : `https://backendprojecr-production.up.railway.app/user/${friend.profilImage}`
                     : "/image/pngegg.png"
                 }
                 alt={`Image of ${friend?.name}`}
@@ -228,7 +228,7 @@ const Chat = () => {
                     friend.profilImage
                       ? friend.profilImage.startsWith("http")
                         ? friend.profilImage
-                        : `https://ss-rr-gg-main-ai.vercel.app/user/${friend.profilImage}`
+                        : `https://backendprojecr-production.up.railway.app/user/${friend.profilImage}`
                       : "/image/pngegg.png"
                   }
                   alt={`Image of ${friend.name}`}
@@ -256,7 +256,7 @@ const Chat = () => {
                       user.profilImage
                         ? user.profilImage.startsWith("http")
                           ? user.profilImage
-                          : `https://ss-rr-gg-main-ai.vercel.app/user/${user.profilImage}`
+                          : `https://backendprojecr-production.up.railway.app/user/${user.profilImage}`
                         : "/image/pngegg.png"
                     }
                     alt={`Image of ${user.name}`}

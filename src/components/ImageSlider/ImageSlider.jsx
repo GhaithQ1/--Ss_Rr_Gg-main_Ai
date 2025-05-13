@@ -72,7 +72,7 @@ const ImageSlider = () => {
               className="log"
                src={
                   src.profilImage
-                    ? `https://ss-rr-gg-main-ai.vercel.app/user/${src.profilImage}`
+                    ? `https://backendprojecr-production.up.railway.app/user/${src.profilImage}`
                     : "/image/test.jpg"
                 } alt="" />
               
@@ -82,7 +82,7 @@ const ImageSlider = () => {
                 }}
                 src={
                   src.Cover_image
-                    ? `https://ss-rr-gg-main-ai.vercel.app/user/${src.Cover_image}`
+                    ? `https://backendprojecr-production.up.railway.app/user/${src.Cover_image}`
                     : "/image/test.jpg"
                 }
                 alt={`Image of ${src.name}`}

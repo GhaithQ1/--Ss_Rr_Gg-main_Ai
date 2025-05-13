@@ -429,7 +429,7 @@ const Get_Shoole_By_Id = () => {
                   <img
                     src={
                       GetDataById.Cover_image
-                        ? `https://ss-rr-gg-main-ai.vercel.app/user/${GetDataById.Cover_image}`
+                        ? `https://backendprojecr-production.up.railway.app/user/${GetDataById.Cover_image}`
                         : "./image/back1.jpg"
                     }
                     alt=""
@@ -441,7 +441,7 @@ const Get_Shoole_By_Id = () => {
                       GetDataById.googleId
                         ? GetDataById.profilImage || "/image/pngegg.png"
                         : GetDataById.profilImage
-                          ? `https://ss-rr-gg-main-ai.vercel.app/user/${GetDataById.profilImage}`
+                          ? `https://backendprojecr-production.up.railway.app/user/${GetDataById.profilImage}`
                           : "/image/pngegg.png"
                     }
                     alt={`Image of ${GetDataById.name}`}
@@ -451,7 +451,7 @@ const Get_Shoole_By_Id = () => {
                       GetDataById.profilImage
                         ? GetDataById.profilImage.startsWith("http")
                           ? GetDataById.profilImage
-                          : `https://ss-rr-gg-main-ai.vercel.app/user/${GetDataById.profilImage}`
+                          : `https://backendprojecr-production.up.railway.app/user/${GetDataById.profilImage}`
                         : "/image/pngegg.png"
                     }
                     alt={`Image of ${GetDataById.name}`}
@@ -519,7 +519,7 @@ const Get_Shoole_By_Id = () => {
                             <img
                               src={
                                 post.user
-                                  ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
+                                  ? `https://backendprojecr-production.up.railway.app/user/${post.user.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt=""
@@ -552,7 +552,7 @@ const Get_Shoole_By_Id = () => {
                                   <img
                                     src={
                                       pos
-                                        ? `https://ss-rr-gg-main-ai.vercel.app/posts/${pos.postImage}`
+                                        ? `https://backendprojecr-production.up.railway.app/posts/${pos.postImage}`
                                         : null
                                     }
                                     alt={`Image ${pos._id}`}
@@ -561,7 +561,7 @@ const Get_Shoole_By_Id = () => {
                                     id={pos._id}
                                     src={
                                       pos
-                                        ? `https://ss-rr-gg-main-ai.vercel.app/posts/${pos.postAudio}`
+                                        ? `https://backendprojecr-production.up.railway.app/posts/${pos.postAudio}`
                                         : null
                                     }
                                   ></audio>
@@ -664,7 +664,7 @@ const Get_Shoole_By_Id = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
+                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -705,7 +705,7 @@ const Get_Shoole_By_Id = () => {
                             <img
                               src={
                                 post.user
-                                  ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
+                                  ? `https://backendprojecr-production.up.railway.app/user/${post.user.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${post.name}`}
@@ -929,7 +929,7 @@ const Get_Shoole_By_Id = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
+                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -970,7 +970,7 @@ const Get_Shoole_By_Id = () => {
                             <img
                               src={
                                 post.user
-                                  ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
+                                  ? `https://backendprojecr-production.up.railway.app/user/${post.user.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt=""
@@ -1213,7 +1213,7 @@ const Get_Shoole_By_Id = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
+                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -1254,7 +1254,7 @@ const Get_Shoole_By_Id = () => {
                             <img
                               src={
                                 post.user
-                                  ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
+                                  ? `https://backendprojecr-production.up.railway.app/user/${post.user.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt=""
@@ -1329,7 +1329,7 @@ const Get_Shoole_By_Id = () => {
                                       <h2>What's in the picture?</h2>
                                       <div className="img_ans">
                                         <img
-                                          src={`https://ss-rr-gg-main-ai.vercel.app/posts/${item.img}`}
+                                          src={`https://backendprojecr-production.up.railway.app/posts/${item.img}`}
                                           alt="Question"
                                         />
                                         <div className="anwser">
@@ -1496,7 +1496,7 @@ const Get_Shoole_By_Id = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
+                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -1537,7 +1537,7 @@ const Get_Shoole_By_Id = () => {
                             <img
                               src={
                                 post.user
-                                  ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
+                                  ? `https://backendprojecr-production.up.railway.app/user/${post.user.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt=""
@@ -1563,7 +1563,7 @@ const Get_Shoole_By_Id = () => {
                           post.video_post.forEach((video, index) => {
                             allMedia.push({
                               type: 'video',
-                              src: `https://ss-rr-gg-main-ai.vercel.app/posts/${video}`,
+                              src: `https://backendprojecr-production.up.railway.app/posts/${video}`,
                               key: `video-${index}`
                             });
                           });
@@ -1574,7 +1574,7 @@ const Get_Shoole_By_Id = () => {
                           post.img_post.forEach((img, index) => {
                             allMedia.push({
                               type: 'image',
-                              src: `https://ss-rr-gg-main-ai.vercel.app/posts/${img}`,
+                              src: `https://backendprojecr-production.up.railway.app/posts/${img}`,
                               key: `img-${index}`
                             });
                           });
@@ -1755,7 +1755,7 @@ const Get_Shoole_By_Id = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
+                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -1793,7 +1793,7 @@ const Get_Shoole_By_Id = () => {
                             <img
                               src={
                                 post.user
-                                  ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
+                                  ? `https://backendprojecr-production.up.railway.app/user/${post.user.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt=""
@@ -1890,7 +1890,7 @@ const Get_Shoole_By_Id = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
+                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
