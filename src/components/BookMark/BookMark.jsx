@@ -449,7 +449,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `http://localhost:8000/user/${post.post.user.profilImage}`
+                            ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt=""
@@ -483,7 +483,7 @@ const BookMark = () => {
                             <img
                               src={
                                 pos
-                                  ? `http://localhost:8000/posts/${pos.postImage}`
+                                  ? `https://ss-rr-gg-main-ai.vercel.app/posts/${pos.postImage}`
                                   : null
                               }
                               alt={`Image ${pos._id}`}
@@ -492,7 +492,7 @@ const BookMark = () => {
                               id={pos._id}
                               src={
                                 pos
-                                  ? `http://localhost:8000/posts/${pos.postAudio}`
+                                  ? `https://ss-rr-gg-main-ai.vercel.app/posts/${pos.postAudio}`
                                   : null
                               }
                             ></audio>
@@ -599,7 +599,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -642,7 +642,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `http://localhost:8000/user/${post.post.user.profilImage}`
+                            ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt={`Image of ${post.post.name}`}
@@ -871,7 +871,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -914,7 +914,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `http://localhost:8000/user/${post.post.user.profilImage}`
+                            ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt=""
@@ -1149,7 +1149,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -1187,7 +1187,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `http://localhost:8000/user/${post.post.user.profilImage}`
+                            ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt=""
@@ -1262,7 +1262,7 @@ const BookMark = () => {
                                 <h2>What's in the picture?</h2>
                                 <div className="img_ans">
                                   <img
-                                    src={`http://localhost:8000/posts/${item.img}`}
+                                    src={`https://ss-rr-gg-main-ai.vercel.app/posts/${item.img}`}
                                     alt="Question"
                                   />
                                   <div className="anwser">
@@ -1413,7 +1413,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -1451,7 +1451,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `http://localhost:8000/user/${post.post.user.profilImage}`
+                            ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt=""
@@ -1470,14 +1470,14 @@ const BookMark = () => {
                       {/* <img
                         src={
                           post.post.img_post
-                            ? `http://localhost:8000/posts/${post.post.img_post}`
+                            ? `https://ss-rr-gg-main-ai.vercel.app/posts/${post.post.img_post}`
                             : null
                         }
                         alt=""
                       />
                       {post.post.video_post ? (
                         <video
-                          src={`http://localhost:8000/posts/${post.post.video_post}`}
+                          src={`https://ss-rr-gg-main-ai.vercel.app/posts/${post.post.video_post}`}
                           controls
                         ></video>
                       ) : null} */}
@@ -1491,7 +1491,7 @@ const BookMark = () => {
         post.post.video_post.forEach((video, index) => {
           allMedia.push({
             type: 'video',
-            src: `http://localhost:8000/posts/${video}`,
+            src: `https://ss-rr-gg-main-ai.vercel.app/posts/${video}`,
             key: `video-${index}`
           });
         });
@@ -1502,7 +1502,7 @@ const BookMark = () => {
         post.post.img_post.forEach((img, index) => {
           allMedia.push({
             type: 'image',
-            src: `http://localhost:8000/posts/${img}`,
+            src: `https://ss-rr-gg-main-ai.vercel.app/posts/${img}`,
             key: `img-${index}`
           });
         });
@@ -1685,7 +1685,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -1723,7 +1723,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `http://localhost:8000/user/${post.post.user.profilImage}`
+                            ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt=""
@@ -1821,7 +1821,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                    : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}

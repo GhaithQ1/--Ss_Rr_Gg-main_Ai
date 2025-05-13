@@ -510,7 +510,7 @@ const Profile = () => {
                     <img
                       src={
                         MyData.Cover_image
-                          ? `http://localhost:8000/user/${MyData.Cover_image}`
+                          ? `https://ss-rr-gg-main-ai.vercel.app/user/${MyData.Cover_image}`
                           : "./image/back1.jpg"
                       }
                       alt=""
@@ -522,7 +522,7 @@ const Profile = () => {
                         MyData.profilImage
                           ? MyData.profilImage.startsWith("http")
                             ? MyData.profilImage
-                            : `http://localhost:8000/user/${MyData.profilImage}`
+                            : `https://ss-rr-gg-main-ai.vercel.app/user/${MyData.profilImage}`
                           : "/image/pngegg.png"
                       }
                       alt={`Image of ${MyData.name}`}
@@ -647,7 +647,7 @@ const Profile = () => {
                                 <img
                                   src={
                                     post.user
-                                      ? `http://localhost:8000/user/${post.user.profilImage}`
+                                      ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
                                       : "/image/pngegg.png"
                                   }
                                   alt=""
@@ -683,7 +683,7 @@ const Profile = () => {
                                       <img
                                         src={
                                           pos
-                                            ? `http://localhost:8000/posts/${pos.postImage}`
+                                            ? `https://ss-rr-gg-main-ai.vercel.app/posts/${pos.postImage}`
                                             : null
                                         }
                                         alt={`Image ${pos._id}`}
@@ -692,7 +692,7 @@ const Profile = () => {
                                         id={pos._id}
                                         src={
                                           pos
-                                            ? `http://localhost:8000/posts/${pos.postAudio}`
+                                            ? `https://ss-rr-gg-main-ai.vercel.app/posts/${pos.postAudio}`
                                             : null
                                         }
                                       ></audio>
@@ -800,7 +800,7 @@ const Profile = () => {
                                                   "http"
                                                 )
                                                   ? com.user_comment.profilImage
-                                                  : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                                  : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                                 : "/image/pngegg.png"
                                             }
                                             alt={`Image of ${com.user_comment?.name || "user"
@@ -880,7 +880,7 @@ const Profile = () => {
                                 <img
                                   src={
                                     post.user
-                                      ? `http://localhost:8000/user/${post.user.profilImage}`
+                                      ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
                                       : "/image/pngegg.png"
                                   }
                                   alt={`Image of ${post.name}`}
@@ -1122,7 +1122,7 @@ const Profile = () => {
                                                   "http"
                                                 )
                                                   ? com.user_comment.profilImage
-                                                  : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                                  : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                                 : "/image/pngegg.png"
                                             }
                                             alt={`Image of ${com.user_comment?.name || "user"
@@ -1201,7 +1201,7 @@ const Profile = () => {
                                 <img
                                   src={
                                     post.user
-                                      ? `http://localhost:8000/user/${post.user.profilImage}`
+                                      ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
                                       : "/image/pngegg.png"
                                   }
                                   alt=""
@@ -1458,7 +1458,7 @@ const Profile = () => {
                                                   "http"
                                                 )
                                                   ? com.user_comment.profilImage
-                                                  : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                                  : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                                 : "/image/pngegg.png"
                                             }
                                             alt={`Image of ${com.user_comment?.name || "user"
@@ -1537,7 +1537,7 @@ const Profile = () => {
                                 <img
                                   src={
                                     post.user
-                                      ? `http://localhost:8000/user/${post.user.profilImage}`
+                                      ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
                                       : "/image/pngegg.png"
                                   }
                                   alt=""
@@ -1620,7 +1620,7 @@ const Profile = () => {
                                           <h2>What's in the picture?</h2>
                                           <div className="img_ans">
                                             <img
-                                              src={`http://localhost:8000/posts/${item.img}`}
+                                              src={`https://ss-rr-gg-main-ai.vercel.app/posts/${item.img}`}
                                               alt="Question"
                                             />
                                             <div className="anwser">
@@ -1780,7 +1780,7 @@ const Profile = () => {
                                                   "http"
                                                 )
                                                   ? com.user_comment.profilImage
-                                                  : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                                  : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                                 : "/image/pngegg.png"
                                             }
                                             alt={`Image of ${com.user_comment?.name || "user"
@@ -1860,7 +1860,7 @@ const Profile = () => {
                                 <img
                                   src={
                                     post.user
-                                      ? `http://localhost:8000/user/${post.user.profilImage}`
+                                      ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
                                       : "/image/pngegg.png"
                                   }
                                   alt=""
@@ -1889,7 +1889,7 @@ const Profile = () => {
                                         post.video_post.forEach((video, index) => {
                                           allMedia.push({
                                             type: 'video',
-                                            src: `http://localhost:8000/posts/${video}`,
+                                            src: `https://ss-rr-gg-main-ai.vercel.app/posts/${video}`,
                                             key: `video-${index}`
                                           });
                                         });
@@ -1900,7 +1900,7 @@ const Profile = () => {
                                         post.img_post.forEach((img, index) => {
                                           allMedia.push({
                                             type: 'image',
-                                            src: `http://localhost:8000/posts/${img}`,
+                                            src: `https://ss-rr-gg-main-ai.vercel.app/posts/${img}`,
                                             key: `img-${index}`
                                           });
                                         });
@@ -2086,7 +2086,7 @@ const Profile = () => {
                                                   "http"
                                                 )
                                                   ? com.user_comment.profilImage
-                                                  : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                                  : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                                 : "/image/pngegg.png"
                                             }
                                             alt={`Image of ${com.user_comment?.name || "user"
@@ -2198,7 +2198,7 @@ const Profile = () => {
                                 <img
                                   src={
                                     post.user
-                                      ? `http://localhost:8000/user/${post.user.profilImage}`
+                                      ? `https://ss-rr-gg-main-ai.vercel.app/user/${post.user.profilImage}`
                                       : "/image/pngegg.png"
                                   }
                                   alt=""
@@ -2302,7 +2302,7 @@ const Profile = () => {
                                                   "http"
                                                 )
                                                   ? com.user_comment.profilImage
-                                                  : `http://localhost:8000/user/${com.user_comment.profilImage}`
+                                                  : `https://ss-rr-gg-main-ai.vercel.app/user/${com.user_comment.profilImage}`
                                                 : "/image/pngegg.png"
                                             }
                                             alt={`Image of ${com.user_comment?.name || "user"

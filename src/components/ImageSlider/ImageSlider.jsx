@@ -72,7 +72,7 @@ const ImageSlider = () => {
               className="log"
                src={
                   src.profilImage
-                    ? `http://localhost:8000/user/${src.profilImage}`
+                    ? `https://ss-rr-gg-main-ai.vercel.app/user/${src.profilImage}`
                     : "/image/test.jpg"
                 } alt="" />
               
@@ -82,7 +82,7 @@ const ImageSlider = () => {
                 }}
                 src={
                   src.Cover_image
-                    ? `http://localhost:8000/user/${src.Cover_image}`
+                    ? `https://ss-rr-gg-main-ai.vercel.app/user/${src.Cover_image}`
                     : "/image/test.jpg"
                 }
                 alt={`Image of ${src.name}`}

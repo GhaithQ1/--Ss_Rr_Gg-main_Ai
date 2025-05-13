@@ -123,7 +123,7 @@ const Create_menu = () => {
     Mydata.profilImage
       ? Mydata.profilImage.startsWith("http")
         ? Mydata.profilImage
-        : `http://localhost:8000/user/${Mydata.profilImage}`
+        : `https://ss-rr-gg-main-ai.vercel.app/user/${Mydata.profilImage}`
       : "/image/pngegg.png"
   }
   alt={`Image of ${Mydata.name}`}

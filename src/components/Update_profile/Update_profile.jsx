@@ -49,8 +49,8 @@ export default function UpdateProfile() {
           headers: { Authorization: `Bearer ${cookies.token}` },
         });
         setUserData(res.data.data);
-        setPreviewProfileImage(`http://localhost:8000/user/${res.data.data.profilImage}`);
-        setPreviewCoverImage(`http://localhost:8000/user/${res.data.data.Cover_image}`);
+        setPreviewProfileImage(`https://ss-rr-gg-main-ai.vercel.app/user/${res.data.data.profilImage}`);
+        setPreviewCoverImage(`https://ss-rr-gg-main-ai.vercel.app/user/${res.data.data.Cover_image}`);
         setUserData_role(res.data.data.role)
         setLoadInput(false)
       } catch (error) {
