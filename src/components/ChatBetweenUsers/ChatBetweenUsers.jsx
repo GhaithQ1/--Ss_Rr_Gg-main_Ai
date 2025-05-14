@@ -206,7 +206,7 @@ const ChatBetweenUsers = () => {
           icon={faTimes}
         /> 
         </div>
-        {not_Chat? <p className="not_chat">You and John can now chat. {userById.name}</p> : null}
+        {not_Chat? <p className="not_chat">You and {userById.name} can now chat.</p> : null}
         
         {chat.map((msg, index) => (
           <div
