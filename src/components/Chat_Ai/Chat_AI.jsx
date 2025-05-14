@@ -933,290 +933,283 @@ const Chat_AI = () => {
                     )}
                 </div>
             </div>
-            <div className="chat-container-ai">
-                <header className="chat-title-ai">
-                    <div className="logo-container">
-                        <button className="toggle-sidebar-button" onClick={toggleSidebar}>
-                            <FontAwesomeIcon icon={faBars} />
-                        </button>
 
-                        <FontAwesomeIcon icon={faRobot} className="robot-icon" />
-                        <h1>Sense AI</h1>
+{conversationLoading ? (
+  <div className="loading-container full-page">
+    <div className="loading-spinner"></div>
+    <p className="loading-text">Loading conversation...</p>
+  </div>
+) : (
+  <>
+    {/* كل الصفحة الأصلية تبدأ من هون */}
+    <div className="chat-container-ai">
+    <header className="chat-title-ai">
+      <div className="logo-container">
+        <button className="toggle-sidebar-button" onClick={toggleSidebar}>
+          <FontAwesomeIcon icon={faBars} />
+        </button>
+        <FontAwesomeIcon icon={faRobot} className="robot-icon" />
+        <h1>Sense AI</h1>
+      </div>
+      <div className="header-buttons">
+        <button className="reload-button" onClick={handleReload} disabled={isReloading}>
+          {isReloading ? (
+            <div className="button-spinner"></div>
+          ) : (
+            <FontAwesomeIcon icon={faSyncAlt} />
+          )}
+        </button>
+        <button className="settings-button">
+          <FontAwesomeIcon icon={faEllipsisH} />
+        </button>
+      </div>
+    </header>
+
+    <div className="chat-box-ai">
+      {messages.length === 0 ? (
+        <div className="empty-chat">
+          <div className="logo-circle">
+            <div className="inner-shape"></div>
+          </div>
+          <h2>Hi, {MyData.name}</h2>
+          <div className="main-prompt">Can I help you with anything?</div>
+          <p className="subtitle">Ready to assist you with anything you need?</p>
+        </div>
+      ) : (
+        <div className="messages-container" ref={messagesContainerRef}>
+          {messages?.map((msg, i) => (
+            <div key={i} className={`message-ai ${msg.role === 'user' ? 'user-ai' : 'assistant-ai'}`}>
+              {msg.role === 'user' ? (
+                <div className="message-content">
+                  <div className="message-header">
+                    <div className="message-avatar">
+                      <img
+                        src={
+                          MyData.profilImage
+                            ? MyData.profilImage.startsWith("http")
+                              ? MyData.profilImage
+                              : `https://backendprojecr-production.up.railway.app/user/${MyData.profilImage}`
+                            : "/image/pngegg.png"
+                        }
+                        alt={`Image of ${MyData.name}`}
+                      />
                     </div>
-                    <div className="header-buttons">
-                        <button className="reload-button" onClick={handleReload} disabled={isReloading}>
-                            {isReloading ? (
-                                <div className="button-spinner"></div>
-                            ) : (
-                                <FontAwesomeIcon icon={faSyncAlt} />
-                            )}
-                        </button>
-                        <button className="settings-button">
-                            <FontAwesomeIcon icon={faEllipsisH} />
-                        </button>
-                    </div>
-                </header>
+                    <div className="message-sender">{MyData.name}</div>
+                  </div>
+                  <div className="message-text">{msg.content}</div>
+                  <div className="message-time">
+                    {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </div>
 
-                <div className="chat-box-ai">
-                    {conversationLoading ? (
-                        <div className="loading-container">
-                            <div className="loading-spinner"></div>
-                            <p className="loading-text">Loading conversation...</p>
-                        </div>
-                    ) : messages.length === 0 ? (
-                        <div className="empty-chat">
-                            <div className="logo-circle">
-                                <div className="inner-shape"></div>
-                            </div>
-                            <h2>Hi, {MyData.name}</h2>
-                            <div className="main-prompt">Can I help you with anything?</div>
-                            <p className="subtitle">Ready to assist you with anything you need?</p>
-                        </div>
-                    ) : (
-                        <div className="messages-container" ref={messagesContainerRef}>
-                            {messages?.map((msg, i) => (
-                                <div key={i} className={`message-ai ${msg.role === 'user' ? 'user-ai' : 'assistant-ai'}`}>
-                                    {msg.role === 'user' ? (
-                                        <>
-                                            <div className="message-content">
-                                                <div className="message-header">
-                                                    <div className="message-avatar">
-                                                        <img
-                                                            src={
-                                                                MyData.profilImage
-                                                                    ? MyData.profilImage.startsWith("http")
-                                                                        ? MyData.profilImage
-                                                                        : `https://backendprojecr-production.up.railway.app/user/${MyData.profilImage}`
-                                                                    : "/image/pngegg.png"
-                                                            }
-                                                            alt={`Image of ${MyData.name}`}
-                                                        />
-                                                    </div>
-                                                    <div className="message-sender">{MyData.name}</div>
-                                                </div>
-                                                <div className="message-text">{msg.content}</div>
-                                                <div className="message-time">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-
-
-                                                {/* Display attachments if any */}
-                                                {msg.attachments && msg.attachments.length > 0 && (
-                                                    <div className="message-attachments">
-                                                        {msg.attachments.map((attachment, index) => (
-                                                            <div key={index} className="attachment-item">
-                                                                {attachment.type === 'image' ? (
-                                                                    <div className="image-attachment">
-                                                                        <img src={attachment.preview} alt={attachment.name} />
-                                                                        <div className="attachment-info">
-                                                                            <span>{attachment.name}</span>
-                                                                            <a href={attachment.preview} download={attachment.name} className="download-button">
-                                                                                <FontAwesomeIcon icon={faDownload} />
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                ) : (
-                                                                    <div className="file-attachment">
-                                                                        <FontAwesomeIcon icon={faFile} className="file-icon" />
-                                                                        <div className="attachment-info">
-                                                                            <span>{attachment.name}</span>
-                                                                            <span className="file-size">{Math.round(attachment.size / 1024)} KB</span>
-                                                                        </div>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="message-content">
-                                                <div className="message-header">
-                                                    <div className="message-avatar">
-                                                        <FontAwesomeIcon icon={faRobot} />
-                                                    </div>
-                                                    <div className="message-sender">Sense AI</div>
-                                                </div>
-                                                <div>{msg.content}</div>
-                                                <div className="message-time">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-
-                                                {/* Regenerate buttons - only show for the last AI message and when there's a valid lastUserMessage */}
-                                                {i === messages.length - 1 && msg.role === 'assistant' && lastUserMessage && lastUserMessage.content && (
-                                                    <div className="regenerate-buttons">
-                                                        <button
-                                                            className="regenerate-button"
-                                                            onClick={() => regenerateResponse('regenerate')}
-                                                            disabled={regenerating}
-                                                        >
-                                                            <FontAwesomeIcon icon={faRedo} />
-                                                            <span> Reply back</span>
-                                                        </button>
-                                                        <button
-                                                            className="regenerate-button improve"
-                                                            onClick={() => regenerateResponse('improve')}
-                                                            disabled={regenerating}
-                                                        >
-                                                            <FontAwesomeIcon icon={faMagic} />
-                                                            <span> Improve</span>
-                                                        </button>
-                                                    </div>
-                                                )}
-
-                                                {/* Show loading indicator when regenerating */}
-                                                {regenerating && i === messages.length - 1 && msg.role === 'assistant' && (
-                                                    <div className="regenerating-indicator">
-                                                        <div className="thinking-indicator">
-                                                            <span className="thinking-dot"></span>
-                                                            <span className="thinking-dot"></span>
-                                                            <span className="thinking-dot"></span>
-                                                        </div>
-                                                        <span>Regenerating</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            ))}
-                            {loading && (
-                                <div className="message-ai assistant-ai loading-message">
-                                    <div className="message-content">
-                                        <div className="message-header">
-                                            <div className="message-avatar">
-                                                <FontAwesomeIcon icon={faRobot} />
-                                            </div>
-                                            <div className="message-sender">Sense AI</div>
-                                            <div className="message-time">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                                        </div>
-                                        <div className="thinking-indicator">
-                                            <span className="thinking-dot"></span>
-                                            <span className="thinking-dot"></span>
-                                            <span className="thinking-dot"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                            <div ref={messagesEndRef} style={{ float: "left", clear: "both" }} />
-
-                            {/* Scroll to bottom button */}
-                            {showScrollButton && (
-                                <button
-                                    className="scroll-bottom-button"
-                                    onClick={scrollToBottom}
-                                    title="Scroll to latest message"
+                  {msg.attachments && msg.attachments.length > 0 && (
+                    <div className="message-attachments">
+                      {msg.attachments.map((attachment, index) => (
+                        <div key={index} className="attachment-item">
+                          {attachment.type === 'image' ? (
+                            <div className="image-attachment">
+                              <img src={attachment.preview} alt={attachment.name} />
+                              <div className="attachment-info">
+                                <span>{attachment.name}</span>
+                                <a
+                                  href={attachment.preview}
+                                  download={attachment.name}
+                                  className="download-button"
                                 >
-                                    <FontAwesomeIcon icon={faArrowDown} />
-                                </button>
-                            )}
+                                  <FontAwesomeIcon icon={faDownload} />
+                                </a>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="file-attachment">
+                              <FontAwesomeIcon icon={faFile} className="file-icon" />
+                              <div className="attachment-info">
+                                <span>{attachment.name}</span>
+                                <span className="file-size">{Math.round(attachment.size / 1024)} KB</span>
+                              </div>
+                            </div>
+                          )}
                         </div>
-                    )}
+                      ))}
+                    </div>
+                  )}
                 </div>
-
-                {/* Attachments preview */}
-                {attachments.length > 0 && (
-                    <div className="attachments-preview">
-                        {attachments.map((attachment, index) => (
-                            <div key={index} className="attachment-preview-item">
-                                {attachment.type === 'image' ? (
-                                    <div className="image-preview">
-                                        <img src={attachment.preview} alt={attachment.name} />
-                                        <button
-                                            className="remove-attachment"
-                                            onClick={() => removeAttachment(index)}
-                                        >
-                                            <FontAwesomeIcon icon={faTimes} />
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="file-preview">
-                                        <FontAwesomeIcon icon={faFile} className="file-icon" />
-                                        <span className="file-name">{attachment.name}</span>
-                                        <button
-                                            className="remove-attachment"
-                                            onClick={() => removeAttachment(index)}
-                                        >
-                                            <FontAwesomeIcon icon={faTimes} />
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
+              ) : (
+                <div className="message-content">
+                  <div className="message-header">
+                    <div className="message-avatar">
+                      <FontAwesomeIcon icon={faRobot} />
                     </div>
-                )}
+                    <div className="message-sender">Sense AI</div>
+                  </div>
+                  <div>{msg.content}</div>
+                  <div className="message-time">
+                    {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </div>
 
-                <div className="input-container">
-                    {/* Emoji Picker */}
-                    {showEmojiPicker && (
-                        <div className="emoji-picker-container" ref={emojiPickerRef}>
-                            <EmojiPicker onEmojiClick={handleEmojiClick} width={400} height={400} theme="dark" emojiStyle="apple" searchDisabled previewConfig={{ showPreview: false }} />
-                        </div>
-                    )}
-
-                    <div className="input-section-ai">
-                        {/* Textarea at the top */}
-                        <textarea
-                            ref={textareaRef}
-                            className="chat-input-ai"
-                            value={input}
-                            onChange={e => setInput(e.target.value)}
-                            onKeyDown={e => {
-                                if (e.key === "Enter" && !e.shiftKey) {
-                                    e.preventDefault(); // Prevent default to avoid newline
-                                    sendMessage();
-                                }
-                            }}
-                            placeholder={placeholder}
-                            rows="1"
-                        />
-
-                        {/* Icons below the textarea */}
-                        <div className="input-controls">
-                            <button
-                                className="tool-button emoji-toggle-button"
-                                onClick={(e) => {
-                                    e.stopPropagation(); // Prevent event bubbling
-                                    setShowEmojiPicker(!showEmojiPicker);
-                                }}
-                            >
-                                <FontAwesomeIcon icon={faFaceSmile} />
-                            </button>
-
-                            {/* File input (hidden) */}
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                style={{ display: 'none' }}
-                                onChange={handleFileSelect}
-                                multiple
-                            />
-
-                            {/* File attachment button */}
-                            {/* <button 
-                                className="tool-button"
-                                onClick={() => fileInputRef.current.click()}
-                            >
-                                <FontAwesomeIcon icon={faPaperclip} />
-                            </button> */}
-                            <div className="icon-container">
-                                <button
-                                    className={`tool-button speech-button ${isListening ? 'listening' : ''}`}
-                                    onClick={toggleSpeechRecognition}
-                                >
-                                    <FontAwesomeIcon icon={isListening ? faMicrophoneSlash : faMicrophone} />
-                                </button>
-                                <button
-                                    onClick={sendMessage}
-                                    className="send-button-ai"
-                                    disabled={loading || (!input.trim() && attachments.length === 0)}
-                                >
-                                    <FontAwesomeIcon icon={faPaperPlane} />
-                                </button>
-                            </div>
-                        </div>
+                  {i === messages.length - 1 && msg.role === 'assistant' && lastUserMessage?.content && (
+                    <div className="regenerate-buttons">
+                      <button
+                        className="regenerate-button"
+                        onClick={() => regenerateResponse('regenerate')}
+                        disabled={regenerating}
+                      >
+                        <FontAwesomeIcon icon={faRedo} />
+                        <span> Reply back</span>
+                      </button>
+                      <button
+                        className="regenerate-button improve"
+                        onClick={() => regenerateResponse('improve')}
+                        disabled={regenerating}
+                      >
+                        <FontAwesomeIcon icon={faMagic} />
+                        <span> Improve</span>
+                      </button>
                     </div>
+                  )}
+
+                  {regenerating && i === messages.length - 1 && msg.role === 'assistant' && (
+                    <div className="regenerating-indicator">
+                      <div className="thinking-indicator">
+                        <span className="thinking-dot"></span>
+                        <span className="thinking-dot"></span>
+                        <span className="thinking-dot"></span>
+                      </div>
+                      <span>Regenerating</span>
+                    </div>
+                  )}
                 </div>
-                <div className="disclaimer">Since AI may contain errors, we recommend checking important information.</div>
+              )}
             </div>
+          ))}
+          {loading && (
+            <div className="message-ai assistant-ai loading-message">
+              <div className="message-content">
+                <div className="message-header">
+                  <div className="message-avatar">
+                    <FontAwesomeIcon icon={faRobot} />
+                  </div>
+                  <div className="message-sender">Sense AI</div>
+                  <div className="message-time">
+                    {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </div>
+                </div>
+                <div className="thinking-indicator">
+                  <span className="thinking-dot"></span>
+                  <span className="thinking-dot"></span>
+                  <span className="thinking-dot"></span>
+                </div>
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} style={{ float: "left", clear: "both" }} />
+
+          {showScrollButton && (
+            <button
+              className="scroll-bottom-button"
+              onClick={scrollToBottom}
+              title="Scroll to latest message"
+            >
+              <FontAwesomeIcon icon={faArrowDown} />
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+
+    {attachments.length > 0 && (
+      <div className="attachments-preview">
+        {attachments.map((attachment, index) => (
+          <div key={index} className="attachment-preview-item">
+            {attachment.type === 'image' ? (
+              <div className="image-preview">
+                <img src={attachment.preview} alt={attachment.name} />
+                <button className="remove-attachment" onClick={() => removeAttachment(index)}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+            ) : (
+              <div className="file-preview">
+                <FontAwesomeIcon icon={faFile} className="file-icon" />
+                <span className="file-name">{attachment.name}</span>
+                <button className="remove-attachment" onClick={() => removeAttachment(index)}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    )}
+
+    <div className="input-container">
+      {showEmojiPicker && (
+        <div className="emoji-picker-container" ref={emojiPickerRef}>
+          <EmojiPicker
+            onEmojiClick={handleEmojiClick}
+            width={400}
+            height={400}
+            theme="dark"
+            emojiStyle="apple"
+            searchDisabled
+            previewConfig={{ showPreview: false }}
+          />
+        </div>
+      )}
+
+      <div className="input-section-ai">
+        <textarea
+          ref={textareaRef}
+          className="chat-input-ai"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              sendMessage();
+            }
+          }}
+          placeholder={placeholder}
+          rows="1"
+        />
+
+        <div className="input-controls">
+          <button
+            className="tool-button emoji-toggle-button"
+            onClick={e => {
+              e.stopPropagation();
+              setShowEmojiPicker(!showEmojiPicker);
+            }}
+          >
+            <FontAwesomeIcon icon={faFaceSmile} />
+          </button>
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={handleFileSelect}
+            multiple
+          />
+
+          <div className="icon-container">
+            <button
+              className={`tool-button speech-button ${isListening ? 'listening' : ''}`}
+              onClick={toggleSpeechRecognition}
+            >
+              <FontAwesomeIcon icon={isListening ? faMicrophoneSlash : faMicrophone} />
+            </button>
+            <button onClick={sendMessage} className="send-button">
+              <FontAwesomeIcon icon={faPaperPlane} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </>
+)}
+
+
 
             {/* Delete Confirmation Modal */}
             {showDeleteModal && (
