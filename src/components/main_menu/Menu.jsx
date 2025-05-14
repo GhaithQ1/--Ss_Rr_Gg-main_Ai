@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Menu.css';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faCompass, faBookmark, faBell, faComments, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faCompass, faBookmark, faBell, faComments, faMoon, faSun,faRobot  } from '@fortawesome/free-solid-svg-icons';
 import { useUser } from '../Context';
 
 const Menu = () => {
@@ -51,6 +51,10 @@ const Menu = () => {
         <NavLink to="/bookmark" className={({ isActive }) => `navbar${isActive ? ' active' : ''}`}>
           <FontAwesomeIcon className='nav_icon' icon={faBookmark} />
           <p>Bookmarks</p>
+        </NavLink>
+        <NavLink to="/chat_bot" className={({ isActive }) => `navbar${isActive ? ' active' : ''}`}>
+          <FontAwesomeIcon className='nav_icon' icon={faRobot} />
+          <p>AI Bot</p>
         </NavLink>
 
 
