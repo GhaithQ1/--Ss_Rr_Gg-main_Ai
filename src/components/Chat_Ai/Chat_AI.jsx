@@ -274,6 +274,8 @@ const Chat_AI = () => {
         if (!activeConversation) return;
 
         // تعيين حالة التحميل إلى true عند بدء تحميل المحادثة
+        setConversationLoading(true);
+
         setMessages([]); // مسح الرسائل السابقة أثناء التحميل
 
         axios.get(`${API}/chat_AI/${activeConversation}`, {
