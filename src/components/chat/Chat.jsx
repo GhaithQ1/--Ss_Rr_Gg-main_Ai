@@ -7,6 +7,7 @@ import { useCookies } from 'react-cookie';
 import ChatBetweenUsers from '../ChatBetweenUsers/ChatBetweenUsers';
 import axios from 'axios';
 import { useUser } from '../Context';
+import { fr } from 'date-fns/locale';
 
 
 
@@ -224,16 +225,17 @@ const Chat = () => {
             <div className="req" key={i}>
               <div className="img_req">
                 <img
-                  src={
+                  src={friend ?
                     friend.profilImage
                       ? friend.profilImage.startsWith("http")
                         ? friend.profilImage
                         : `https://backendprojecr-production.up.railway.app/user/${friend.profilImage}`
                       : "/image/pngegg.png"
+                      :"/image/pngegg.png"
                   }
                   alt={`Image of ${friend.name}`}
                 />
-                <p>{friend.name}</p>
+                <p>{friend? friend.name :"مستخدم"}</p>
               </div>
               <div className="accept">
                 <button onClick={() => rejectRequest(friend._id)}>Reject</button>
