@@ -772,9 +772,10 @@ const Chat_AI = () => {
                 } else {
                     setActiveConversation(null);
                     setMessages([]);
+                    window.location.reload();
                 }
             }
-            window.location.reload();
+            
 
         } catch (error) {
             console.error('Error deleting conversation:', error);
