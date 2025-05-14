@@ -233,7 +233,7 @@ const Chat = () => {
                       : "/image/pngegg.png"
                       :"/image/pngegg.png"
                   }
-                  alt={`Image of ${friend.name}`}
+                  alt={`Image of`}
                 />
                 <p>{friend? friend.name :"مستخدم"}</p>
               </div>
