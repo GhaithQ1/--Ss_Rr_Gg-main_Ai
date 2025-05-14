@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef ,useLayoutEffect } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import './Chat_AI.css';
@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faPaperPlane, faRobot, faUser, faSmile,
     faMicrophone, faEllipsisH, faPlus, faComment,
-    faClock, faBars, faChevronLeft, faTrash,
+    faClock, faBars, faChevronRight, faTrash,
     faMicrophoneSlash, faFaceSmile, faArrowDown,
     faFile, faPaperclip, faImage, faDownload, faTimes,
     faRedo, faMagic, faSyncAlt
@@ -16,7 +16,7 @@ import EmojiPicker from 'emoji-picker-react';
 import { useNavigate } from "react-router-dom";
 const Chat_AI = () => {
     const Navigate = useNavigate();
-          const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
+    const API = 'https://backendprojecr-production.up.railway.app/api/v2';
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
@@ -144,13 +144,13 @@ const Chat_AI = () => {
 
                 // التحقق مما إذا كانت هناك محادثة جديدة تم إنشاؤها قبل إعادة التحميل
                 const lastCreatedChat = localStorage.getItem('lastCreatedChat');
-                
+
                 // إذا كان هناك محادثات
                 if (res.data.data.thread_id.length > 0) {
                     if (lastCreatedChat) {
                         // البحث عن المحادثة الجديدة في قائمة المحادثات
                         const newChatExists = res.data.data.thread_id.some(conv => conv.id_thread === lastCreatedChat);
-                        
+
                         if (newChatExists) {
                             // تعيين المحادثة الجديدة كمحادثة نشطة
                             setActiveConversation(lastCreatedChat);
@@ -173,7 +173,7 @@ const Chat_AI = () => {
                         // تفعيل حالة تحميل العناوين
                         // setLoadingTitles(true);
                         console.log('Started loading conversation titles');
-                        
+
                         const titles = {};
 
                         // تعيين عناوين افتراضية لجميع المحادثات
@@ -217,7 +217,7 @@ const Chat_AI = () => {
                         setCreatingNewChat(true);
                         // إيقاف حالة تحميل العناوين قبل إنشاء محادثة جديدة
                         setLoadingTitles(false);
-                        
+
                         // إنشاء محادثة جديدة تلقائياً
                         const response = await axios.post(`${API}/chat_AI/craete`,
                             { message: 'Start new chat' },
@@ -234,7 +234,7 @@ const Chat_AI = () => {
                         if (newThreadId) {
                             // حفظ معرف المحادثة في التخزين المحلي للتعامل مع إعادة تحميل الصفحة
                             localStorage.setItem('lastCreatedChat', newThreadId);
-                            
+
                             const newConversation = { _id: newThreadId, id_thread: newThreadId };
                             setConversations([newConversation]);
                             setActiveConversation(newThreadId);
@@ -244,7 +244,7 @@ const Chat_AI = () => {
                                 ...prev,
                                 [newThreadId]: 'محادثة جديدة'
                             }));
-                            
+
                             // إيقاف حالة تحميل العناوين بعد إنشاء المحادثة بنجاح
                             setLoadingTitles(false);
                         }
@@ -327,17 +327,17 @@ const Chat_AI = () => {
     const autoResizeTextarea = () => {
         const textarea = textareaRef.current;
         if (textarea) {
-          textarea.style.height = 'auto';
-          textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
         }
-      };
-      
+    };
+
 
     // Resize textarea when input changes
     useLayoutEffect(() => {
         autoResizeTextarea();
     }, [input]);
-    
+
     // Handle scroll events to show/hide the scroll button
     useEffect(() => {
         const container = messagesContainerRef.current;
@@ -515,31 +515,31 @@ const Chat_AI = () => {
 
         // Check if there's an active conversation, if not create one first
         let currentThreadId = activeConversation;
-        
+
         // Only create a new thread if there's no active conversation and we're not already creating one
         if (!currentThreadId && !creatingNewChat) {
             try {
                 // تفعيل علامة إنشاء محادثة جديدة لمنع الإنشاء المزدوج
                 setCreatingNewChat(true);
                 console.log('No active thread, creating a new one before sending message');
-                
+
                 // Create a new thread first
-                const threadResponse = await axios.post(`${API}/chat_AI/craete`, 
-                    { message: 'Start new chat' }, 
+                const threadResponse = await axios.post(`${API}/chat_AI/craete`,
+                    { message: 'Start new chat' },
                     {
                         headers: {
                             Authorization: `Bearer ${cookies.token}`,
                         },
                     }
                 );
-                
+
                 const newThreadId = threadResponse.data.thread_id;
                 console.log('Created new thread before sending message:', newThreadId);
-                
+
                 if (newThreadId) {
                     // Save the thread ID to localStorage to handle page reloads
                     localStorage.setItem('lastCreatedChat', newThreadId);
-                    
+
                     // Update state with the new conversation
                     const newConversation = { _id: newThreadId, id_thread: newThreadId };
                     setConversations(prevConversations => {
@@ -548,11 +548,11 @@ const Chat_AI = () => {
                         if (exists) return prevConversations;
                         return [newConversation, ...prevConversations];
                     });
-                    
+
                     // Set as active conversation
                     setActiveConversation(newThreadId);
                     currentThreadId = newThreadId;
-                    
+
                     // Set default title
                     setConversationTitles(prev => ({
                         ...prev,
@@ -654,13 +654,13 @@ const Chat_AI = () => {
         setLoadingTitles(false);
         window.location.reload();
     };
-    
+
     // Handle creating a new chat
     const handleNewChat = async () => {
         try {
             // إظهار مؤشر التحميل في واجهة المستخدم
             setCreatingNewChat(true);
-            
+
             // إرسال طلب لإنشاء محادثة جديدة
             const response = await axios.post(`${API}/chat_AI/craete`, { message: 'Start new chat' }, {
                 headers: {
@@ -677,7 +677,7 @@ const Chat_AI = () => {
                 setCreatingNewChat(false);
                 return;
             }
-            
+
             // إنشاء كائن المحادثة الجديدة بنفس الهيكل المستخدم في المحادثات الأخرى
             const newConversation = { _id: newThreadId, id_thread: newThreadId };
 
@@ -703,10 +703,10 @@ const Chat_AI = () => {
                 ...prev,
                 [newThreadId]: 'محادثة جديدة' // "محادثة جديدة" بالعربية
             }));
-            
+
             // إخفاء مؤشر التحميل
             setCreatingNewChat(false);
-            
+
         } catch (error) {
             console.error('Error starting new chat:', error);
             // إخفاء مؤشر التحميل في حالة الخطأ
@@ -731,19 +731,19 @@ const Chat_AI = () => {
     const handleDeleteConversation = (event, conversationId) => {
         // منع انتشار الحدث لتجنب تحديد المحادثة
         event.stopPropagation();
-        
+
         // Set the conversation to delete and show the modal
         setConversationToDelete(conversationId);
         setShowDeleteModal(true);
     };
-    
+
     // Confirm delete conversation
     const confirmDeleteConversation = async () => {
         const conversationId = conversationToDelete;
-        
+
         // Show loading indicator
         setIsDeleting(true);
-        
+
         try {
             const response = await axios.delete(`${API}/chat_AI/${conversationId}`, {
                 headers: {
@@ -785,7 +785,7 @@ const Chat_AI = () => {
             setConversationToDelete(null);
         }
     };
-    
+
     // Cancel delete
     const cancelDelete = () => {
         setShowDeleteModal(false);
@@ -874,7 +874,11 @@ const Chat_AI = () => {
         <div className="chat-app-container">
             <div className={`chat-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
                 <div className="sidebar-header">
+
                     <h2>Chats</h2>
+                    <button className="toggle-sidebar-button" onClick={toggleSidebar}>
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </button>
                 </div>
                 <button className="new-chat-button" onClick={handleNewChat} disabled={creatingNewChat}>
                     {creatingNewChat ? (
@@ -931,8 +935,9 @@ const Chat_AI = () => {
                 <header className="chat-title-ai">
                     <div className="logo-container">
                         <button className="toggle-sidebar-button" onClick={toggleSidebar}>
-                            <FontAwesomeIcon icon={sidebarOpen ? faChevronLeft : faBars} />
+                            <FontAwesomeIcon icon={faBars} />
                         </button>
+
                         <FontAwesomeIcon icon={faRobot} className="robot-icon" />
                         <h1>Sense AI</h1>
                     </div>
@@ -1190,19 +1195,19 @@ const Chat_AI = () => {
                                 <FontAwesomeIcon icon={faPaperclip} />
                             </button> */}
                             <div className="icon-container">
-                            <button
-                                className={`tool-button speech-button ${isListening ? 'listening' : ''}`}
-                                onClick={toggleSpeechRecognition}
-                            >
-                                <FontAwesomeIcon icon={isListening ? faMicrophoneSlash : faMicrophone} />
-                            </button>
-                            <button
-                                onClick={sendMessage}
-                                className="send-button-ai"
-                                disabled={loading || (!input.trim() && attachments.length === 0)}
-                            >
-                                <FontAwesomeIcon icon={faPaperPlane} />
-                            </button>
+                                <button
+                                    className={`tool-button speech-button ${isListening ? 'listening' : ''}`}
+                                    onClick={toggleSpeechRecognition}
+                                >
+                                    <FontAwesomeIcon icon={isListening ? faMicrophoneSlash : faMicrophone} />
+                                </button>
+                                <button
+                                    onClick={sendMessage}
+                                    className="send-button-ai"
+                                    disabled={loading || (!input.trim() && attachments.length === 0)}
+                                >
+                                    <FontAwesomeIcon icon={faPaperPlane} />
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1221,15 +1226,15 @@ const Chat_AI = () => {
                             Are you sure you want to delete this conversation? This action cannot be undone.
                         </div>
                         <div className="modal-footer">
-                            <button 
-                                className="modal-btn modal-btn-cancel" 
+                            <button
+                                className="modal-btn modal-btn-cancel"
                                 onClick={cancelDelete}
                                 disabled={isDeleting}
                             >
                                 Cancel
                             </button>
-                            <button 
-                                className={`modal-btn modal-btn-delete ${isDeleting ? 'loading' : ''}`} 
+                            <button
+                                className={`modal-btn modal-btn-delete ${isDeleting ? 'loading' : ''}`}
                                 onClick={confirmDeleteConversation}
                                 disabled={isDeleting}
                             >

@@ -29,6 +29,9 @@
   position: relative;
   z-index: 10;
   box-shadow: var(--shadowai);
+  position: absolute;
+  z-index: 100;
+  background: #1D2330 ;
 }
 
 .chat-sidebar.closed {
@@ -234,6 +237,7 @@
   font-weight: 500;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   background-color: transparent;
+  z-index: 1;
 }
 
 .logo-container {
