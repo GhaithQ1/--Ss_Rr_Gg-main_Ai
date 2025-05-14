@@ -78,4 +78,7 @@
     .shoole .img_shoole img.log{
       top: -25px;
     }
+    .shoole .img_shoole .transparent_layer{
+      width: 100%;
+    }
   }
