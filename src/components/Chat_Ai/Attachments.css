@@ -55,7 +55,7 @@
 
 .file-name {
   font-size: 12px;
-  color: var(--text-color);
+  color: var(--text-colorai);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -134,7 +134,7 @@
 }
 
 .download-button {
-  color: var(--text-color);
+  color: var(--text-colorai);
   background: rgba(255, 255, 255, 0.1);
   border: none;
   border-radius: 4px;
@@ -167,7 +167,7 @@
   background-color: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  color: var(--text-color);
+  color: var(--text-colorai);
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
