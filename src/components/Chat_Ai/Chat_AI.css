@@ -32,6 +32,7 @@
   position: absolute;
   z-index: 100;
   background: #1D2330 ;
+  transform: translateX(-280px);
 }
 
 .chat-sidebar.closed {
