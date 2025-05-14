@@ -448,7 +448,7 @@
 
 .not_chat {
   color: var(--text-color);
-  padding: 0 15px;
+  padding: 10px 15px;
   text-align: center;
   background-color: var(--box-color);
   font-size: 13px;
