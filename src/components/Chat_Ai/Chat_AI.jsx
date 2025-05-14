@@ -131,8 +131,8 @@ const Chat_AI = () => {
     }, []);
     const [loadingTitles, setLoadingTitles] = useState(false);
     // Fetch user data and conversations on component mount
-    setConversationLoading(true);
     useEffect(() => {
+        setConversationLoading(true);
         axios.get(`${API}/auth/get_date_my`, {
             headers: {
                 Authorization: `Bearer ${cookies.token}`,
