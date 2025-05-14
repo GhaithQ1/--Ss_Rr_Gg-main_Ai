@@ -1033,9 +1033,9 @@ const Chat_AI = () => {
                                                         <FontAwesomeIcon icon={faRobot} />
                                                     </div>
                                                     <div className="message-sender">Sense AI</div>
-                                                    <div className="message-time">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                                                 </div>
                                                 <div>{msg.content}</div>
+                                                    <div className="message-time">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
 
                                                 {/* Regenerate buttons - only show for the last AI message and when there's a valid lastUserMessage */}
                                                 {i === messages.length - 1 && msg.role === 'assistant' && lastUserMessage && lastUserMessage.content && (
