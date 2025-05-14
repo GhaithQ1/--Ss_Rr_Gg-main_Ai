@@ -937,6 +937,10 @@
 }
 
 @media (max-width: 768px) {
+  .assistant-ai .message-header,
+  .chat-app-container .message-text{
+    font-size: 13px;
+  }
   .chat-container-ai {
     margin: 0;
     height: 100vh;
@@ -944,7 +948,7 @@
   }
 
   .message-ai {
-    max-width: 90%;
+    max-width: 100%;
   }
 
   .chat-title-ai {
