@@ -39,6 +39,10 @@
   transform: translateX(-280px);
   width: 0;
 }
+.chat-sidebar.open {
+  transform: translateX(0);
+  width: 0;
+}
 
 .toggle-sidebar-button {
   background: transparent;
