@@ -522,7 +522,7 @@ const Chat_AI = () => {
                 setCreatingNewChat(true);
                 console.log('No active thread, creating a new one before sending message');
                 
-                const threadResponse = await axios.post('http://localhost:8000/api/v2/chat_AI/craete', 
+                const threadResponse = await axios.post(`${API}/chat_AI/craete`, 
                     { message: 'Start new chat' }, 
                     {
                         headers: {
@@ -590,7 +590,7 @@ const Chat_AI = () => {
         setMessages(prev => [...prev, aiMessage]);
     
         try {
-            const response = await fetch("http://localhost:8000/api/v2/chat_AI", {
+            const response = await fetch(`${API}/chat_AI`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${cookies.token}`,
@@ -1139,7 +1139,7 @@ const Chat_AI = () => {
           )}
         </div>
       )}
-    </div>/
+    </div>
 
     {attachments.length > 0 && (
       <div className="attachments-preview">
@@ -1223,7 +1223,7 @@ const Chat_AI = () => {
             >
               <FontAwesomeIcon icon={isListening ? faMicrophoneSlash : faMicrophone} />
             </button>
-            <button onClick={sendMessage} className="send-button">
+            <button onClick={sendMessage} className="send-button-ai">
               <FontAwesomeIcon icon={faPaperPlane} />
             </button>
           </div>
