@@ -35,17 +35,27 @@ const ImageSlider = () => {
         console.error("Error fetching data", error);
       });
   }, []);
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 4000,
-    arrows: false,
-    swipeToSlide: true,
-  };
+const settings = {
+  dots: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 4000,
+  arrows: false,
+  swipeToSlide: true,
+  responsive: [
+    {
+      breakpoint: 776,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+      },
+    },
+  ],
+};
+
 
   const images = [
     "./image/test.jpg",

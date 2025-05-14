@@ -172,7 +172,7 @@ const SignAndLog = () => {
                             <input type="password" placeholder="Confirm Password" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
                         </div>
                         <Link to="/sign_school">Register as an Educational Institution!!!</Link>
-                                
+                                <span onClick={handleSignInClick}>log in</span>
                         <button type="submit">Sign Up</button>
                     </form>
                 </div>
@@ -223,6 +223,7 @@ const SignAndLog = () => {
                         </div>
 
                         <a href="#">Forgot Your Password?</a>
+                        <span onClick={handleSignUpClick}>create accunt</span>
                         <button type="submit">Sign In</button>
                     </form>
                 </div>
