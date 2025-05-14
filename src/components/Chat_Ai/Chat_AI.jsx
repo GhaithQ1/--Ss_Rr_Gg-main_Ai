@@ -991,9 +991,10 @@ const Chat_AI = () => {
                                                         />
                                                     </div>
                                                     <div className="message-sender">{MyData.name}</div>
-                                                    <div className="message-time">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                                                 </div>
                                                 <div className="message-text">{msg.content}</div>
+                                                <div className="message-time">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+
 
                                                 {/* Display attachments if any */}
                                                 {msg.attachments && msg.attachments.length > 0 && (
@@ -1035,7 +1036,7 @@ const Chat_AI = () => {
                                                     <div className="message-sender">Sense AI</div>
                                                 </div>
                                                 <div>{msg.content}</div>
-                                                    <div className="message-time">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                                                <div className="message-time">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
 
                                                 {/* Regenerate buttons - only show for the last AI message and when there's a valid lastUserMessage */}
                                                 {i === messages.length - 1 && msg.role === 'assistant' && lastUserMessage && lastUserMessage.content && (
