@@ -1,6 +1,6 @@
 .chat {
   background-color: var(--box-color);
-    border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
   overflow: hidden;
   flex: 1;
   height: 600px;
@@ -35,7 +35,7 @@
   width: 100%;
   height: 100%;
   padding: 15px 10px 15px 50px;
-    border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
   border: none;
   background-color: var(--body-color);
   font-size: var(--text-size);
@@ -151,12 +151,15 @@
   position: relative;
 
   /* لإخفاء السكروول */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
 }
 
 .chat-container .chat-box::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
+  display: none;
+  /* Chrome, Safari, Edge */
 }
 
 
@@ -177,11 +180,11 @@
 
 .chat-container .message p {
   padding: 10px 15px;
-    border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
   margin: 0;
   max-width: 100%;
   word-wrap: break-word;
-  margin:0 10px;
+  margin: 0 10px;
 }
 
 .chat-container .me {
@@ -212,7 +215,7 @@
   flex: 1;
   padding: 10px;
   border: 2px solid transparent;
-    border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
   outline: none;
   background-color: var(--box-color);
 }
@@ -223,7 +226,7 @@
   border: none;
   background-color: var(--main-color);
   color: white;
-     border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
   cursor: pointer;
 }
 
@@ -244,7 +247,7 @@
 
 .the_requset {
   display: flex;
-flex-direction: column;
+  flex-direction: column;
   gap: 20px;
   padding: 10px;
   height: 70%;
@@ -256,7 +259,7 @@ flex-direction: column;
   flex-direction: column;
   background-color: var(--body-color);
   padding: 10px;
-    border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
 }
 
 .the_requset .req .img_req {
@@ -287,7 +290,7 @@ flex-direction: column;
 .the_requset .req .accept button {
   padding: 10px 30px;
   border: none;
-    border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
   background-color: var(--main-color);
   color: #fff;
   font-size: var(--text-size);
@@ -323,10 +326,10 @@ flex-direction: column;
 
 .general .req {
   display: flex;
-flex-direction: column;
+  flex-direction: column;
   background-color: var(--body-color);
   padding: 10px;
-    border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
 }
 
 .general .req .img_req {
@@ -338,8 +341,8 @@ flex-direction: column;
 
 .general .req .img_req img {
   width: 40px;
-    border-radius: var(--border-radius);
-    border-radius: 50%;
+  border-radius: var(--border-radius);
+  border-radius: 50%;
 }
 
 .general .req .img_req p {
@@ -357,7 +360,7 @@ flex-direction: column;
 .general .req .accept button {
   padding: 10px;
   border: none;
-    border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
   background-color: var(--main-color);
   color: #fff;
   font-size: var(--text-size);
@@ -370,6 +373,7 @@ flex-direction: column;
 .general .req .accept button:hover {
   box-shadow: 0 0 8px var(--main-color);
 }
+
 .general .req .accept .sent:hover {
   box-shadow: none;
 }
@@ -377,18 +381,16 @@ flex-direction: column;
 
 /* Send */
 
-.chat .test{
+.chat .test {}
 
-}
-
-.chat .display_none{
+.chat .display_none {
   display: none;
 }
 
 /* ================================= */
 
 
-.Emoji_input{
+.Emoji_input {
   position: relative;
   flex: 1;
 }
@@ -407,7 +409,7 @@ flex-direction: column;
   display: none;
 }
 
-.chat-container .header_chat{
+.chat-container .header_chat {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -421,31 +423,35 @@ flex-direction: column;
   box-shadow: 0 0 8px var(--shadow-color);
 }
 
-.chat-container .header_chat .user_img_name{
+.chat-container .header_chat .user_img_name {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.chat-container .header_chat .user_img_name img{
+.chat-container .header_chat .user_img_name img {
   width: 40px;
   border-radius: 50%;
 }
 
-.chat-container .header_chat .user_img_name p{
+.chat-container .header_chat .user_img_name p {
   color: var(--text-color);
   font-size: var(--text-size);
-} 
+}
 
-.chat-container .header_chat .search_icon{
+.chat-container .header_chat .search_icon {
   font-size: 25px;
   cursor: pointer;
   color: var(--icon-color);
 }
 
 
-.not_chat{
-      color: var(--title-color);
-    padding: 0 15px;
-    text-align: center;
+.not_chat {
+  color: var(--text-color);
+  padding: 0 15px;
+  text-align: center;
+  background-color: var(--box-color);
+  font-size: 13px;
+  margin: 0 5px;
+  border-radius: var(--border-radius);
 }
