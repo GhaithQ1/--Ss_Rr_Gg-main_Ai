@@ -378,7 +378,7 @@ flex-direction: column;
 /* Send */
 
 .chat .test{
-  height: 30%;
+
 }
 
 .chat .display_none{
@@ -448,11 +448,4 @@ flex-direction: column;
       color: var(--title-color);
     padding: 0 15px;
     text-align: center;
-}
-
-
-@media(max-width:767px){
-  .chat .test{
-        height: 25%;
-  }
 }
