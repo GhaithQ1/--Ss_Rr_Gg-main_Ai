@@ -7,6 +7,8 @@
   box-shadow: 0 2px 8px var(--shadow-color);
   position: sticky;
   top: 125px;
+  display: flex;
+  flex-direction: column;
 }
 
 
@@ -135,10 +137,8 @@
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: 70%;
-  margin: auto;
   background-color: var(--body-color);
-  /* display: none; */
+  flex: 1;
 }
 
 .chat-container .chat-box {
