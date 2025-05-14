@@ -872,7 +872,7 @@ const Chat_AI = () => {
 
     return (
         <div className="chat-app-container">
-            <div className={`chat-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
+            <div className={`chat-sidebar ${sidebarOpen ? 'closed' : 'open'}`}>
                 <div className="sidebar-header">
 
                     <h2>Chats</h2>
