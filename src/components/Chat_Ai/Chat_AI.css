@@ -41,7 +41,6 @@
 }
 .chat-sidebar.open {
   transform: translateX(0);
-  width: 0;
 }
 
 .toggle-sidebar-button {
