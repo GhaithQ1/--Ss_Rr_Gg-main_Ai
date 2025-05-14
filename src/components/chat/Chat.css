@@ -449,3 +449,10 @@ flex-direction: column;
     padding: 0 15px;
     text-align: center;
 }
+
+
+@media(max-width:767px){
+  .chat .test{
+        height: 25%;
+  }
+}
