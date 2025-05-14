@@ -513,49 +513,38 @@ const Chat_AI = () => {
 
     // Send a new message
     const sendMessage = async () => {
-        if (!input.trim() && attachments.length === 0) return;
-
-        // Check if there's an active conversation, if not create one first
+        if (!input.trim()) return;
+    
         let currentThreadId = activeConversation;
-
-        // Only create a new thread if there's no active conversation and we're not already creating one
+    
         if (!currentThreadId && !creatingNewChat) {
             try {
-                // تفعيل علامة إنشاء محادثة جديدة لمنع الإنشاء المزدوج
                 setCreatingNewChat(true);
                 console.log('No active thread, creating a new one before sending message');
-
-                // Create a new thread first
-                const threadResponse = await axios.post(`${API}/chat_AI/craete`,
-                    { message: 'Start new chat' },
+                
+                const threadResponse = await axios.post('http://localhost:8000/api/v2/chat_AI/craete', 
+                    { message: 'Start new chat' }, 
                     {
                         headers: {
                             Authorization: `Bearer ${cookies.token}`,
                         },
                     }
                 );
-
+                
                 const newThreadId = threadResponse.data.thread_id;
                 console.log('Created new thread before sending message:', newThreadId);
-
+                
                 if (newThreadId) {
-                    // Save the thread ID to localStorage to handle page reloads
                     localStorage.setItem('lastCreatedChat', newThreadId);
-
-                    // Update state with the new conversation
                     const newConversation = { _id: newThreadId, id_thread: newThreadId };
                     setConversations(prevConversations => {
-                        // Check if thread already exists to prevent duplicates
                         const exists = prevConversations.some(conv => conv.id_thread === newThreadId);
                         if (exists) return prevConversations;
                         return [newConversation, ...prevConversations];
                     });
-
-                    // Set as active conversation
                     setActiveConversation(newThreadId);
                     currentThreadId = newThreadId;
-
-                    // Set default title
+    
                     setConversationTitles(prev => ({
                         ...prev,
                         [newThreadId]: 'محادثة جديدة'
@@ -570,65 +559,98 @@ const Chat_AI = () => {
                 setCreatingNewChat(false);
                 return;
             } finally {
-                // إيقاف علامة إنشاء محادثة جديدة
                 setCreatingNewChat(false);
             }
         }
-
-        // Create form data for file uploads
-        const formData = new FormData();
-        formData.append('message', input);
-        formData.append('threadId', currentThreadId);
-
-        // Add attachments to form data
-        attachments.forEach((attachment) => {
-            formData.append('files', attachment.file);
-        });
-
-        // Create message object with attachments info
+    
         const userMessage = {
             role: "user",
             content: input,
-            attachments: attachments.map(att => ({
-                type: att.type,
-                preview: att.preview,
-                name: att.name,
-                size: att.size
-            }))
+            attachments: [] // ما فيه مرفقات
         };
-
-        // Store the last user message for regeneration
+    
         setLastUserMessage({
             content: input,
-            attachments: attachments.map(att => ({
-                file: att.file,
-                type: att.type,
-                preview: att.preview,
-                name: att.name,
-                size: att.size
-            }))
+            attachments: []
         });
-
-        // Add user message to the UI immediately
+    
         setMessages(prev => [...prev, userMessage]);
         setInput("");
-        setAttachments([]);
+        setAttachments([]); // نظف المرفقات حتى لو مش مستخدمة
         setLoading(true);
-
+    
+        const aiMessageId = Date.now();
+        const aiMessage = { 
+            id: aiMessageId,
+            role: "assistant", 
+            content: "", 
+            streaming: true 
+        };
+        
+        setMessages(prev => [...prev, aiMessage]);
+    
         try {
-            // Send message to the API
-            const res = await axios.post(`${API}/chat_AI`, formData, {
+            const response = await fetch("http://localhost:8000/api/v2/chat_AI", {
+                method: 'POST',
                 headers: {
                     Authorization: `Bearer ${cookies.token}`,
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json'
                 },
+                body: JSON.stringify({
+                    message: input,
+                    threadId: currentThreadId
+                })
             });
-
-            // Add AI response to the UI
-            const aiMessage = { role: "assistant", content: res.data.reply };
-            setMessages(prev => [...prev, aiMessage]);
-
-            // If this is the first message in the conversation, update the title
+    
+            if (!response.body) {
+                throw new Error("ReadableStream not supported");
+            }
+    
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let streamedContent = "";
+    
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
+                
+                for (const line of lines) {
+                    const content = line.replace(/^data: /, '').trim();
+                    if (content === '[DONE]') break;
+                
+                    // أضف مسافة بعد المحتوى إذا ما انتهى بنقطة أو علامة تعجب أو استفهام
+                    const needsSpace = content.replace(/\s+/g, '').trim();
+                    streamedContent += needsSpace + (needsSpace ? ' ' : '');
+                
+                    setMessages(prev => {
+                        const updatedMessages = [...prev];
+                        const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
+                        if (messageIndex !== -1) {
+                            updatedMessages[messageIndex] = {
+                                ...updatedMessages[messageIndex],
+                                content: streamedContent
+                            };
+                        }
+                        return updatedMessages;
+                    });
+                }
+            }
+    
+            setMessages(prev => {
+                const updatedMessages = [...prev];
+                const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
+                if (messageIndex !== -1) {
+                    updatedMessages[messageIndex] = {
+                        ...updatedMessages[messageIndex],
+                        streaming: false
+                    };
+                }
+                return updatedMessages;
+            });
+    
             if (messages.length === 0) {
                 setConversationTitles(prev => ({
                     ...prev,
@@ -638,6 +660,7 @@ const Chat_AI = () => {
         } catch (error) {
             console.error("Error sending message:", error);
             alert("حدث خطأ أثناء إرسال الرسالة");
+            setMessages(prev => prev.filter(msg => msg.id !== aiMessageId));
         } finally {
             setLoading(false);
         }
@@ -1083,7 +1106,7 @@ const Chat_AI = () => {
               )}
             </div>
           ))}
-          {loading && (
+          {/* {loading && (
             <div className="message-ai assistant-ai loading-message">
               <div className="message-content">
                 <div className="message-header">
@@ -1102,7 +1125,7 @@ const Chat_AI = () => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
           <div ref={messagesEndRef} style={{ float: "left", clear: "both" }} />
 
           {showScrollButton && (
@@ -1116,7 +1139,7 @@ const Chat_AI = () => {
           )}
         </div>
       )}
-    </div>
+    </div>/
 
     {attachments.length > 0 && (
       <div className="attachments-preview">
