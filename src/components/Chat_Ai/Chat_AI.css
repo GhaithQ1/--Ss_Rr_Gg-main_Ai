@@ -962,6 +962,12 @@
   .input-section-ai {
     width: 95%;
   }
+  .scroll-bottom-button{
+    bottom: 200px;
+    right: 30px;
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .input-controls {
