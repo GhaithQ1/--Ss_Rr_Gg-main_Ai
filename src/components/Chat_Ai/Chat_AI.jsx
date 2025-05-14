@@ -131,6 +131,7 @@ const Chat_AI = () => {
     }, []);
     const [loadingTitles, setLoadingTitles] = useState(false);
     // Fetch user data and conversations on component mount
+    setConversationLoading(true);
     useEffect(() => {
         axios.get(`${API}/auth/get_date_my`, {
             headers: {
@@ -273,7 +274,6 @@ const Chat_AI = () => {
         if (!activeConversation) return;
 
         // تعيين حالة التحميل إلى true عند بدء تحميل المحادثة
-        setConversationLoading(true);
         setMessages([]); // مسح الرسائل السابقة أثناء التحميل
 
         axios.get(`${API}/chat_AI/${activeConversation}`, {
