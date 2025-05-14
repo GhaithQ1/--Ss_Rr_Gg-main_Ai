@@ -818,6 +818,12 @@
   padding: 10px;
 }
 
+@media(max-width:767px){
+.emoji-picker-container{
+  width: 100%;
+}
+}
+
 /* Scroll to bottom button */
 .scroll-bottom-button {
   position: fixed;
