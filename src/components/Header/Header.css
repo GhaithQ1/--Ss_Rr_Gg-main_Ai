@@ -124,3 +124,9 @@ padding: 0;
 color: white;
 }
 
+
+@media(max-width:767px){
+    header .container .header_respon .logo{
+        display: none;
+    }
+}

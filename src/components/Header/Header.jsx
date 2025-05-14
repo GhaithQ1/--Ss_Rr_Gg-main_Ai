@@ -78,7 +78,7 @@ const Header = () => {
     <header>
       <div className='container'>
         <div className='header_respon'>
-          <img src="./image/logo.png" alt="" />
+          <img src="./image/logo.png" alt="" className='logo'/>
           <form action="">
             <FontAwesomeIcon className='search_icon' icon={faSearch} />
             <input type="text" placeholder='Search for schools, or people you may know.' />
