@@ -1256,7 +1256,7 @@ const Chat_AI = () => {
                                     <button
                                         onClick={stopResponse}
                                         className="stop-button-ai"
-                                        title="إيقاف الإجابة"
+                                        title="Stop answering"
                                     >
                                         <FontAwesomeIcon icon={faSquare} />
                                     </button>
