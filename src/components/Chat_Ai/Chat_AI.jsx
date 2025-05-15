@@ -1208,7 +1208,7 @@ const Chat_AI = () => {
                                                     <button
                                                         className="regenerate-button copy-bot-reply-button"
                                                         onClick={copyLastBotResponse}
-                                                        title="Copy bot reply"
+                                                        title="Copy"
                                                     >
                                                         <FontAwesomeIcon icon={isCopied ? faCheck : faCopy} />
                                                     </button>

@@ -163,7 +163,7 @@
 .regenerate-button {
   background: inherit;
   border: none;
-  color: var(--text-secondary);
+  color: var(--text-mutedai);
   border-radius: 6px;
   width: 32px;
   height: 32px;
@@ -176,16 +176,12 @@
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
-.regenerate-button.improve {
-  color: #6a5acd;
-}
-
 .regenerate-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
 .regenerate-button:hover:not(:disabled) {
-  background: rgba(255,255,255,0.18);
+  background: #222e3a4f;
   color: var(--text-colorbot);
 }
