@@ -536,26 +536,26 @@ const Chat_AI = () => {
     // Send a new message
     const sendMessage = async () => {
         if (!input.trim()) return;
-
+    
         let currentThreadId = activeConversation;
-
+    
         if (!currentThreadId && !creatingNewChat) {
             try {
                 setCreatingNewChat(true);
                 console.log('No active thread, creating a new one before sending message');
-
-                const threadResponse = await axios.post(`${API}/chat_AI/craete`,
-                    { message: 'Start new chat' },
+                
+                const threadResponse = await axios.post('http://localhost:8000/api/v2/chat_AI/craete', 
+                    { message: 'Start new chat' }, 
                     {
                         headers: {
                             Authorization: `Bearer ${cookies.token}`,
                         },
                     }
                 );
-
+                
                 const newThreadId = threadResponse.data.thread_id;
                 console.log('Created new thread before sending message:', newThreadId);
-
+                
                 if (newThreadId) {
                     localStorage.setItem('lastCreatedChat', newThreadId);
                     const newConversation = { _id: newThreadId, id_thread: newThreadId };
@@ -566,7 +566,7 @@ const Chat_AI = () => {
                     });
                     setActiveConversation(newThreadId);
                     currentThreadId = newThreadId;
-
+    
                     setConversationTitles(prev => ({
                         ...prev,
                         [newThreadId]: 'محادثة جديدة'
@@ -584,38 +584,39 @@ const Chat_AI = () => {
                 setCreatingNewChat(false);
             }
         }
-
+    
         const userMessage = {
             role: "user",
             content: input,
             attachments: [] // ما فيه مرفقات
         };
-
+    
         setLastUserMessage({
             content: input,
             attachments: []
         });
-
+    
         setMessages(prev => [...prev, userMessage]);
         setInput("");
         setAttachments([]); // نظف المرفقات حتى لو مش مستخدمة
         setLoading(true);
-
+    
         const aiMessageId = Date.now();
-        const aiMessage = {
+        const aiMessage = { 
             id: aiMessageId,
-            role: "assistant",
-            content: "",
-            streaming: true
+            role: "assistant", 
+            content: "", 
+            streaming: true 
         };
-
+        
         setMessages(prev => [...prev, aiMessage]);
-
+    
         try {
             // إنشاء كائن AbortController جديد لهذا الطلب
             const controller = new AbortController();
             setAbortController(controller);
-            const response = await fetch(`${API}/chat_AI`, {
+            
+            const response = await fetch("http://localhost:8000/api/v2/chat_AI", {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${cookies.token}`,
@@ -627,30 +628,30 @@ const Chat_AI = () => {
                 }),
                 signal: controller.signal
             });
-
+    
             if (!response.body) {
                 throw new Error("ReadableStream not supported");
             }
-
+    
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let streamedContent = "";
-
+    
             while (true) {
                 const { value, done } = await reader.read();
                 if (done) break;
-
+                
                 const chunk = decoder.decode(value, { stream: true });
                 const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
-
+                
                 for (const line of lines) {
                     const content = line.replace(/^data: /, '').trim();
                     if (content === '[DONE]') break;
-
+                
                     // أضف مسافة بعد المحتوى إذا ما انتهى بنقطة أو علامة تعجب أو استفهام
                     const needsSpace = content.replace(/\s+/g, '').trim();
                     streamedContent += needsSpace + (needsSpace ? ' ' : '');
-
+                
                     setMessages(prev => {
                         const updatedMessages = [...prev];
                         const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
@@ -664,7 +665,7 @@ const Chat_AI = () => {
                     });
                 }
             }
-
+    
             setMessages(prev => {
                 const updatedMessages = [...prev];
                 const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
@@ -676,7 +677,7 @@ const Chat_AI = () => {
                 }
                 return updatedMessages;
             });
-
+    
             if (messages.length === 0) {
                 setConversationTitles(prev => ({
                     ...prev,
@@ -692,6 +693,7 @@ const Chat_AI = () => {
             }
         } finally {
             setLoading(false);
+            setAbortController(null);
         }
     };
 
