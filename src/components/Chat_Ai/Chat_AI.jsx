@@ -525,7 +525,7 @@ const Chat_AI = () => {
                 const lastMessage = updatedMessages[updatedMessages.length - 1];
                 if (lastMessage && lastMessage.role === "assistant" && lastMessage.streaming) {
                     lastMessage.streaming = false;
-                    lastMessage.content += " [توقفت الإجابة]";
+                    lastMessage.content += " [The answer stopped]";
                 }
                 return updatedMessages;
             });
