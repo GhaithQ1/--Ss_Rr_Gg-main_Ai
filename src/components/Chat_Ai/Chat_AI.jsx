@@ -935,6 +935,7 @@ const Chat_AI = () => {
             let streamedContent = "";
 
             while (true) {
+                setRegenerating(false);
                 const { value, done } = await reader.read();
                 if (done) break;
 
@@ -992,7 +993,7 @@ const Chat_AI = () => {
                 }]);
             }
         } finally {
-            setRegenerating(false);
+            
             setLoading(false);
             setAbortController(null);
         }
@@ -1193,12 +1194,13 @@ const Chat_AI = () => {
 
                                                     {regenerating && i === messages.length - 1 && msg.role === 'assistant' && (
                                                         <div className="regenerating-indicator">
+
                                                             <div className="thinking-indicator">
                                                                 <span className="thinking-dot"></span>
                                                                 <span className="thinking-dot"></span>
                                                                 <span className="thinking-dot"></span>
                                                             </div>
-                                                            <span>Regenerating</span>
+                                                            
                                                         </div>
                                                     )}
                                                 </div>
