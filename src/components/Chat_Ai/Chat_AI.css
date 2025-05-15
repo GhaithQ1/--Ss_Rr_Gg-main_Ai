@@ -631,6 +631,7 @@
   padding: 0.5rem;
   width: 32px;
   height: 32px;
+  border-radius: 50%;
 }
 
 .send-button-ai:disabled {
@@ -641,11 +642,35 @@
 
 .send-button-ai:hover {
   color: var(--text-colorai);
+   background-color: rgba(255, 255, 255, 0.05);
 }
 
 .send-button-ai:active {
   transform: scale(0.95);
 }
+
+.stop-button-ai {
+  color: var(--text-colorbot);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin: 0.5rem;
+  padding: 0;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+}
+
+.stop-button-ai:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* No animation for the stop button to match ChatGPT style */
 
 /* Scrollbar styling */
 .chat-box-ai::-webkit-scrollbar {

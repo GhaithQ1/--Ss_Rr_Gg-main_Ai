@@ -10,7 +10,7 @@ import {
     faClock, faBars, faChevronRight, faTrash,
     faMicrophoneSlash, faFaceSmile, faArrowDown,
     faFile, faPaperclip, faImage, faDownload, faTimes,
-    faRedo, faMagic, faSyncAlt
+    faRedo, faMagic, faSyncAlt,faSquare
 } from '@fortawesome/free-solid-svg-icons';
 import EmojiPicker from 'emoji-picker-react';
 import { useNavigate } from "react-router-dom";
@@ -58,6 +58,8 @@ const Chat_AI = () => {
     const [placeholder, setPlaceholder] = useState("Ask me anything...");
     const [showCursor, setShowCursor] = useState(true); // State for blinking cursor
     // Reference for auto-resizing textarea
+        // حالة لتتبع ما إذا كان يجب إيقاف استجابة البوت
+    const [abortController, setAbortController] = useState(null);
     const textareaRef = useRef(null);
     const placeholders = [
         "Ask me anything...",
@@ -510,6 +512,26 @@ const Chat_AI = () => {
             return newAttachments;
         });
     };
+    // وظيفة لإيقاف استجابة البوت
+    const stopResponse = () => {
+        if (abortController) {
+            abortController.abort();
+            setAbortController(null);
+            setLoading(false);
+            
+            // تحديث حالة آخر رسالة من البوت لتظهر أنها توقفت
+            setMessages(prev => {
+                const updatedMessages = [...prev];
+                const lastMessage = updatedMessages[updatedMessages.length - 1];
+                if (lastMessage && lastMessage.role === "assistant" && lastMessage.streaming) {
+                    lastMessage.streaming = false;
+                    lastMessage.content += " [توقفت الإجابة]";
+                }
+                return updatedMessages;
+            });
+        }
+    };
+
 
     // Send a new message
     const sendMessage = async () => {
@@ -590,6 +612,9 @@ const Chat_AI = () => {
         setMessages(prev => [...prev, aiMessage]);
     
         try {
+                       // إنشاء كائن AbortController جديد لهذا الطلب
+            const controller = new AbortController();
+            setAbortController(controller);
             const response = await fetch(`${API}/chat_AI`, {
                 method: 'POST',
                 headers: {
@@ -599,7 +624,8 @@ const Chat_AI = () => {
                 body: JSON.stringify({
                     message: input,
                     threadId: currentThreadId
-                })
+                }),
+                signal: controller.signal
             });
     
             if (!response.body) {
@@ -658,9 +684,12 @@ const Chat_AI = () => {
                 }));
             }
         } catch (error) {
+                        // تجاهل خطأ AbortError لأنه متوقع عند إيقاف الطلب
+            if (error.name !== 'AbortError') {
             console.error("Error sending message:", error);
             alert("حدث خطأ أثناء إرسال الرسالة");
             setMessages(prev => prev.filter(msg => msg.id !== aiMessageId));
+            }
         } finally {
             setLoading(false);
         }
@@ -1223,9 +1252,19 @@ const Chat_AI = () => {
             >
               <FontAwesomeIcon icon={isListening ? faMicrophoneSlash : faMicrophone} />
             </button>
+                                            {loading ? (
+                                    <button
+                                        onClick={stopResponse}
+                                        className="stop-button-ai"
+                                        title="إيقاف الإجابة"
+                                    >
+                                        <FontAwesomeIcon icon={faSquare} />
+                                    </button>
+                                ) : (
             <button onClick={sendMessage} className="send-button-ai">
               <FontAwesomeIcon icon={faPaperPlane} />
             </button>
+             )}
           </div>
         </div>
       </div>
