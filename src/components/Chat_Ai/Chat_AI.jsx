@@ -10,7 +10,8 @@ import {
     faClock, faBars, faChevronRight, faTrash,
     faMicrophoneSlash, faFaceSmile, faArrowDown,
     faFile, faPaperclip, faImage, faDownload, faTimes,
-    faRedo, faMagic, faSyncAlt, faSquare
+    faRedo, faMagic, faSyncAlt, faStop, faSquare,
+    faCopy, faCheck
 } from '@fortawesome/free-solid-svg-icons';
 import EmojiPicker from 'emoji-picker-react';
 import { useNavigate } from "react-router-dom";
@@ -536,26 +537,26 @@ const Chat_AI = () => {
     // Send a new message
     const sendMessage = async () => {
         if (!input.trim()) return;
-    
+
         let currentThreadId = activeConversation;
-    
+
         if (!currentThreadId && !creatingNewChat) {
             try {
                 setCreatingNewChat(true);
                 console.log('No active thread, creating a new one before sending message');
-                
-                const threadResponse = await axios.post(`${API}/chat_AI/craete`, 
-                    { message: 'Start new chat' }, 
+
+                const threadResponse = await axios.post(`${API}/chat_AI/craete`,
+                    { message: 'Start new chat' },
                     {
                         headers: {
                             Authorization: `Bearer ${cookies.token}`,
                         },
                     }
                 );
-                
+
                 const newThreadId = threadResponse.data.thread_id;
                 console.log('Created new thread before sending message:', newThreadId);
-                
+
                 if (newThreadId) {
                     localStorage.setItem('lastCreatedChat', newThreadId);
                     const newConversation = { _id: newThreadId, id_thread: newThreadId };
@@ -566,7 +567,7 @@ const Chat_AI = () => {
                     });
                     setActiveConversation(newThreadId);
                     currentThreadId = newThreadId;
-    
+
                     setConversationTitles(prev => ({
                         ...prev,
                         [newThreadId]: 'محادثة جديدة'
@@ -584,38 +585,38 @@ const Chat_AI = () => {
                 setCreatingNewChat(false);
             }
         }
-    
+
         const userMessage = {
             role: "user",
             content: input,
             attachments: [] // ما فيه مرفقات
         };
-    
+
         setLastUserMessage({
             content: input,
             attachments: []
         });
-    
+
         setMessages(prev => [...prev, userMessage]);
         setInput("");
         setAttachments([]); // نظف المرفقات حتى لو مش مستخدمة
         setLoading(true);
-    
+
         const aiMessageId = Date.now();
-        const aiMessage = { 
+        const aiMessage = {
             id: aiMessageId,
-            role: "assistant", 
-            content: "", 
-            streaming: true 
+            role: "assistant",
+            content: "",
+            streaming: true
         };
-        
+
         setMessages(prev => [...prev, aiMessage]);
-    
+
         try {
             // إنشاء كائن AbortController جديد لهذا الطلب
             const controller = new AbortController();
             setAbortController(controller);
-            
+
             const response = await fetch(`${API}/chat_AI`, {
                 method: 'POST',
                 headers: {
@@ -628,30 +629,30 @@ const Chat_AI = () => {
                 }),
                 signal: controller.signal
             });
-    
+
             if (!response.body) {
                 throw new Error("ReadableStream not supported");
             }
-    
+
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let streamedContent = "";
-    
+
             while (true) {
                 const { value, done } = await reader.read();
                 if (done) break;
-                
+
                 const chunk = decoder.decode(value, { stream: true });
                 const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
-                
+
                 for (const line of lines) {
                     const content = line.replace(/^data: /, '').trim();
                     if (content === '[DONE]') break;
-                
+
                     // أضف مسافة بعد المحتوى إذا ما انتهى بنقطة أو علامة تعجب أو استفهام
                     const needsSpace = content.replace(/\s+/g, '').trim();
                     streamedContent += needsSpace + (needsSpace ? ' ' : '');
-                
+
                     setMessages(prev => {
                         const updatedMessages = [...prev];
                         const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
@@ -665,7 +666,7 @@ const Chat_AI = () => {
                     });
                 }
             }
-    
+
             setMessages(prev => {
                 const updatedMessages = [...prev];
                 const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
@@ -677,7 +678,7 @@ const Chat_AI = () => {
                 }
                 return updatedMessages;
             });
-    
+
             if (messages.length === 0) {
                 setConversationTitles(prev => ({
                     ...prev,
@@ -855,39 +856,50 @@ const Chat_AI = () => {
         setSidebarOpen(!sidebarOpen);
     };
 
+    // حالة لتتبع ما إذا كان تم النسخ لتغيير الأيقونة
+    const [isCopied, setIsCopied] = useState(false);
 
+    // دالة لنسخ آخر إجابة من البوت مع تغيير الأيقونة
+    const copyLastBotResponse = () => {
+        const lastBotMsg = [...messages].reverse().find(msg => msg.role === 'assistant' && msg.content && !msg.streaming);
+        if (lastBotMsg) {
+            navigator.clipboard.writeText(lastBotMsg.content);
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 3000);
+        }
+    };
     // Regenerate or improve the AI response
     const regenerateResponse = async (type) => {
         if (regenerating) return;
-        
+
         // Get the last user message from the messages array
         const userMessages = messages.filter(msg => msg.role === "user");
         const lastUserMsg = userMessages[userMessages.length - 1];
-        
+
         if (!lastUserMsg || !lastUserMsg.content || lastUserMsg.content.trim() === '') {
             alert('لا يمكن إعادة توليد رد لرسالة فارغة');
             return;
         }
-        
+
         setRegenerating(true);
         setLoading(true);
-        
+
         // Create a new AI message with streaming flag
         const aiMessageId = Date.now();
-        const aiMessage = { 
+        const aiMessage = {
             id: aiMessageId,
-            role: "assistant", 
-            content: "", 
-            streaming: true 
+            role: "assistant",
+            content: "",
+            streaming: true
         };
-        
+
         // Remove the last AI message if it exists
-        const filteredMessages = messages.filter(msg => msg.role !== "assistant" || 
+        const filteredMessages = messages.filter(msg => msg.role !== "assistant" ||
             (messages.indexOf(msg) !== messages.length - 1));
-        
+
         // Add the new AI message
         setMessages([...filteredMessages, aiMessage]);
-        
+
         try {
             // Prepare the message based on the type
             let message = lastUserMsg.content;
@@ -896,11 +908,11 @@ const Chat_AI = () => {
             } else if (type === 'improve') {
                 message = `Improve the previous answer: ${message}`;
             }
-            
+
             // Create a new AbortController for this request
             const controller = new AbortController();
             setAbortController(controller);
-            
+
             const response = await fetch(`${API}/chat_AI`, {
                 method: 'POST',
                 headers: {
@@ -913,30 +925,30 @@ const Chat_AI = () => {
                 }),
                 signal: controller.signal
             });
-            
+
             if (!response.body) {
                 throw new Error("ReadableStream not supported");
             }
-            
+
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let streamedContent = "";
-            
+
             while (true) {
                 const { value, done } = await reader.read();
                 if (done) break;
-                
+
                 const chunk = decoder.decode(value, { stream: true });
                 const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
-                
+
                 for (const line of lines) {
                     const content = line.replace(/^data: /, '').trim();
                     if (content === '[DONE]') break;
-                    
+
                     // Add space after content if needed
                     const needsSpace = content.replace(/\s+/g, '').trim();
                     streamedContent += needsSpace + (needsSpace ? ' ' : '');
-                    
+
                     setMessages(prev => {
                         const updatedMessages = [...prev];
                         const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
@@ -950,7 +962,7 @@ const Chat_AI = () => {
                     });
                 }
             }
-            
+
             // Mark the message as no longer streaming
             setMessages(prev => {
                 const updatedMessages = [...prev];
@@ -963,16 +975,16 @@ const Chat_AI = () => {
                 }
                 return updatedMessages;
             });
-            
+
         } catch (error) {
             // Ignore AbortError as it's expected when stopping
             if (error.name !== 'AbortError') {
                 console.error("Error regenerating response:", error);
                 alert("حدث خطأ أثناء إعادة توليد الرد");
-                
+
                 // Remove the loading message
                 setMessages(prev => prev.filter(msg => msg.id !== aiMessageId));
-                
+
                 // Add an error message
                 setMessages(prev => [...prev, {
                     role: "assistant",
@@ -1192,6 +1204,13 @@ const Chat_AI = () => {
                                                         title="Improve"
                                                     >
                                                         <FontAwesomeIcon icon={faMagic} />
+                                                    </button>
+                                                    <button
+                                                        className="regenerate-button copy-bot-reply-button"
+                                                        onClick={copyLastBotResponse}
+                                                        title="Copy bot reply"
+                                                    >
+                                                        <FontAwesomeIcon icon={isCopied ? faCheck : faCopy} />
                                                     </button>
                                                 </div>
                                             )}
