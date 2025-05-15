@@ -853,38 +853,39 @@ const Chat_AI = () => {
         setSidebarOpen(!sidebarOpen);
     };
 
+
     // Regenerate or improve the AI response
     const regenerateResponse = async (type) => {
         if (regenerating) return;
-
+        
         // Get the last user message from the messages array
         const userMessages = messages.filter(msg => msg.role === "user");
         const lastUserMsg = userMessages[userMessages.length - 1];
-
+        
         if (!lastUserMsg || !lastUserMsg.content || lastUserMsg.content.trim() === '') {
             alert('لا يمكن إعادة توليد رد لرسالة فارغة');
             return;
         }
-
+        
         setRegenerating(true);
         setLoading(true);
-
+        
         // Create a new AI message with streaming flag
         const aiMessageId = Date.now();
-        const aiMessage = {
+        const aiMessage = { 
             id: aiMessageId,
-            role: "assistant",
-            content: "",
-            streaming: true
+            role: "assistant", 
+            content: "", 
+            streaming: true 
         };
-
+        
         // Remove the last AI message if it exists
-        const filteredMessages = messages.filter(msg => msg.role !== "assistant" ||
+        const filteredMessages = messages.filter(msg => msg.role !== "assistant" || 
             (messages.indexOf(msg) !== messages.length - 1));
-
+        
         // Add the new AI message
         setMessages([...filteredMessages, aiMessage]);
-
+        
         try {
             // Prepare the message based on the type
             let message = lastUserMsg.content;
@@ -893,11 +894,11 @@ const Chat_AI = () => {
             } else if (type === 'improve') {
                 message = `Improve the previous answer: ${message}`;
             }
-
+            
             // Create a new AbortController for this request
             const controller = new AbortController();
             setAbortController(controller);
-
+            
             const response = await fetch("http://localhost:8000/api/v2/chat_AI", {
                 method: 'POST',
                 headers: {
@@ -910,30 +911,30 @@ const Chat_AI = () => {
                 }),
                 signal: controller.signal
             });
-
+            
             if (!response.body) {
                 throw new Error("ReadableStream not supported");
             }
-
+            
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let streamedContent = "";
-
+            
             while (true) {
                 const { value, done } = await reader.read();
                 if (done) break;
-
+                
                 const chunk = decoder.decode(value, { stream: true });
                 const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
-
+                
                 for (const line of lines) {
                     const content = line.replace(/^data: /, '').trim();
                     if (content === '[DONE]') break;
-
+                    
                     // Add space after content if needed
                     const needsSpace = content.replace(/\s+/g, '').trim();
                     streamedContent += needsSpace + (needsSpace ? ' ' : '');
-
+                    
                     setMessages(prev => {
                         const updatedMessages = [...prev];
                         const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
@@ -947,7 +948,7 @@ const Chat_AI = () => {
                     });
                 }
             }
-
+            
             // Mark the message as no longer streaming
             setMessages(prev => {
                 const updatedMessages = [...prev];
@@ -960,16 +961,16 @@ const Chat_AI = () => {
                 }
                 return updatedMessages;
             });
-
+            
         } catch (error) {
             // Ignore AbortError as it's expected when stopping
             if (error.name !== 'AbortError') {
                 console.error("Error regenerating response:", error);
                 alert("حدث خطأ أثناء إعادة توليد الرد");
-
+                
                 // Remove the loading message
                 setMessages(prev => prev.filter(msg => msg.id !== aiMessageId));
-
+                
                 // Add an error message
                 setMessages(prev => [...prev, {
                     role: "assistant",
@@ -982,6 +983,7 @@ const Chat_AI = () => {
             setAbortController(null);
         }
     };
+
 
 
     return (
