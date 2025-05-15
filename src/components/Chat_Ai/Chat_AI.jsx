@@ -1169,7 +1169,23 @@ const Chat_AI = () => {
                                                         </div>
                                                         <div className="message-sender">Sense AI</div>
                                                     </div>
-                                                    <div>{msg.content}</div>
+                                                <div style={{ overflowX: 'auto', width: '100%' }}>
+              
+                                                        <pre
+                                                            style={{
+                                                                whiteSpace: 'pre-wrap',
+                                                                wordBreak: 'break-word',
+                                                                fontFamily: 'inherit',
+                                                                margin: 0,
+                                                                lineHeight: '2'
+                                                            }}
+                                                        >
+                                                            {msg.content}
+                                                        </pre>
+                                          
+
+
+                                                </div>
                                                     <div className="message-time">
                                                     </div>
 
