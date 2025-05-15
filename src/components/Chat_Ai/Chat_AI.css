@@ -15,7 +15,7 @@
   width: 100%;
   overflow: hidden;
   position: relative;
-  background: radial-gradient(circle at center, #1D2330 0%, #0B0F18 100%);
+  background: radial-gradient(circle at center, var(--box-color) 0%, var(--body-color) 100%);
 }
 
 .chat-sidebar {
@@ -31,7 +31,7 @@
   box-shadow: var(--shadowai);
   position: absolute;
   z-index: 100;
-  background: #1D2330;
+  background: var(--body-color);
   transform: translateX(-280px);
 }
 
@@ -427,7 +427,7 @@
 
 .user-ai .message-content {
   width: 80%;
-  background-color: #222e3a4f;
+  background-color: var(--body-color);
   color: var(--text-colorai);
   margin-left: auto;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -865,7 +865,7 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #1D2330;
+  background-color: var(--body-color);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--text-colorai);
   display: flex;
