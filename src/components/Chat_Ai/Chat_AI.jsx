@@ -853,68 +853,124 @@ const Chat_AI = () => {
         setSidebarOpen(!sidebarOpen);
     };
 
-    // // Regenerate or improve the AI response
+// Regenerate or improve the AI response
     const regenerateResponse = async (type) => {
-        console.log("1")
-        if (!lastUserMessage || regenerating) return;
-
-        if (!lastUserMessage.content || lastUserMessage.content.trim() === '') {
+        if (regenerating) return;
+        
+        // Get the last user message from the messages array
+        const userMessages = messages.filter(msg => msg.role === "user");
+        const lastUserMsg = userMessages[userMessages.length - 1];
+        
+        if (!lastUserMsg || !lastUserMsg.content || lastUserMsg.content.trim() === '') {
             alert('لا يمكن إعادة توليد رد لرسالة فارغة');
             return;
         }
-
+        
         setRegenerating(true);
-
+        setLoading(true);
+        
+        // Create a new AI message with streaming flag
+        const aiMessageId = Date.now();
+        const aiMessage = { 
+            id: aiMessageId,
+            role: "assistant", 
+            content: "", 
+            streaming: true 
+        };
+        
+        // Remove the last AI message if it exists
+        const filteredMessages = messages.filter(msg => msg.role !== "assistant" || 
+            (messages.indexOf(msg) !== messages.length - 1));
+        
+        // Add the new AI message
+        setMessages([...filteredMessages, aiMessage]);
+        
         try {
-            const formData = new FormData();
-            formData.append('threadId', activeConversation);
-
-            const messageContent = lastUserMessage.content || 'رسالة المستخدم';
+            // Prepare the message based on the type
+            let message = lastUserMsg.content;
             if (type === 'regenerate') {
-                formData.append('message', `Re-answer to: ${messageContent}`);
+                message = `Re-answer to: ${message}`;
             } else if (type === 'improve') {
-                formData.append('message', `Improve the previous answer: ${messageContent}`);
-            } else {
-                formData.append('message', messageContent);
+                message = `Improve the previous answer: ${message}`;
             }
-
-            // الملفات
-            if (lastUserMessage.attachments?.length) {
-                lastUserMessage.attachments.forEach(attachment => {
-                    if (attachment?.file) {
-                        formData.append('files', attachment.file);
-                    }
-                });
-            }
-
-            // إزالة الرسالة الأخيرة من المساعد
-            setMessages(prev => prev.slice(0, -1));
-
-            // إضافة رسالة التحميل
-            const loadingMessage = { role: "assistant", content: "Loading..." };
-            setMessages(prev => [...prev, loadingMessage]);
-            // لا نقوم بتفعيل حالة التحميل لتجنب ظهور المؤشر في الأسفل
-
-            const res = await axios.post(`${API}/chat_AI`, formData, {
+            
+            // Create a new AbortController for this request
+            const controller = new AbortController();
+            setAbortController(controller);
+            
+            const response = await fetch("http://localhost:8000/api/v2/chat_AI", {
+                method: 'POST',
                 headers: {
                     Authorization: `Bearer ${cookies.token}`,
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json'
                 },
+                body: JSON.stringify({
+                    message: message,
+                    threadId: activeConversation
+                }),
+                signal: controller.signal
             });
-
-            // إزالة رسالة التحميل
-            setMessages(prev => prev.filter(msg => !(msg.role === "assistant" && msg.content === "Loading...")));
-            // لم نقم بتفعيل حالة التحميل لذلك لا حاجة لإيقافها
-
-            const aiMessage = { role: "assistant", content: res.data.reply };
-            setMessages(prev => [...prev, aiMessage]);
-
+            
+            if (!response.body) {
+                throw new Error("ReadableStream not supported");
+            }
+            
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let streamedContent = "";
+            
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
+                
+                for (const line of lines) {
+                    const content = line.replace(/^data: /, '').trim();
+                    if (content === '[DONE]') break;
+                    
+                    // Add space after content if needed
+                    const needsSpace = content.replace(/\s+/g, '').trim();
+                    streamedContent += needsSpace + (needsSpace ? ' ' : '');
+                    
+                    setMessages(prev => {
+                        const updatedMessages = [...prev];
+                        const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
+                        if (messageIndex !== -1) {
+                            updatedMessages[messageIndex] = {
+                                ...updatedMessages[messageIndex],
+                                content: streamedContent
+                            };
+                        }
+                        return updatedMessages;
+                    });
+                }
+            }
+            
+            // Mark the message as no longer streaming
+            setMessages(prev => {
+                const updatedMessages = [...prev];
+                const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
+                if (messageIndex !== -1) {
+                    updatedMessages[messageIndex] = {
+                        ...updatedMessages[messageIndex],
+                        streaming: false
+                    };
+                }
+                return updatedMessages;
+            });
+            
         } catch (error) {
-            console.error("Error regenerating response:", error);
-            alert("حدث خطأ أثناء إعادة توليد الرد");
-
-            const lastMessages = messages.slice(-2);
-            if (!(lastMessages.length === 2 && lastMessages[1].role === 'assistant')) {
+            // Ignore AbortError as it's expected when stopping
+            if (error.name !== 'AbortError') {
+                console.error("Error regenerating response:", error);
+                alert("حدث خطأ أثناء إعادة توليد الرد");
+                
+                // Remove the loading message
+                setMessages(prev => prev.filter(msg => msg.id !== aiMessageId));
+                
+                // Add an error message
                 setMessages(prev => [...prev, {
                     role: "assistant",
                     content: "عذراً، حدث خطأ أثناء محاولة إعادة توليد الرد."
@@ -922,6 +978,8 @@ const Chat_AI = () => {
             }
         } finally {
             setRegenerating(false);
+            setLoading(false);
+            setAbortController(null);
         }
     };
 
