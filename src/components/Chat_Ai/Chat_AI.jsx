@@ -899,7 +899,7 @@ const Chat_AI = () => {
             const controller = new AbortController();
             setAbortController(controller);
             
-            const response = await fetch("http://localhost:8000/api/v2/chat_AI", {
+            const response = await fetch(`${API}/chat_AI`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${cookies.token}`,
