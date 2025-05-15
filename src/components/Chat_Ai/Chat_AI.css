@@ -15,7 +15,7 @@
   width: 100%;
   overflow: hidden;
   position: relative;
-  background: white;
+  background: radial-gradient(circle at center, #1D2330 0%, #0B0F18 100%);
 }
 
 .chat-sidebar {
