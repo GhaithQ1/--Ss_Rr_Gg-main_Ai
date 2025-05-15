@@ -652,14 +652,13 @@
 .stop-button-ai {
   color: var(--text-colorbot);
   background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  border-radius: 50%;
   width: 32px;
   height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  margin: 0.5rem;
   padding: 0;
   font-size: 0.9rem;
   border: none;
