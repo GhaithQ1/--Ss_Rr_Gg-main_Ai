@@ -31,7 +31,7 @@
   box-shadow: var(--shadowai);
   position: absolute;
   z-index: 100;
-  background: #1D2330 ;
+  background: #1D2330;
   transform: translateX(-280px);
 }
 
@@ -39,6 +39,7 @@
   transform: translateX(-280px);
   width: 0;
 }
+
 .chat-sidebar.open {
   transform: translateX(0);
 }
@@ -334,8 +335,15 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translate(-50%, -10px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
+  from {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 .chat-box-ai {
@@ -391,7 +399,6 @@
 }
 
 .message-content {
-  max-width: 80%;
   padding: 10px 15px;
   border-radius: 12px;
   line-height: 1.5;
@@ -418,6 +425,7 @@
 }
 
 .user-ai .message-content {
+  width: 80%;
   background-color: #222e3a4f;
   color: var(--text-colorai);
   margin-left: auto;
@@ -430,11 +438,11 @@
 }
 
 .assistant-ai .message-content {
-  background-color: #222e3a;
-  color: var(--text-colorai);
-  margin-right: auto;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 2px 8px var(--shadowai-color);
+  background-color: inherit;
+  color: var(--text-colorbot);
+  width: 100%;
+  border-bottom: 1px solid #ffffff0d;
+  border-radius: 0;
 }
 
 .message-header {
@@ -642,7 +650,7 @@
 
 .send-button-ai:hover {
   color: var(--text-colorai);
-   background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .send-button-ai:active {
@@ -842,10 +850,10 @@
   padding: 10px;
 }
 
-@media(max-width:767px){
-.emoji-picker-container{
-  width: 100%;
-}
+@media(max-width:767px) {
+  .emoji-picker-container {
+    width: 100%;
+  }
 }
 
 /* Scroll to bottom button */
@@ -971,10 +979,12 @@
 }
 
 @media (max-width: 768px) {
+
   .assistant-ai .message-content div,
-  .chat-app-container .message-text{
+  .chat-app-container .message-text {
     font-size: 13px;
   }
+
   .chat-container-ai {
     margin: 0;
     height: 100vh;
@@ -996,7 +1006,8 @@
   .input-section-ai {
     width: 95%;
   }
-  .scroll-bottom-button{
+
+  .scroll-bottom-button {
     bottom: 200px;
     right: 30px;
     width: 40px;
@@ -1009,7 +1020,8 @@
   justify-content: space-between;
   width: 100%;
 }
-.input-controls .icon-container{
+
+.input-controls .icon-container {
   display: flex;
   align-items: center;
 }

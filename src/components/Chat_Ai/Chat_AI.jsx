@@ -10,7 +10,7 @@ import {
     faClock, faBars, faChevronRight, faTrash,
     faMicrophoneSlash, faFaceSmile, faArrowDown,
     faFile, faPaperclip, faImage, faDownload, faTimes,
-    faRedo, faMagic, faSyncAlt,faSquare
+    faRedo, faMagic, faSyncAlt, faSquare
 } from '@fortawesome/free-solid-svg-icons';
 import EmojiPicker from 'emoji-picker-react';
 import { useNavigate } from "react-router-dom";
@@ -58,7 +58,7 @@ const Chat_AI = () => {
     const [placeholder, setPlaceholder] = useState("Ask me anything...");
     const [showCursor, setShowCursor] = useState(true); // State for blinking cursor
     // Reference for auto-resizing textarea
-        // حالة لتتبع ما إذا كان يجب إيقاف استجابة البوت
+    // حالة لتتبع ما إذا كان يجب إيقاف استجابة البوت
     const [abortController, setAbortController] = useState(null);
     const textareaRef = useRef(null);
     const placeholders = [
@@ -518,7 +518,7 @@ const Chat_AI = () => {
             abortController.abort();
             setAbortController(null);
             setLoading(false);
-            
+
             // تحديث حالة آخر رسالة من البوت لتظهر أنها توقفت
             setMessages(prev => {
                 const updatedMessages = [...prev];
@@ -536,26 +536,26 @@ const Chat_AI = () => {
     // Send a new message
     const sendMessage = async () => {
         if (!input.trim()) return;
-    
+
         let currentThreadId = activeConversation;
-    
+
         if (!currentThreadId && !creatingNewChat) {
             try {
                 setCreatingNewChat(true);
                 console.log('No active thread, creating a new one before sending message');
-                
-                const threadResponse = await axios.post(`${API}/chat_AI/craete`, 
-                    { message: 'Start new chat' }, 
+
+                const threadResponse = await axios.post(`${API}/chat_AI/craete`,
+                    { message: 'Start new chat' },
                     {
                         headers: {
                             Authorization: `Bearer ${cookies.token}`,
                         },
                     }
                 );
-                
+
                 const newThreadId = threadResponse.data.thread_id;
                 console.log('Created new thread before sending message:', newThreadId);
-                
+
                 if (newThreadId) {
                     localStorage.setItem('lastCreatedChat', newThreadId);
                     const newConversation = { _id: newThreadId, id_thread: newThreadId };
@@ -566,7 +566,7 @@ const Chat_AI = () => {
                     });
                     setActiveConversation(newThreadId);
                     currentThreadId = newThreadId;
-    
+
                     setConversationTitles(prev => ({
                         ...prev,
                         [newThreadId]: 'محادثة جديدة'
@@ -584,35 +584,35 @@ const Chat_AI = () => {
                 setCreatingNewChat(false);
             }
         }
-    
+
         const userMessage = {
             role: "user",
             content: input,
             attachments: [] // ما فيه مرفقات
         };
-    
+
         setLastUserMessage({
             content: input,
             attachments: []
         });
-    
+
         setMessages(prev => [...prev, userMessage]);
         setInput("");
         setAttachments([]); // نظف المرفقات حتى لو مش مستخدمة
         setLoading(true);
-    
+
         const aiMessageId = Date.now();
-        const aiMessage = { 
+        const aiMessage = {
             id: aiMessageId,
-            role: "assistant", 
-            content: "", 
-            streaming: true 
+            role: "assistant",
+            content: "",
+            streaming: true
         };
-        
+
         setMessages(prev => [...prev, aiMessage]);
-    
+
         try {
-                       // إنشاء كائن AbortController جديد لهذا الطلب
+            // إنشاء كائن AbortController جديد لهذا الطلب
             const controller = new AbortController();
             setAbortController(controller);
             const response = await fetch(`${API}/chat_AI`, {
@@ -627,30 +627,30 @@ const Chat_AI = () => {
                 }),
                 signal: controller.signal
             });
-    
+
             if (!response.body) {
                 throw new Error("ReadableStream not supported");
             }
-    
+
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let streamedContent = "";
-    
+
             while (true) {
                 const { value, done } = await reader.read();
                 if (done) break;
-                
+
                 const chunk = decoder.decode(value, { stream: true });
                 const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
-                
+
                 for (const line of lines) {
                     const content = line.replace(/^data: /, '').trim();
                     if (content === '[DONE]') break;
-                
+
                     // أضف مسافة بعد المحتوى إذا ما انتهى بنقطة أو علامة تعجب أو استفهام
                     const needsSpace = content.replace(/\s+/g, '').trim();
                     streamedContent += needsSpace + (needsSpace ? ' ' : '');
-                
+
                     setMessages(prev => {
                         const updatedMessages = [...prev];
                         const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
@@ -664,7 +664,7 @@ const Chat_AI = () => {
                     });
                 }
             }
-    
+
             setMessages(prev => {
                 const updatedMessages = [...prev];
                 const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
@@ -676,7 +676,7 @@ const Chat_AI = () => {
                 }
                 return updatedMessages;
             });
-    
+
             if (messages.length === 0) {
                 setConversationTitles(prev => ({
                     ...prev,
@@ -684,11 +684,11 @@ const Chat_AI = () => {
                 }));
             }
         } catch (error) {
-                        // تجاهل خطأ AbortError لأنه متوقع عند إيقاف الطلب
+            // تجاهل خطأ AbortError لأنه متوقع عند إيقاف الطلب
             if (error.name !== 'AbortError') {
-            console.error("Error sending message:", error);
-            alert("حدث خطأ أثناء إرسال الرسالة");
-            setMessages(prev => prev.filter(msg => msg.id !== aiMessageId));
+                console.error("Error sending message:", error);
+                alert("حدث خطأ أثناء إرسال الرسالة");
+                setMessages(prev => prev.filter(msg => msg.id !== aiMessageId));
             }
         } finally {
             setLoading(false);
@@ -829,7 +829,7 @@ const Chat_AI = () => {
                     window.location.reload();
                 }
             }
-            
+
 
         } catch (error) {
             console.error('Error deleting conversation:', error);
@@ -853,38 +853,38 @@ const Chat_AI = () => {
         setSidebarOpen(!sidebarOpen);
     };
 
-// Regenerate or improve the AI response
+    // Regenerate or improve the AI response
     const regenerateResponse = async (type) => {
         if (regenerating) return;
-        
+
         // Get the last user message from the messages array
         const userMessages = messages.filter(msg => msg.role === "user");
         const lastUserMsg = userMessages[userMessages.length - 1];
-        
+
         if (!lastUserMsg || !lastUserMsg.content || lastUserMsg.content.trim() === '') {
             alert('لا يمكن إعادة توليد رد لرسالة فارغة');
             return;
         }
-        
+
         setRegenerating(true);
         setLoading(true);
-        
+
         // Create a new AI message with streaming flag
         const aiMessageId = Date.now();
-        const aiMessage = { 
+        const aiMessage = {
             id: aiMessageId,
-            role: "assistant", 
-            content: "", 
-            streaming: true 
+            role: "assistant",
+            content: "",
+            streaming: true
         };
-        
+
         // Remove the last AI message if it exists
-        const filteredMessages = messages.filter(msg => msg.role !== "assistant" || 
+        const filteredMessages = messages.filter(msg => msg.role !== "assistant" ||
             (messages.indexOf(msg) !== messages.length - 1));
-        
+
         // Add the new AI message
         setMessages([...filteredMessages, aiMessage]);
-        
+
         try {
             // Prepare the message based on the type
             let message = lastUserMsg.content;
@@ -893,11 +893,11 @@ const Chat_AI = () => {
             } else if (type === 'improve') {
                 message = `Improve the previous answer: ${message}`;
             }
-            
+
             // Create a new AbortController for this request
             const controller = new AbortController();
             setAbortController(controller);
-            
+
             const response = await fetch("http://localhost:8000/api/v2/chat_AI", {
                 method: 'POST',
                 headers: {
@@ -910,30 +910,30 @@ const Chat_AI = () => {
                 }),
                 signal: controller.signal
             });
-            
+
             if (!response.body) {
                 throw new Error("ReadableStream not supported");
             }
-            
+
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let streamedContent = "";
-            
+
             while (true) {
                 const { value, done } = await reader.read();
                 if (done) break;
-                
+
                 const chunk = decoder.decode(value, { stream: true });
                 const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
-                
+
                 for (const line of lines) {
                     const content = line.replace(/^data: /, '').trim();
                     if (content === '[DONE]') break;
-                    
+
                     // Add space after content if needed
                     const needsSpace = content.replace(/\s+/g, '').trim();
                     streamedContent += needsSpace + (needsSpace ? ' ' : '');
-                    
+
                     setMessages(prev => {
                         const updatedMessages = [...prev];
                         const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
@@ -947,7 +947,7 @@ const Chat_AI = () => {
                     });
                 }
             }
-            
+
             // Mark the message as no longer streaming
             setMessages(prev => {
                 const updatedMessages = [...prev];
@@ -960,16 +960,16 @@ const Chat_AI = () => {
                 }
                 return updatedMessages;
             });
-            
+
         } catch (error) {
             // Ignore AbortError as it's expected when stopping
             if (error.name !== 'AbortError') {
                 console.error("Error regenerating response:", error);
                 alert("حدث خطأ أثناء إعادة توليد الرد");
-                
+
                 // Remove the loading message
                 setMessages(prev => prev.filter(msg => msg.id !== aiMessageId));
-                
+
                 // Add an error message
                 setMessages(prev => [...prev, {
                     role: "assistant",
@@ -1046,154 +1046,154 @@ const Chat_AI = () => {
                 </div>
             </div>
 
-{conversationLoading ? (
-  <div className="loading-container full-page">
-    <div className="loading-spinner"></div>
-    <p className="loading-text">Loading conversation...</p>
-  </div>
-) : (
-  <>
-    {/* كل الصفحة الأصلية تبدأ من هون */}
-    <div className="chat-container-ai">
-    <header className="chat-title-ai">
-      <div className="logo-container">
-        <button className="toggle-sidebar-button" onClick={toggleSidebar}>
-          <FontAwesomeIcon icon={faBars} />
-        </button>
-        <FontAwesomeIcon icon={faRobot} className="robot-icon" />
-        <h1>Sense AI</h1>
-      </div>
-      <div className="header-buttons">
-        <button className="reload-button" onClick={handleReload} disabled={isReloading}>
-          {isReloading ? (
-            <div className="button-spinner"></div>
-          ) : (
-            <FontAwesomeIcon icon={faSyncAlt} />
-          )}
-        </button>
-        <button className="settings-button">
-          <FontAwesomeIcon icon={faEllipsisH} />
-        </button>
-      </div>
-    </header>
-
-    <div className="chat-box-ai">
-      {messages.length === 0 ? (
-        <div className="empty-chat">
-          <div className="logo-circle">
-            <div className="inner-shape"></div>
-          </div>
-          <h2>Hi, {MyData.name}</h2>
-          <div className="main-prompt">Can I help you with anything?</div>
-          <p className="subtitle">Ready to assist you with anything you need?</p>
-        </div>
-      ) : (
-        <div className="messages-container" ref={messagesContainerRef}>
-          {messages?.map((msg, i) => (
-            <div key={i} className={`message-ai ${msg.role === 'user' ? 'user-ai' : 'assistant-ai'}`}>
-              {msg.role === 'user' ? (
-                <div className="message-content">
-                  <div className="message-header">
-                    <div className="message-avatar">
-                      <img
-                        src={
-                          MyData.profilImage
-                            ? MyData.profilImage.startsWith("http")
-                              ? MyData.profilImage
-                              : `https://backendprojecr-production.up.railway.app/user/${MyData.profilImage}`
-                            : "/image/pngegg.png"
-                        }
-                        alt={`Image of ${MyData.name}`}
-                      />
-                    </div>
-                    <div className="message-sender">{MyData.name}</div>
-                  </div>
-                  <div className="message-text">{msg.content}</div>
-                  <div className="message-time">
-                    {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </div>
-
-                  {msg.attachments && msg.attachments.length > 0 && (
-                    <div className="message-attachments">
-                      {msg.attachments.map((attachment, index) => (
-                        <div key={index} className="attachment-item">
-                          {attachment.type === 'image' ? (
-                            <div className="image-attachment">
-                              <img src={attachment.preview} alt={attachment.name} />
-                              <div className="attachment-info">
-                                <span>{attachment.name}</span>
-                                <a
-                                  href={attachment.preview}
-                                  download={attachment.name}
-                                  className="download-button"
-                                >
-                                  <FontAwesomeIcon icon={faDownload} />
-                                </a>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="file-attachment">
-                              <FontAwesomeIcon icon={faFile} className="file-icon" />
-                              <div className="attachment-info">
-                                <span>{attachment.name}</span>
-                                <span className="file-size">{Math.round(attachment.size / 1024)} KB</span>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+            {conversationLoading ? (
+                <div className="loading-container full-page">
+                    <div className="loading-spinner"></div>
+                    <p className="loading-text">Loading conversation...</p>
                 </div>
-              ) : (
-                <div className="message-content">
-                  <div className="message-header">
-                    <div className="message-avatar">
-                      <FontAwesomeIcon icon={faRobot} />
-                    </div>
-                    <div className="message-sender">Sense AI</div>
-                  </div>
-                  <div>{msg.content}</div>
-                  <div className="message-time">
-                    {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </div>
+            ) : (
+                <>
+                    {/* كل الصفحة الأصلية تبدأ من هون */}
+                    <div className="chat-container-ai">
+                        <header className="chat-title-ai">
+                            <div className="logo-container">
+                                <button className="toggle-sidebar-button" onClick={toggleSidebar}>
+                                    <FontAwesomeIcon icon={faBars} />
+                                </button>
+                                <FontAwesomeIcon icon={faRobot} className="robot-icon" />
+                                <h1>Sense AI</h1>
+                            </div>
+                            <div className="header-buttons">
+                                <button className="reload-button" onClick={handleReload} disabled={isReloading}>
+                                    {isReloading ? (
+                                        <div className="button-spinner"></div>
+                                    ) : (
+                                        <FontAwesomeIcon icon={faSyncAlt} />
+                                    )}
+                                </button>
+                                <button className="settings-button">
+                                    <FontAwesomeIcon icon={faEllipsisH} />
+                                </button>
+                            </div>
+                        </header>
 
-                  {i === messages.length - 1 && msg.role === 'assistant' && lastUserMessage?.content && (
-                    <div className="regenerate-buttons">
-                      <button
-                        className="regenerate-button"
-                        onClick={() => regenerateResponse('regenerate')}
-                        disabled={regenerating}
-                      >
-                        <FontAwesomeIcon icon={faRedo} />
-                        <span> Reply back</span>
-                      </button>
-                      <button
-                        className="regenerate-button improve"
-                        onClick={() => regenerateResponse('improve')}
-                        disabled={regenerating}
-                      >
-                        <FontAwesomeIcon icon={faMagic} />
-                        <span> Improve</span>
-                      </button>
-                    </div>
-                  )}
+                        <div className="chat-box-ai">
+                            {messages.length === 0 ? (
+                                <div className="empty-chat">
+                                    <div className="logo-circle">
+                                        <div className="inner-shape"></div>
+                                    </div>
+                                    <h2>Hi, {MyData.name}</h2>
+                                    <div className="main-prompt">Can I help you with anything?</div>
+                                    <p className="subtitle">Ready to assist you with anything you need?</p>
+                                </div>
+                            ) : (
+                                <div className="messages-container" ref={messagesContainerRef}>
+                                    {messages?.map((msg, i) => (
+                                        <div key={i} className={`message-ai ${msg.role === 'user' ? 'user-ai' : 'assistant-ai'}`}>
+                                            {msg.role === 'user' ? (
+                                                <div className="message-content">
+                                                    <div className="message-header">
+                                                        <div className="message-avatar">
+                                                            <img
+                                                                src={
+                                                                    MyData.profilImage
+                                                                        ? MyData.profilImage.startsWith("http")
+                                                                            ? MyData.profilImage
+                                                                            : `https://backendprojecr-production.up.railway.app/user/${MyData.profilImage}`
+                                                                        : "/image/pngegg.png"
+                                                                }
+                                                                alt={`Image of ${MyData.name}`}
+                                                            />
+                                                        </div>
+                                                        <div className="message-sender">{MyData.name}</div>
+                                                    </div>
+                                                    <div className="message-text">{msg.content}</div>
+                                                    <div className="message-time">
+                                                        {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </div>
 
-                  {regenerating && i === messages.length - 1 && msg.role === 'assistant' && (
-                    <div className="regenerating-indicator">
-                      <div className="thinking-indicator">
-                        <span className="thinking-dot"></span>
-                        <span className="thinking-dot"></span>
-                        <span className="thinking-dot"></span>
-                      </div>
-                      <span>Regenerating</span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-          {/* {loading && (
+                                                    {msg.attachments && msg.attachments.length > 0 && (
+                                                        <div className="message-attachments">
+                                                            {msg.attachments.map((attachment, index) => (
+                                                                <div key={index} className="attachment-item">
+                                                                    {attachment.type === 'image' ? (
+                                                                        <div className="image-attachment">
+                                                                            <img src={attachment.preview} alt={attachment.name} />
+                                                                            <div className="attachment-info">
+                                                                                <span>{attachment.name}</span>
+                                                                                <a
+                                                                                    href={attachment.preview}
+                                                                                    download={attachment.name}
+                                                                                    className="download-button"
+                                                                                >
+                                                                                    <FontAwesomeIcon icon={faDownload} />
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="file-attachment">
+                                                                            <FontAwesomeIcon icon={faFile} className="file-icon" />
+                                                                            <div className="attachment-info">
+                                                                                <span>{attachment.name}</span>
+                                                                                <span className="file-size">{Math.round(attachment.size / 1024)} KB</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <div className="message-content">
+                                                    <div className="message-header">
+                                                        <div className="message-avatar">
+                                                            <FontAwesomeIcon icon={faRobot} />
+                                                        </div>
+                                                        <div className="message-sender">Sense AI</div>
+                                                    </div>
+                                                    <div>{msg.content}</div>
+                                                    <div className="message-time">
+                                                    </div>
+
+
+
+                                                    {regenerating && i === messages.length - 1 && msg.role === 'assistant' && (
+                                                        <div className="regenerating-indicator">
+                                                            <div className="thinking-indicator">
+                                                                <span className="thinking-dot"></span>
+                                                                <span className="thinking-dot"></span>
+                                                                <span className="thinking-dot"></span>
+                                                            </div>
+                                                            <span>Regenerating</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                            {msg.role === 'assistant' && !msg.streaming && i === messages.length - 1 && (
+                                                <div className="regenerate-buttons">
+                                                    <button
+                                                        className="regenerate-button"
+                                                        onClick={() => regenerateResponse('regenerate')}
+                                                        disabled={regenerating}
+                                                        title="Reply back"
+                                                    >
+                                                        <FontAwesomeIcon icon={faRedo} />
+                                                    </button>
+                                                    <button
+                                                        className="regenerate-button improve"
+                                                        onClick={() => regenerateResponse('improve')}
+                                                        disabled={regenerating}
+                                                        title="Improve"
+                                                    >
+                                                        <FontAwesomeIcon icon={faMagic} />
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {/* {loading && (
             <div className="message-ai assistant-ai loading-message">
               <div className="message-content">
                 <div className="message-header">
@@ -1213,123 +1213,123 @@ const Chat_AI = () => {
               </div>
             </div>
           )} */}
-          <div ref={messagesEndRef} style={{ float: "left", clear: "both" }} />
+                                    <div ref={messagesEndRef} style={{ float: "left", clear: "both" }} />
 
-          {showScrollButton && (
-            <button
-              className="scroll-bottom-button"
-              onClick={scrollToBottom}
-              title="Scroll to latest message"
-            >
-              <FontAwesomeIcon icon={faArrowDown} />
-            </button>
-          )}
-        </div>
-      )}
-    </div>
+                                    {showScrollButton && (
+                                        <button
+                                            className="scroll-bottom-button"
+                                            onClick={scrollToBottom}
+                                            title="Scroll to latest message"
+                                        >
+                                            <FontAwesomeIcon icon={faArrowDown} />
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
 
-    {attachments.length > 0 && (
-      <div className="attachments-preview">
-        {attachments.map((attachment, index) => (
-          <div key={index} className="attachment-preview-item">
-            {attachment.type === 'image' ? (
-              <div className="image-preview">
-                <img src={attachment.preview} alt={attachment.name} />
-                <button className="remove-attachment" onClick={() => removeAttachment(index)}>
-                  <FontAwesomeIcon icon={faTimes} />
-                </button>
-              </div>
-            ) : (
-              <div className="file-preview">
-                <FontAwesomeIcon icon={faFile} className="file-icon" />
-                <span className="file-name">{attachment.name}</span>
-                <button className="remove-attachment" onClick={() => removeAttachment(index)}>
-                  <FontAwesomeIcon icon={faTimes} />
-                </button>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    )}
+                        {attachments.length > 0 && (
+                            <div className="attachments-preview">
+                                {attachments.map((attachment, index) => (
+                                    <div key={index} className="attachment-preview-item">
+                                        {attachment.type === 'image' ? (
+                                            <div className="image-preview">
+                                                <img src={attachment.preview} alt={attachment.name} />
+                                                <button className="remove-attachment" onClick={() => removeAttachment(index)}>
+                                                    <FontAwesomeIcon icon={faTimes} />
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="file-preview">
+                                                <FontAwesomeIcon icon={faFile} className="file-icon" />
+                                                <span className="file-name">{attachment.name}</span>
+                                                <button className="remove-attachment" onClick={() => removeAttachment(index)}>
+                                                    <FontAwesomeIcon icon={faTimes} />
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
 
-    <div className="input-container">
-      {showEmojiPicker && (
-        <div className="emoji-picker-container" ref={emojiPickerRef}>
-          <EmojiPicker
-            onEmojiClick={handleEmojiClick}
-            width={400}
-            height={400}
-            theme="dark"
-            emojiStyle="apple"
-            searchDisabled
-            previewConfig={{ showPreview: false }}
-          />
-        </div>
-      )}
+                        <div className="input-container">
+                            {showEmojiPicker && (
+                                <div className="emoji-picker-container" ref={emojiPickerRef}>
+                                    <EmojiPicker
+                                        onEmojiClick={handleEmojiClick}
+                                        width={400}
+                                        height={400}
+                                        theme="dark"
+                                        emojiStyle="apple"
+                                        searchDisabled
+                                        previewConfig={{ showPreview: false }}
+                                    />
+                                </div>
+                            )}
 
-      <div className="input-section-ai">
-        <textarea
-          ref={textareaRef}
-          className="chat-input-ai"
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              sendMessage();
-            }
-          }}
-          placeholder={placeholder}
-          rows="1"
-        />
+                            <div className="input-section-ai">
+                                <textarea
+                                    ref={textareaRef}
+                                    className="chat-input-ai"
+                                    value={input}
+                                    onChange={e => setInput(e.target.value)}
+                                    onKeyDown={e => {
+                                        if (e.key === "Enter" && !e.shiftKey) {
+                                            e.preventDefault();
+                                            sendMessage();
+                                        }
+                                    }}
+                                    placeholder={placeholder}
+                                    rows="1"
+                                />
 
-        <div className="input-controls">
-          <button
-            className="tool-button emoji-toggle-button"
-            onClick={e => {
-              e.stopPropagation();
-              setShowEmojiPicker(!showEmojiPicker);
-            }}
-          >
-            <FontAwesomeIcon icon={faFaceSmile} />
-          </button>
-
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={handleFileSelect}
-            multiple
-          />
-
-          <div className="icon-container">
-            <button
-              className={`tool-button speech-button ${isListening ? 'listening' : ''}`}
-              onClick={toggleSpeechRecognition}
-            >
-              <FontAwesomeIcon icon={isListening ? faMicrophoneSlash : faMicrophone} />
-            </button>
-                                            {loading ? (
+                                <div className="input-controls">
                                     <button
-                                        onClick={stopResponse}
-                                        className="stop-button-ai"
-                                        title="Stop answering"
+                                        className="tool-button emoji-toggle-button"
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            setShowEmojiPicker(!showEmojiPicker);
+                                        }}
                                     >
-                                        <FontAwesomeIcon icon={faSquare} />
+                                        <FontAwesomeIcon icon={faFaceSmile} />
                                     </button>
-                                ) : (
-            <button onClick={sendMessage} className="send-button-ai">
-              <FontAwesomeIcon icon={faPaperPlane} />
-            </button>
-             )}
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-  </>
-)}
+
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                        onChange={handleFileSelect}
+                                        multiple
+                                    />
+
+                                    <div className="icon-container">
+                                        <button
+                                            className={`tool-button speech-button ${isListening ? 'listening' : ''}`}
+                                            onClick={toggleSpeechRecognition}
+                                        >
+                                            <FontAwesomeIcon icon={isListening ? faMicrophoneSlash : faMicrophone} />
+                                        </button>
+                                        {loading ? (
+                                            <button
+                                                onClick={stopResponse}
+                                                className="stop-button-ai"
+                                                title="Stop answering"
+                                            >
+                                                <FontAwesomeIcon icon={faSquare} />
+                                            </button>
+                                        ) : (
+                                            <button onClick={sendMessage} className="send-button-ai">
+                                                <FontAwesomeIcon icon={faPaperPlane} />
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
 
 
 
