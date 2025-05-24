@@ -8,7 +8,6 @@ const AuthSuccess = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
-      
 
     if (!token) {
       navigate("/signandlog?error=missing-token");
@@ -21,7 +20,7 @@ const AuthSuccess = () => {
     // الآن استدعِ بيانات المستخدم من الباكند
     const fetchUser = async () => {
       try {
-        const res = await fetch("https://backendprojecr-production.up.railway.app/api/userinfo", {
+        const res = await fetch("backendprojecr-production.up.railway.app/api/userinfo", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

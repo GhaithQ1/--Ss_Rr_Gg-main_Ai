@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from './components/Home/Home';
 import Explore from './components/Explore/Explore';
@@ -20,23 +20,25 @@ import Loading_main from './components/Loading_Main/Loading_main';
 import Update_profile from './components/Update_profile/Update_profile';
 import './App.css';
 import { UserProvider } from './components/Context';
-import { CookiesProvider ,useCookies} from 'react-cookie';
+import { CookiesProvider, useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import AuthSuccess from './components/AuthSuccess';
 import Chat_AI from './components/Chat_Ai/Chat_AI';
+import Not_Found from './components/Not_Found/Not_Found'
+
+
 function AppContent() {
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   const token = document.cookie
-  //     .split("; ")
-  //     .find((row) => row.startsWith("token="))
-  //     ?.split("=")[1];
+  const navigate = useNavigate();
+  const token = window.localStorage.getItem("token");
+  const [cookies, setCookies] = useCookies(["token"]);
 
-  //   if (!token) {
-  //     navigate("/signandlog"); // أو "/login" أو أي صفحة ترحيب
-  //   }
-  // }, []);
-
+  useEffect(() => {
+    if (token && !cookies.token) {
+      setCookies("token", token, { path: "/" });
+    } else if (!token) {
+      navigate("/signandlog");
+    }
+  }, [token, cookies, navigate, setCookies]);
 
   const location = useLocation();
 
@@ -44,7 +46,7 @@ function AppContent() {
   useEffect(() => {
     // أول شي شيل كل الكلاسات
     document.body.className = '';
-    
+
     // قراءة الثيم من localStorage وتطبيقه على الـ body مباشرةً
     const storedTheme = localStorage.getItem('theme');
     if (storedTheme === 'dark') {
@@ -57,30 +59,32 @@ function AppContent() {
     }
   }, [location]);
 
-  
 
+const [showComponent, setShowComponent] = useState(false)
   return (
     <UserProvider>
-    <Routes>
-      <Route path='/' element={<><Header /><Home /></>} />
-      <Route path='/explore' element={<><Header /><Explore /></>} />
-      <Route path='/chat' element={<><Header /><Menu /><Chat /></>} />
-      <Route path='/signandlog' element={<><SignAndLog /></>} />
-      <Route path='/sign_school' element={<><Sign_school /></>} />
-      <Route path='/bookmark' element={<><Header /><BookMark /></>} />
-      <Route path='/create_bost_image_and_ward' element={<><Header /><Create_Bost_image_and_ward /></>} />
-      <Route path='/create_bost_choose_the_correct_answer' element={<><Header /><Create_Bost_choose_the_correct_answer /></>} />
-      <Route path='/create_bost_true_or_false' element={<><Header /><Create_Bost_True_Or_False /></>} />
-      <Route path='/create_bost_image_and_answer' element={<><Header /><Create_Bost_image_and_answer /></>} />
-      <Route path='/Create_Bost_Video_and_image' element={<><Header /><Create_Bost_Video_and_image /></>} />
-      <Route path='/profile' element={<><Header /><Profile /></>} />
-      <Route path='/update_profile' element={<><Header /><Update_profile /></>} />
-      <Route path='/Get_Shoole_By/:idParams' element={<><Header /><Get_Shoole_By_Id/></>} />
-      <Route path='/Create_Bost_Ifrem' element={<><Header /><Create_Bost_Ifrem/></>} />
-      <Route path='/Loading_main' element={<><Header /><Loading_main/></>} />
-      <Route path="/auth/success" element={<AuthSuccess/>} />
-      <Route path="/chat_bot/" element={<Chat_AI/>} />
-    </Routes>
+      <Routes>
+        <Route path='/' element={<><Header toggle={() => setShowComponent(prev => !prev)}/><Menu/><Home showComponent={showComponent}/></>} />
+        <Route path='/explore' element={<><Header /><Menu/><Explore /></>} />
+        <Route path='/chat' element={<><Header /><Menu /><Chat /></>} />
+        <Route path='/signandlog' element={<><SignAndLog /></>} />
+        <Route path='/sign_school' element={<><Sign_school /></>} />
+        <Route path='/bookmark' element={<><Header /><Menu/><BookMark /></>} />
+        <Route path='/create_bost_image_and_ward' element={<><Header /><Menu/><Create_Bost_image_and_ward /></>} />
+        <Route path='/create_bost_choose_the_correct_answer' element={<><Header /><Menu/><Create_Bost_choose_the_correct_answer /></>} />
+        <Route path='/create_bost_true_or_false' element={<><Header /><Menu/><Create_Bost_True_Or_False /></>} />
+        <Route path='/create_bost_image_and_answer' element={<><Header /><Menu/><Create_Bost_image_and_answer /></>} />
+        <Route path='/Create_Bost_Video_and_image' element={<><Header /><Menu/><Create_Bost_Video_and_image /></>} />
+        <Route path='/profile' element={<><Header /><Menu/><Profile /></>} />
+        <Route path='/update_profile' element={<><Header /><Menu/><Update_profile /></>} />
+        <Route path='/Get_Shoole_By/:idParams' element={<><Header /><Menu/><Get_Shoole_By_Id /></>} />
+        <Route path='/Create_Bost_Ifrem' element={<><Header /><Menu/><Create_Bost_Ifrem /></>} />
+        <Route path='/Loading_main' element={<><Header /><Menu/><Loading_main /></>} />
+        <Route path="/auth/success" element={<AuthSuccess />} />
+        <Route path="/chat_bot/" element={<Chat_AI />} />
+        <Route path="*" element={<Not_Found />} />
+
+      </Routes>
     </UserProvider>
   );
 }
@@ -90,7 +94,7 @@ function App() {
     <BrowserRouter>
       <CookiesProvider>
 
-      <AppContent />
+        <AppContent />
       </CookiesProvider>
 
     </BrowserRouter>

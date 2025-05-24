@@ -8,17 +8,17 @@
     align-items: center;
 }
 
-.Create_Bost_True_Or_False .butin button:nth-child(2) {
+/* .Create_Bost_True_Or_False .butin button:nth-child(2) {
     padding: 10px 20px;
     font-size: 16px;
-    /* margin-top: 15px; */
+    margin-top: 15px;
     cursor: pointer;
     background-color: var(--main-color);
     color: white;
     border: none;
     border-radius: var(--border-radius);
     display: block;
-}
+} */
 
 .Create_Bost_True_Or_False h2 {
     padding-bottom: 15px;
@@ -70,7 +70,7 @@
     background-color: var(--box-color);
     font-size: var(--text-size);
     border: 2px solid transparent;
-    color: black;
+    color: var(--text-color);
     box-shadow: 0 2px 8px var(--shadow-color);
     padding: 15px;
 
@@ -136,7 +136,7 @@
 
 
 .add-question-btn {
-    background-color: white;
+    background-color: var(--box-color);
     /* أزرق فاتح */
     color: var(--text-color);
     border: none;

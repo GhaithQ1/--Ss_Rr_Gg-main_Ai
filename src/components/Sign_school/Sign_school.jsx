@@ -12,8 +12,6 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 const Sign_school = () => {
-        const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
-
   const [Cook, setCookies] = useCookies("token");
   const Navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -93,7 +91,7 @@ const Sign_school = () => {
 
     try {
       const response = await axios.post(
-      `${API}/auth/sign_up`,
+        "backendprojecr-production.up.railway.app/api/v2/auth/sign_up",
         newFormData
       );
       setSuccessMessage(response.data.message);

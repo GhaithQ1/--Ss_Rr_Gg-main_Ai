@@ -9,6 +9,7 @@
     justify-content: space-between;
     align-items: center;
     z-index: 100;
+    border: 1px solid var(--hover-color);
 }
 
 .create_menu .img_create {
@@ -24,17 +25,20 @@
 
 .create_menu p {
     color: var(--text-color);
+    font-size: var(--text-size);
 }
 
-.create_menu button {
-    padding: 10px 15px;
-    font-size: 18px;
-    border: none;
-    border-radius: var(--border-radius);
-    background-color: var(--main-color);
-    color: white;
-    cursor: pointer;
+.create_menu .button {
+    width: 120px;
 }
+
+.create_menu .button .char.state-1 span:nth-child(5){
+    margin: 0;
+}
+.create_menu .button .char.state-1 span:nth-child(6){
+    margin: 0 4px;
+}
+
 
 .create_menu .menus {
     position: absolute;
@@ -65,7 +69,7 @@
 
 .create_menu .menus .links p {
     color: var(--text-color);
-    font-weight: 600;
+    font-weight: 500;
     transition: 0.3s;
 }
 

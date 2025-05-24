@@ -5,19 +5,20 @@ import './Chat_AI.css';
 import './Attachments.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+
     faPaperPlane, faRobot, faUser, faSmile,
     faMicrophone, faEllipsisH, faPlus, faComment,
     faClock, faBars, faChevronRight, faTrash,
     faMicrophoneSlash, faFaceSmile, faArrowDown,
     faFile, faPaperclip, faImage, faDownload, faTimes,
     faRedo, faMagic, faSyncAlt, faStop, faSquare,
-    faCopy, faCheck
+    faCopy, faCheck, faXmark
 } from '@fortawesome/free-solid-svg-icons';
 import EmojiPicker from 'emoji-picker-react';
 import { useNavigate } from "react-router-dom";
 const Chat_AI = () => {
     const Navigate = useNavigate();
-    const API = 'https://backendprojecr-production.up.railway.app/api/v2';
+    const API = 'backendprojecr-production.up.railway.app/api/v2';
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
@@ -72,65 +73,19 @@ const Chat_AI = () => {
     ];
 
     // Effect for blinking cursor
+    const [index, setIndex] = useState(0);
+    const [showPlaceholder, setShowPlaceholder] = useState(true);
+
     useEffect(() => {
-        const cursorInterval = setInterval(() => {
-            setShowCursor(prev => !prev);
-        }, 1000); // Blink every 500ms
+        setShowPlaceholder(input.trim() === "");
+    }, [input]);
 
-        return () => clearInterval(cursorInterval);
-    }, []);
-
-    // Effect for animated placeholder
     useEffect(() => {
-        let currentIndex = 0;
-        let currentPlaceholder = "";
-        let isDeleting = false;
-        let charIndex = 0;
+        const interval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % placeholders.length);
+        }, 3000);
 
-        const animatePlaceholder = () => {
-            const currentText = placeholders[currentIndex];
-
-            if (isDeleting) {
-                // Deleting characters
-                currentPlaceholder = currentText.substring(0, charIndex);
-                charIndex--;
-
-                if (charIndex < 0) {
-                    isDeleting = false;
-                    currentIndex = (currentIndex + 1) % placeholders.length;
-                    charIndex = 0;
-                    // Virtually no pause before starting to type next placeholder
-                    setTimeout(animatePlaceholder, 100);
-                    return;
-                }
-            } else {
-                // Adding characters
-                currentPlaceholder = currentText.substring(0, charIndex);
-                charIndex++;
-
-                if (charIndex > currentText.length) {
-                    // Minimal pause at the end of typing before deleting
-                    isDeleting = true;
-                    setTimeout(animatePlaceholder, 100);
-                    return;
-                }
-            }
-
-            // Add a blinking cursor at the end of the text
-            setPlaceholder(currentPlaceholder + (showCursor ? "|" : ""));
-
-            // Speed of typing/deleting - smooth and natural typing feel
-            // Variable speed to make it feel more human-like
-            const baseSpeed = isDeleting ? 60 : 60;
-            const randomVariation = Math.floor(Math.random() * 20); // Add natural randomness
-            const speed = baseSpeed - randomVariation; // Subtract to make it faster sometimes
-            setTimeout(animatePlaceholder, speed);
-        };
-
-        // Start the animation
-        const animationTimeout = setTimeout(animatePlaceholder, 100);
-
-        return () => clearTimeout(animationTimeout);
+        return () => clearInterval(interval);
     }, []);
     const [loadingTitles, setLoadingTitles] = useState(false);
     // Fetch user data and conversations on component mount
@@ -501,6 +456,13 @@ const Chat_AI = () => {
         setAttachments(prev => [...prev, ...newAttachments]);
     };
 
+    // Function to format file size
+    const formatFileSize = (bytes) => {
+        if (bytes < 1024) return bytes + ' B';
+        else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+        else return (bytes / 1048576).toFixed(1) + ' MB';
+    };
+
     //Remove an attachment
     const removeAttachment = (index) => {
         setAttachments(prev => {
@@ -513,6 +475,7 @@ const Chat_AI = () => {
             return newAttachments;
         });
     };
+
     // وظيفة لإيقاف استجابة البوت
     const stopResponse = () => {
         if (abortController) {
@@ -536,7 +499,7 @@ const Chat_AI = () => {
 
     // Send a new message
     const sendMessage = async () => {
-        if (!input.trim()) return;
+        if (!input.trim() && attachments.length === 0) return;
 
         let currentThreadId = activeConversation;
 
@@ -586,20 +549,25 @@ const Chat_AI = () => {
             }
         }
 
+        // Create a message with attachments if any
         const userMessage = {
             role: "user",
             content: input,
-            attachments: [] // ما فيه مرفقات
+            attachments: attachments.map(att => ({
+                type: att.type,
+                name: att.name,
+                url: att.preview || null,
+                size: att.size
+            }))
         };
 
         setLastUserMessage({
             content: input,
-            attachments: []
+            attachments: attachments
         });
 
         setMessages(prev => [...prev, userMessage]);
         setInput("");
-        setAttachments([]); // نظف المرفقات حتى لو مش مستخدمة
         setLoading(true);
 
         const aiMessageId = Date.now();
@@ -617,16 +585,27 @@ const Chat_AI = () => {
             const controller = new AbortController();
             setAbortController(controller);
 
+            // Create FormData for file uploads
+            const formData = new FormData();
+            formData.append('message', input);
+            formData.append('threadId', currentThreadId);
+
+            // Add files to FormData if there are any
+            attachments.forEach(attachment => {
+                formData.append('files', attachment.file);
+            });
+
+            // Reset attachments after adding to FormData
+            setAttachments([]);
+
+            // Use fetch for streaming response with FormData
             const response = await fetch(`${API}/chat_AI`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${cookies.token}`,
-                    'Content-Type': 'application/json'
+                    Authorization: `Bearer ${cookies.token}`
+                    // Don't set Content-Type for FormData, browser will set it with boundary
                 },
-                body: JSON.stringify({
-                    message: input,
-                    threadId: currentThreadId
-                }),
+                body: formData,
                 signal: controller.signal
             });
 
@@ -650,9 +629,30 @@ const Chat_AI = () => {
                     if (content === '[DONE]') break;
 
                     // أضف مسافة بعد المحتوى إذا ما انتهى بنقطة أو علامة تعجب أو استفهام
-                    const needsSpace = content.replace(/\s+/g, '').trim();
-                    streamedContent += needsSpace + (needsSpace ? ' ' : '');
+                    let processedContent = content.replace(/([.!?:])/g, (match, p1, offset, str) => {
+                        const charAfter = str[offset + 1];
 
+                        // إذا ما في حرف بعد العلامة (حرف أو رقم) أو في نهاية النص → نضيف سطر
+                        if (!charAfter || !/[a-zA-Z0-9]/.test(charAfter)) {
+                            return p1 + '\n';
+                        }
+
+                        // غير هيك، ما نضيف سطر
+                        return p1;
+                    });
+
+                    // الآن عالج الرمز المخفي
+                    processedContent = processedContent.replace(/\u2063/g, '');
+                    processedContent = processedContent.replace(/\u2064/g, '<hr />');
+
+                    // دمج مع محتوى الرسالة المجمعة
+                    if (streamedContent.length > 0 && !streamedContent.endsWith(' ')) {
+                        streamedContent += ' ';
+                    }
+
+                    streamedContent += processedContent;
+
+                    // ثم تحدث الحالة مثل كودك
                     setMessages(prev => {
                         const updatedMessages = [...prev];
                         const messageIndex = updatedMessages.findIndex(msg => msg.id === aiMessageId);
@@ -664,6 +664,7 @@ const Chat_AI = () => {
                         }
                         return updatedMessages;
                     });
+
                 }
             }
 
@@ -773,10 +774,6 @@ const Chat_AI = () => {
         }
     };
 
-
-
-
-
     // Handle selecting an existing conversation
     const handleConversationSelect = (conversationId) => {
         if (conversationId === activeConversation) return; // تجنب إعادة تحميل نفس المحادثة
@@ -868,6 +865,7 @@ const Chat_AI = () => {
             setTimeout(() => setIsCopied(false), 3000);
         }
     };
+
     // Regenerate or improve the AI response
     const regenerateResponse = async (type) => {
         if (regenerating) return;
@@ -993,13 +991,11 @@ const Chat_AI = () => {
                 }]);
             }
         } finally {
-            
+
             setLoading(false);
             setAbortController(null);
         }
     };
-
-
 
     return (
         <div className="chat-app-container">
@@ -1039,7 +1035,8 @@ const Chat_AI = () => {
                                 onClick={() => handleConversationSelect(conv.id_thread)} // عند النقر على المحادثة يتم تحديدها
                             >
                                 <div className="conversation-icon">
-                                    <FontAwesomeIcon icon={faComment} />
+                                    {/* <FontAwesomeIcon icon={faComment} /> */}
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 3H14C18.4183 3 22 6.58172 22 11C22 15.4183 18.4183 19 14 19V22.5C9 20.5 2 17.5 2 11C2 6.58172 5.58172 3 10 3ZM12 17H14C17.3137 17 20 14.3137 20 11C20 7.68629 17.3137 5 14 5H10C6.68629 5 4 7.68629 4 11C4 14.61 6.46208 16.9656 12 19.4798V17Z"></path></svg>
                                 </div>
                                 <div className="conversation-title">
                                     {conversationTitles[conv.id_thread] || 'محادثة جديدة'}
@@ -1050,7 +1047,8 @@ const Chat_AI = () => {
                                         onClick={(e) => handleDeleteConversation(e, conv.id_thread)}
                                         title="حذف المحادثة"
                                     >
-                                        <FontAwesomeIcon icon={faTrash} />
+                                        {/* <FontAwesomeIcon icon={faTrash} /> */}
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"></path></svg>
                                     </button>
                                 </div>
                                 <div className="conversation-time">
@@ -1077,7 +1075,8 @@ const Chat_AI = () => {
                                 <button className="toggle-sidebar-button" onClick={toggleSidebar}>
                                     <FontAwesomeIcon icon={faBars} />
                                 </button>
-                                <FontAwesomeIcon icon={faRobot} className="robot-icon" />
+                                {/* <FontAwesomeIcon icon={faRobot} className="robot-icon" /> */}
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11 1V2H7C5.34315 2 4 3.34315 4 5V8C4 10.7614 6.23858 13 9 13H15C17.7614 13 20 10.7614 20 8V5C20 3.34315 18.6569 2 17 2H13V1H11ZM6 5C6 4.44772 6.44772 4 7 4H17C17.5523 4 18 4.44772 18 5V8C18 9.65685 16.6569 11 15 11H9C7.34315 11 6 9.65685 6 8V5ZM9.5 9C10.3284 9 11 8.32843 11 7.5C11 6.67157 10.3284 6 9.5 6C8.67157 6 8 6.67157 8 7.5C8 8.32843 8.67157 9 9.5 9ZM14.5 9C15.3284 9 16 8.32843 16 7.5C16 6.67157 15.3284 6 14.5 6C13.6716 6 13 6.67157 13 7.5C13 8.32843 13.6716 9 14.5 9ZM6 22C6 18.6863 8.68629 16 12 16C15.3137 16 18 18.6863 18 22H20C20 17.5817 16.4183 14 12 14C7.58172 14 4 17.5817 4 22H6Z"></path></svg>
                                 <h1>Sense AI</h1>
                             </div>
                             <div className="header-buttons">
@@ -1125,72 +1124,93 @@ const Chat_AI = () => {
                                                         </div>
                                                         <div className="message-sender">{MyData.name}</div>
                                                     </div>
-                                                    <div className="message-text">{msg.content}</div>
-                                                    <div className="message-time">
-                                                        {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                    </div>
-
+                                                    {msg.content.split('\n').map((line, i) => (
+                                                        <p key={i} dangerouslySetInnerHTML={{ __html: line }} />
+                                                    ))}
                                                     {msg.attachments && msg.attachments.length > 0 && (
                                                         <div className="message-attachments">
-                                                            {msg.attachments.map((attachment, index) => (
-                                                                <div key={index} className="attachment-item">
+                                                            {msg.attachments.map((attachment, i) => (
+                                                                <div key={i} className="message-attachment">
                                                                     {attachment.type === 'image' ? (
-                                                                        <div className="image-attachment">
-                                                                            <img src={attachment.preview} alt={attachment.name} />
-                                                                            <div className="attachment-info">
-                                                                                <span>{attachment.name}</span>
-                                                                                <a
-                                                                                    href={attachment.preview}
-                                                                                    download={attachment.name}
-                                                                                    className="download-button"
-                                                                                >
-                                                                                    <FontAwesomeIcon icon={faDownload} />
-                                                                                </a>
-                                                                            </div>
+                                                                        <div className="message-image-attachment">
+                                                                            <img
+                                                                                src={attachment.url.startsWith('http') ? attachment.url : `${attachment.url}`}
+                                                                                alt={attachment.name}
+                                                                                onClick={() => window.open(attachment.url.startsWith('http') ? attachment.url : `${attachment.url}`, '_blank')}
+                                                                                style={{ cursor: 'pointer' }}
+                                                                            />
+
                                                                         </div>
                                                                     ) : (
-                                                                        <div className="file-attachment">
-                                                                            <FontAwesomeIcon icon={faFile} className="file-icon" />
-                                                                            <div className="attachment-info">
-                                                                                <span>{attachment.name}</span>
-                                                                                <span className="file-size">{Math.round(attachment.size / 1024)} KB</span>
-                                                                            </div>
+                                                                        <div className="message-file-attachment">
+                                                                            {/* <FontAwesomeIcon icon={faFile} />
+
+                                                                            <a 
+                                                                                href={attachment.url.startsWith('http') ? attachment.url : `${attachment.url}`} 
+                                                                                target="_blank" 
+                                                                                rel="noopener noreferrer"
+                                                                                className="download-button"
+                                                                            >
+                                                                                <FontAwesomeIcon icon={faDownload} /> تنزيل
+                                                                            </a> */}
                                                                         </div>
                                                                     )}
                                                                 </div>
                                                             ))}
                                                         </div>
                                                     )}
+                                                    <div className="message-time">
+                                                        {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </div>
+
+
                                                 </div>
                                             ) : (
-                                                <div className="message-content">
+                                                <div className="message-content boting">
                                                     <div className="message-header">
                                                         <div className="message-avatar">
                                                             <FontAwesomeIcon icon={faRobot} />
                                                         </div>
-                                                        <div className="message-sender">Sense AI</div>
+                                                        {/* <div className="message-sender">Sense AI</div> */}
                                                     </div>
-                                                <div style={{ overflowX: 'auto', width: '100%' }}>
-              
-                                                        <pre
-                                                            style={{
-                                                                whiteSpace: 'pre-wrap',
-                                                                wordBreak: 'break-word',
-                                                                fontFamily: 'inherit',
-                                                                margin: 0,
-                                                                lineHeight: '2'
-                                                            }}
-                                                        >
-                                                            {msg.content}
-                                                        </pre>
-                                          
+                                                    <div
+                                                        style={{
+                                                            whiteSpace: 'pre-wrap',
+                                                            wordBreak: 'break-word',
+                                                            margin: 0,
+                                                            lineHeight: '2',
+                                                            width: '100%'
+                                                        }}
+                                                        dangerouslySetInnerHTML={{ __html: msg.content }}
+                                                    />
 
+                                                    {/* عرض المرفقات إن وجدت */}
+                                                    {msg.attachments && msg.attachments.length > 0 && (
+                                                        <div className="message-attachments">
+                                                            {msg.attachments.map((attachment, i) => (
+                                                                <div key={i} className="message-attachment">
+                                                                    {attachment.type === 'image' ? (
+                                                                        <div className="message-image-attachment">
+                                                                            <img
+                                                                                src={attachment.url.startsWith('http') ? attachment.url : `${attachment.url}`}
+                                                                                alt={attachment.name}
+                                                                                onClick={() => window.open(attachment.url.startsWith('http') ? attachment.url : `${attachment.url}`, '_blank')}
+                                                                                style={{ cursor: 'pointer' }}
+                                                                            />
 
-                                                </div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="message-file-attachment">
+
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+
                                                     <div className="message-time">
                                                     </div>
-
-
 
                                                     {regenerating && i === messages.length - 1 && msg.role === 'assistant' && (
                                                         <div className="regenerating-indicator">
@@ -1200,13 +1220,22 @@ const Chat_AI = () => {
                                                                 <span className="thinking-dot"></span>
                                                                 <span className="thinking-dot"></span>
                                                             </div>
-                                                            
+
                                                         </div>
                                                     )}
                                                 </div>
                                             )}
                                             {msg.role === 'assistant' && !msg.streaming && i === messages.length - 1 && (
                                                 <div className="regenerate-buttons">
+                                                    <button
+                                                        className="regenerate-button"
+                                                        onClick={() => copyLastBotResponse()}
+                                                        title="Copy response"
+                                                    >
+                                                        <FontAwesomeIcon icon={isCopied ? faCheck : faCopy} />
+
+                                                    </button>
+
                                                     <button
                                                         className="regenerate-button"
                                                         onClick={() => regenerateResponse('regenerate')}
@@ -1223,37 +1252,11 @@ const Chat_AI = () => {
                                                     >
                                                         <FontAwesomeIcon icon={faMagic} />
                                                     </button>
-                                                    <button
-                                                        className="regenerate-button copy-bot-reply-button"
-                                                        onClick={copyLastBotResponse}
-                                                        title="Copy"
-                                                    >
-                                                        <FontAwesomeIcon icon={isCopied ? faCheck : faCopy} />
-                                                    </button>
                                                 </div>
                                             )}
                                         </div>
                                     ))}
-                                    {/* {loading && (
-            <div className="message-ai assistant-ai loading-message">
-              <div className="message-content">
-                <div className="message-header">
-                  <div className="message-avatar">
-                    <FontAwesomeIcon icon={faRobot} />
-                  </div>
-                  <div className="message-sender">Sense AI</div>
-                  <div className="message-time">
-                    {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </div>
-                </div>
-                <div className="thinking-indicator">
-                  <span className="thinking-dot"></span>
-                  <span className="thinking-dot"></span>
-                  <span className="thinking-dot"></span>
-                </div>
-              </div>
-            </div>
-          )} */}
+
                                     <div ref={messagesEndRef} style={{ float: "left", clear: "both" }} />
 
                                     {showScrollButton && (
@@ -1275,7 +1278,7 @@ const Chat_AI = () => {
                                     <div key={index} className="attachment-preview-item">
                                         {attachment.type === 'image' ? (
                                             <div className="image-preview">
-                                                <img src={attachment.preview} alt={attachment.name} />
+
                                                 <button className="remove-attachment" onClick={() => removeAttachment(index)}>
                                                     <FontAwesomeIcon icon={faTimes} />
                                                 </button>
@@ -1310,31 +1313,98 @@ const Chat_AI = () => {
                             )}
 
                             <div className="input-section-ai">
-                                <textarea
-                                    ref={textareaRef}
-                                    className="chat-input-ai"
-                                    value={input}
-                                    onChange={e => setInput(e.target.value)}
-                                    onKeyDown={e => {
-                                        if (e.key === "Enter" && !e.shiftKey) {
-                                            e.preventDefault();
-                                            sendMessage();
-                                        }
-                                    }}
-                                    placeholder={placeholder}
-                                    rows="1"
-                                />
+                                <div style={{ position: "relative", width: "100%" }}>
+                                    <textarea
+                                        value={input}
+                                        className="chat-input-ai"
+                                        onChange={(e) => setInput(e.target.value)}
+                                        placeholder=""
+                                        rows="3"
+                                        style={{ width: "100%", padding: "10px", fontSize: "14px" }}
+                                    />
+                                    {showPlaceholder && (
+                                        <div
+                                            key={index}
+                                            style={{
+                                                position: "absolute",
+                                                left: "12px",
+                                                top: "12px",
+                                                color: "#888",
+                                                pointerEvents: "none",
+                                                userSelect: "none",
+                                                whiteSpace: "nowrap",
+                                                transition: "transform 0.5s ease, opacity 0.5s ease",
+                                                animation: "slideUp 0.5s ease"
+                                            }}
+                                        >
+                                            {placeholders[index]}
+                                        </div>
+                                    )}
+
+                                    <style>{`
+        @keyframes slideUp {
+          from {
+            transform: translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+      `}</style>
+                                </div>
+                                {/* Display attachments */}
+                                {attachments.length > 0 && (
+                                    <div className="attachments-container">
+                                        {attachments.map((attachment, index) => (
+                                            <div key={index} className="attachment-item">
+                                                {attachment.type === 'image' ? (
+                                                    <div className="attachment-preview">
+                                                        <img src={attachment.preview} alt={attachment.name} />
+                                                    </div>
+                                                ) : (
+                                                    <div className="attachment-file">
+                                                        <FontAwesomeIcon icon={faFile} />
+                                                        <span className="attachment-name">{attachment.name}</span>
+                                                        <span className="attachment-size">({formatFileSize(attachment.size)})</span>
+                                                    </div>
+                                                )}
+                                                <button
+                                                    className="remove-attachment"
+                                                    onClick={() => removeAttachment(index)}
+                                                    title="Remove attachment"
+                                                >
+                                                    <FontAwesomeIcon icon={faXmark} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
                                 <div className="input-controls">
-                                    <button
-                                        className="tool-button emoji-toggle-button"
-                                        onClick={e => {
-                                            e.stopPropagation();
-                                            setShowEmojiPicker(!showEmojiPicker);
-                                        }}
-                                    >
-                                        <FontAwesomeIcon icon={faFaceSmile} />
-                                    </button>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                                        <button
+                                            className="tool-button emoji-toggle-button"
+                                            onClick={e => {
+                                                e.stopPropagation();
+                                                setShowEmojiPicker(!showEmojiPicker);
+                                            }}
+                                        >
+                                            <FontAwesomeIcon icon={faFaceSmile} />
+                                        </button>
+
+                                        <button
+                                            className="tool-button attachment-button"
+                                            onClick={() => fileInputRef.current.click()}
+                                            title="Attach files"
+                                            // disabled={attachments.length >= 5}
+                                            disabled
+                                        >
+                                            <FontAwesomeIcon style={{ cursor: "not-allowed" }} icon={faPaperclip} />
+                                        </button>
+                                    </div>
+
 
                                     <input
                                         type="file"
@@ -1342,6 +1412,7 @@ const Chat_AI = () => {
                                         style={{ display: 'none' }}
                                         onChange={handleFileSelect}
                                         multiple
+                                        accept="image/*,.pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx"
                                     />
 
                                     <div className="icon-container">
@@ -1360,7 +1431,11 @@ const Chat_AI = () => {
                                                 <FontAwesomeIcon icon={faSquare} />
                                             </button>
                                         ) : (
-                                            <button onClick={sendMessage} className="send-button-ai">
+                                            <button
+                                                onClick={sendMessage}
+                                                className="send-button-ai"
+                                                disabled={!input.trim() && attachments.length === 0}
+                                            >
                                                 <FontAwesomeIcon icon={faPaperPlane} />
                                             </button>
                                         )}

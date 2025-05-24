@@ -15,13 +15,14 @@ display: flex
     background-color: var(--box-color);
     border-radius: var(--border-radius);
     position: relative;
+    flex-direction: column;
 }
-.Create_Bost_image_and_answer .form .remove_form_btn{
 
+.Create_Bost_image_and_answer .form .form_flex{
+  display: flex;
+  gap: 10px;
 }
-.Create_Bost_image_and_answer .form .input_image{
 
-}
 .Create_Bost_image_and_answer .form .input_ward{
     width: 100%;
     border-radius: var(--border-radius);
@@ -33,6 +34,23 @@ display: flex
     box-shadow: 0 2px 8px var(--shadow-color);
     padding:15px
 }
+
+.Create_Bost_image_and_answer .form .question{
+    width: 100%;
+    border-radius: var(--border-radius);
+    border: none;
+    background-color: var(--body-color);
+    font-size: var(--text-size);
+    border: 2px solid transparent;
+    color: var(--text-color);
+    padding:15px
+}
+
+.Create_Bost_image_and_answer .form .question:focus{
+   outline: none;
+   border-color: #aaa;
+}
+
   .Create_Bost_image_and_answer .unified_form {
     display: flex
     ;
@@ -145,6 +163,8 @@ display: flex
     justify-content: center;
     align-items: center;
     font-weight: 600;
+    text-align: center;
+    padding: 10px;
   }
   .Create_Bost_image_and_answer .all_input_answer .word_error{
     position: relative;
@@ -162,7 +182,7 @@ display: flex
 
 
   .add-question-btn {
-    background-color: white; /* أزرق فاتح */
+    background-color: var(--box-color);/* أزرق فاتح */
     color: var(--text-color);
     border: none;
     padding: 10px 20px;

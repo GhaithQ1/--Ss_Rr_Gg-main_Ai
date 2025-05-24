@@ -5,18 +5,21 @@ import Chat from '../chat/Chat';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-
+import Loading_button from "../Loading_button/Loading_button";
+import Info_menu from "../Info_menu/Info_menu";
+import Shools from "../Shools/Shools";
 const Create_Bost_image_and_answer = () => {
   const [questions, setQuestions] = useState([
-    { img: null, word_1: "", word_2: "", word_3: "", word_4: "", correctWord: "" }
+    { img: null, word_1: "", word_2: "", word_3: "", word_4: "", correctWord: "" ,question: ""}
   ]);
   const [formErrors, setFormErrors] = useState({});
   const [cookies] = useCookies(['token']);
   const navigate = useNavigate();
-        const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
+
+  const [Load_butt, setLoad_butt] = useState(false);
 
   const addNewQuestion = () => {
-    setQuestions([...questions, { img: null, word_1: "", word_2: "", word_3: "", word_4: "", correctWord: "" }]);
+    setQuestions([...questions, { img: null, word_1: "", word_2: "", word_3: "", word_4: "", correctWord: "" ,question: ""}]);
     setTimeout(() => {
       const lastQuestion = document.querySelector('.form:last-child');
       console.log(lastQuestion)
@@ -43,6 +46,7 @@ const Create_Bost_image_and_answer = () => {
   };
 
   const handleSubmit = async (event) => {
+    setLoad_butt(true);
     event.preventDefault();
   
     try {
@@ -81,6 +85,8 @@ const Create_Bost_image_and_answer = () => {
           img: q.img || null  // التأكد من إضافة الصورة إذا كانت موجودة
         };
       });
+
+
   
       // تعبئة البيانات في formData
       preparedQuestions.forEach((q, index) => {
@@ -94,24 +100,28 @@ const Create_Bost_image_and_answer = () => {
         formData.append(`questions[${index}][word_4]`, q.word_4);
         formData.append(`questions[${index}][correctWord]`, q.correctWord);
       });
-  
+  for (let pair of formData.entries()) {
+  console.log(pair[0], pair[1]);
+}
       // إرسال البيانات إلى الخادم
-      await axios.post(`${API}/post/post_4`, formData, {
+      await axios.post('backendprojecr-production.up.railway.app/api/v2/post/post_4', formData, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
       });
   
-      navigate('/'); // التوجيه إلى الصفحة الرئيسية بعد الإرسال
+      navigate('/');
+      setLoad_butt(false);
     } catch (err) {
+      console.error(err)
       if (err.response?.data?.errors) {
         const formattedErrors = {};
         err.response.data.errors.forEach(error => {
           formattedErrors[error.path] = error.msg;
         });
         setFormErrors(formattedErrors);
-        console.log(formattedErrors); // طباعة الأخطاء إذا حدثت
       }
+      setLoad_butt(false);
     }
   };
   
@@ -121,9 +131,12 @@ const Create_Bost_image_and_answer = () => {
   return (
     <div className="home">
       <div className="container">
-        <Menu />
+          <div className="flexinfo">
+          <Info_menu/>
+            <Shools/>
+          </div>
         <div className="Create_Bost_image_and_answer">
-          <h2>Create Bost Image And Word</h2>
+          <h2>Based on the image, select the correct answer.</h2>
           <form className="unified_form" onSubmit={handleSubmit}>
             {questions.map((question, index) => (
               <div key={index} className="form">
@@ -134,7 +147,15 @@ const Create_Bost_image_and_answer = () => {
                 >
                   X
                 </button>
-                <label className="image-box">
+                    <input
+                      className="question"
+                      type="text"
+                      placeholder="question 1"
+                      value={question.question}
+                      onChange={(e) => handleInputChange(index, "question", e.target.value)}
+                    />  
+                <div className='form_flex'>
+                  <label className="image-box">
                   {question.img ? (
                     <img src={URL.createObjectURL(question.img)} alt="preview" className="preview-image" />
                   ) : formErrors[`questions[${index}].img`] ? (
@@ -196,13 +217,97 @@ const Create_Bost_image_and_answer = () => {
                     />
                   </div>
                 </div>
+                </div>
+                
               </div>
             ))}
 <button type="button" className="add-question-btn" onClick={addNewQuestion}>
   <span className="icon">＋</span> Another Question
 </button>
 
-            <button type="submit" className="submit_btn">Submit</button>
+            <button
+              type="submit"
+              // onClick={handleSubmit}
+              className="button"
+              style={{
+                opacity: Load_butt ? 0.6 : 1,
+                pointerEvents: Load_butt ? "none" : "auto",
+                position: "relative",
+              }}
+            >
+              <div className="bg"></div>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 342 208"
+                height="208"
+                width="342"
+                className="splash"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeWidth="3"
+                  d="M54.1054 99.7837C54.1054 99.7837 40.0984 90.7874 26.6893 97.6362C13.2802 104.485 1.5 97.6362 1.5 97.6362"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeWidth="3"
+                  d="M285.273 99.7841C285.273 99.7841 299.28 90.7879 312.689 97.6367C326.098 104.486 340.105 95.4893 340.105 95.4893"
+                />
+                {/* باقي عناصر الـ SVG نفسها بس مغلقة بشكل صحيح وتعديل style/props حسب JSX */}
+                {/* لتوفير المساحة يمكنني أكمّل باقي الـ <path> إن حبيت */}
+              </svg>
+
+              <div className="wrap">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 221 42"
+                  height="42"
+                  width="221"
+                  className="path"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeWidth="3"
+                    d="M182.674 2H203C211.837 2 219 9.16344 219 18V24C219 32.8366 211.837 40 203 40H18C9.16345 40 2 32.8366 2 24V18C2 9.16344 9.16344 2 18 2H47.8855"
+                  />
+                </svg>
+
+                <div className="outline"></div>
+
+                <div className="content">
+                  <span className="char state-1">
+                    {Load_butt ? (
+                      <Loading_button />
+                    ) : (
+                      ["P", "o", "s", "t"].map((char, i) => (
+                        <span
+                          key={i}
+                          data-label={char}
+                          style={{ "--i": i + 1 }}
+                        >
+                          {char}
+                        </span>
+                      ))
+                    )}
+                  </span>
+
+                  <div className="icon">
+                    <div></div>
+                  </div>
+
+                  {/* <span className="char state-2">
+            {['P', 'o', 's', 't', 'i', 'n', 'g', '.', '.', '.'].map((char, i) => (
+              <span key={i} data-label={char} style={{ '--i': i + 1 }}>
+                {char}
+              </span>
+            ))}
+          </span> */}
+                </div>
+              </div>
+            </button>
           </form>
         </div>
         <Chat />

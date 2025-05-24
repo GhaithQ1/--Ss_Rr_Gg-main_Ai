@@ -1,50 +1,50 @@
 .menu {
-    background-color: var(--box-color);
-    border-radius: var(--border-radius);
+background-color: var(--box-color);
     overflow: hidden;
-    flex: 1;
-    max-height: 580px;
-    box-shadow: 0 2px 8px var(--shadow-color);
     position: sticky;
-    top: 125px;
+    top: 55px;
     z-index: 100;
+    border: none;
+    border-top: 1px solid var(--hover-color);
+    height: 45px;
+    z-index: 1000;
 }
 
 
 .menu .sidebar__list {
-    display: flex;
-    flex-direction: column;
+    display: flex
+;
     align-items: start;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
 
 .menu .sidebar__list .navbar {
-    display: flex;
+    display: flex
+;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
     text-decoration: none;
-    width: 100%;
-    padding: 20px 40px;
+    width: fit-content;
+    padding: 0 16px;
     position: relative;
     transition: 0.3s all;
     cursor: pointer;
+    font-size: var(--text-size);
+    height: 100%;
 }
 
-.menu .sidebar__list .navbar .nav_icon {
-      font-size:20px;
+.menu .sidebar__list .navbar svg {
+      width:20px;
       color: var(--icon-color);
 }
 .menu .sidebar__list .icon_chats {
       display: none;
 }
-@media(max-width:1190px){
-    .menu .sidebar__list .icon_chats {
-        display: flex;
-  }
-}
 
 .menu .sidebar__list .navbar p {
     color: var(--text-color);
-    font-weight: 600;
 }
 
 .menu .sidebar__list .navbar:hover{
@@ -53,8 +53,8 @@
 }
 .menu .sidebar__list .navbar::after{
     content: '';
-    width: 7px;
-    height: 0;
+    width: 0;
+    height: 2px;
     background-color: var(--main-color);
     position: absolute;
     bottom: 0;
@@ -62,9 +62,9 @@
     transition: 0.3s all;
 }
 .menu .sidebar__list .navbar:hover::after{
-height: 100%;
+width: 100%;
 }
-.menu .sidebar__list .navbar:hover .nav_icon{
+.menu .sidebar__list .navbar:hover svg{
 color: var(--main-color);
 }
 .menu .sidebar__list .active {
@@ -72,7 +72,7 @@ color: var(--main-color);
     color: var(--main-color);
 }
 
-.menu .sidebar__list .active .nav_icon {
+.menu .sidebar__list .active svg {
     color: var(--main-color);
 }
 
@@ -82,31 +82,21 @@ color: var(--main-color);
 
 .menu .sidebar__list .active::after {
     content: '';
-    width: 7px;
-    height: 100%;
+    width: 100%;
+    height: 2px;
     background-color: var(--main-color);
     position: absolute;
-    top: 0;
+    bottom:0;
     left: 0;
 }
 
 
 
-@media(max-width:1190px){
-    .menu {
-        border-radius: 0;
-        top: 0;
-        width: 100vw;
-        transform: translateX(-65px);
-        box-shadow: 0 2px 8px transparent;
-    }  
-    body.chat-page .menu {
-        transform: translateX(0);
-      }
+@media(max-width:767px){
+
 
     .menu .sidebar__list {
-        padding:5px 0;
-        flex-direction: row;
+justify-content: space-around;
     }
     .menu .sidebar__list .navbar {
         padding:5px;
@@ -123,12 +113,14 @@ color: var(--main-color);
         background-color: transparent;
     }
     .menu .sidebar__list .active {
-        background-color:transparent;
+        background-color:transparent !important;
     }
+
+}
+@media(max-width:1191px){
+        .menu .sidebar__list .icon_chats {
+      display: flex;
+}
 }
 
-@media(max-width:767px){
-    .menu {
-        transform: translateX(-10px);
-    }
-}
+

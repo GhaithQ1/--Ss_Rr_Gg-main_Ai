@@ -11,7 +11,6 @@ import Loading_input from "../Loading_input/Loading_input";
 
 export default function UpdateProfile() {
   const Navigate = useNavigate();
-      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   const [cookies] = useCookies(["token"]);
 
@@ -45,12 +44,12 @@ export default function UpdateProfile() {
     setLoadInput(true)
     const fetchUserData = async () => {
       try {
-        const res = await axios.get(`${API}/auth/get_date_my`, {
+        const res = await axios.get("backendprojecr-production.up.railway.app/api/v2/auth/get_date_my", {
           headers: { Authorization: `Bearer ${cookies.token}` },
         });
         setUserData(res.data.data);
-        setPreviewProfileImage(`https://backendprojecr-production.up.railway.app/user/${res.data.data.profilImage}`);
-        setPreviewCoverImage(`https://backendprojecr-production.up.railway.app/user/${res.data.data.Cover_image}`);
+        setPreviewProfileImage(`backendprojecr-production.up.railway.app/user/${res.data.data.profilImage}`);
+        setPreviewCoverImage(`backendprojecr-production.up.railway.app/user/${res.data.data.Cover_image}`);
         setUserData_role(res.data.data.role)
         setLoadInput(false)
       } catch (error) {
@@ -81,7 +80,7 @@ export default function UpdateProfile() {
   
       console.log("Data being sent:", formData);
   
-      await axios.put(`${API}/user`, formData, {
+      await axios.put("backendprojecr-production.up.railway.app/api/v2/user", formData, {
         headers: { 
           Authorization: `Bearer ${cookies.token}`,
           "Content-Type": "multipart/form-data",

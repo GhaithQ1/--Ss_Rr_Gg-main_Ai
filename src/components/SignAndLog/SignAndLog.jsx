@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 const SignAndLog = () => {
     const [Cook, setCookies] = useCookies("token");
     const [isSignUpActive, setIsSignUpActive] = useState(false);
-      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -68,7 +67,7 @@ const SignAndLog = () => {
         if (hasError) return;
 
         try {
-            const response = await axios.post(`${API}/auth/sign_up`, {
+            const response = await axios.post('backendprojecr-production.up.railway.app/api/v2/auth/sign_up', {
                 name,
                 email,
                 password,
@@ -79,13 +78,9 @@ const SignAndLog = () => {
             Navigate("/");
             // window.location.href = '/';
         } catch (error) {
-            // console.error('Sign up error:', error);
-            console.log(
-                name,
-                email,
-                password,
-                passwordConfirm,);
+            console.error('Sign up error:', error);
         }
+        
     };
 
     const handleSignIn = async (e) => {
@@ -102,7 +97,7 @@ const SignAndLog = () => {
         }
 
         try {
-            const response = await axios.post( `${API}/auth/login`, {
+            const response = await axios.post('backendprojecr-production.up.railway.app/api/v2/auth/login', {
                 email,
                 password,
             });
@@ -139,7 +134,7 @@ const SignAndLog = () => {
                                     const top = (window.innerHeight - height) / 1;
 
                                     window.open(
-                                        "http://backendprojecr-production.up.railway.app/auth/google",
+                                        "backendprojecr-production.up.railway.app/auth/google",
                                         "Google Login",
                                         `width=${width},height=${height},top=${top},left=${left}`
                                     );
@@ -172,7 +167,7 @@ const SignAndLog = () => {
                             <input type="password" placeholder="Confirm Password" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
                         </div>
                         <Link to="/sign_school">Register as an Educational Institution!!!</Link>
-                                <span onClick={handleSignInClick}>log in</span>
+                                <p className="hidden" onClick={handleSignInClick}>Already have an account? <span>Sign In</span> </p>
                         <button type="submit">Sign Up</button>
                     </form>
                 </div>
@@ -194,7 +189,7 @@ const SignAndLog = () => {
                                     const top = (window.innerHeight - height) / 1;
 
                                     window.open(
-                                        "http://backendprojecr-production.up.railway.app/auth/google",
+                                        "backendprojecr-production.up.railway.app/auth/google",
                                         "Google Login",
                                         `width=${width},height=${height},top=${top},left=${left}`
                                     );
@@ -223,7 +218,7 @@ const SignAndLog = () => {
                         </div>
 
                         <a href="#">Forgot Your Password?</a>
-                        <span onClick={handleSignUpClick}>create accunt</span>
+                        <p className="hidden" onClick={handleSignUpClick}>Don't have an account? <span>Sign Up</span> </p>
                         <button type="submit">Sign In</button>
                     </form>
                 </div>

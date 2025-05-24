@@ -1,5 +1,5 @@
 header{
-    height: 75px;
+    height: 55px;
     background-color: var(--box-color);
     position: sticky;
     top: 0;
@@ -33,21 +33,19 @@ header .container .header_respon form{
     position: relative;
 }
 @media(max-width:991px){
-    header{
-position: relative;
-    }
     
     header .container .header_respon form{
         display: none;
     }
 }
 
-header .container .header_respon form .search_icon{
+header .container .header_respon form svg{
 position: absolute;
 top: 50%;
 transform:translateY(-50%);
 left:15px;
 color: var(--text-color);
+width: 20px;
 }
 header .container .header_respon form input{
     width: 100%;
@@ -59,7 +57,6 @@ header .container .header_respon form input{
     font-size: var(--text-size);
     border:2px solid transparent;
     color: var(--text-color);
-
 }
 header .container .header_respon form input:focus{
     outline: none;
@@ -76,7 +73,13 @@ header .container .header_respon .profile{
 
 header .container .header_respon .profile img{
     width: 40px;
+    border: 2px solid var(--main-color);
     border-radius: 50%;
+}
+@media(max-width:768px){
+    header .container .header_respon .profile img{
+        margin-right: 20px;
+    }
 }
 header .container .header_respon .profile p{
     color: var(--text-color);
@@ -124,9 +127,3 @@ padding: 0;
 color: white;
 }
 
-
-@media(max-width:767px){
-    header .container .header_respon .logo{
-        display: none;
-    }
-}

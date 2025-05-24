@@ -8,7 +8,6 @@ const Create_menu = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [Mydata, SetMydata] = useState({});
   const [cookies] = useCookies(['token']);
-      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
@@ -17,7 +16,7 @@ const Create_menu = () => {
     const fetchMyData = async () => {
       try {
         const res = await axios.get(
-          `${API}/auth/get_date_my`,
+          'backendprojecr-production.up.railway.app/api/v2/auth/get_date_my',
           {
             headers: { Authorization: `Bearer ${cookies.token}` },
           }
@@ -83,7 +82,7 @@ const Create_menu = () => {
   const links = [
     {
       to: "/Create_Bost_Video_and_image",
-      text: "Video And Image And Word",
+      text: "Text, image or video.",
       tooltip: "Share images, videos, and text together. Ideal for explaining ideas or sharing visual and educational content."
     },
     {
@@ -93,7 +92,7 @@ const Create_menu = () => {
     },
     {
       to: "/create_bost_image_and_answer",
-      text: "Image And Answer",
+      text: "Based on the image, select the correct answer.",
       tooltip: "Display an image with multiple answer choices to select the correct one. Ideal for testing visual comprehension."
     },
     {
@@ -103,12 +102,12 @@ const Create_menu = () => {
     },
     {
       to: "/create_bost_true_or_false",
-      text: "True Or False",
+      text: "True or false.",
       tooltip: "Present a statement and determine if it's true or false. Perfect for testing concepts and information."
     },
     {
       to: "/Create_Bost_Ifrem",
-      text: "Create Bost Ifrem",
+      text: "<iframe>/<script>",
       tooltip: "Embed external content such as YouTube videos or interactive tools using an iframe."
     }
   ];
@@ -123,17 +122,81 @@ const Create_menu = () => {
     Mydata.profilImage
       ? Mydata.profilImage.startsWith("http")
         ? Mydata.profilImage
-        : `https://backendprojecr-production.up.railway.app/user/${Mydata.profilImage}`
+        : `backendprojecr-production.up.railway.app/user/${Mydata.profilImage}`
       : "/image/pngegg.png"
   }
   alt={`Image of ${Mydata.name}`}
 />
-        <p>Choose one of the posts to create it.</p>
+        <p>Please choose from the list the {Mydata.name}</p>
       </div>
 
-      <button onClick={toggleMenu} ref={buttonRef}>
-        Create Post
-      </button>
+            <button
+              type="submit"
+              onClick={toggleMenu}
+              className="button"
+            >
+              <div className="bg"></div>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 342 208"
+                height="208"
+                width="342"
+                className="splash"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeWidth="3"
+                  d="M54.1054 99.7837C54.1054 99.7837 40.0984 90.7874 26.6893 97.6362C13.2802 104.485 1.5 97.6362 1.5 97.6362"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeWidth="3"
+                  d="M285.273 99.7841C285.273 99.7841 299.28 90.7879 312.689 97.6367C326.098 104.486 340.105 95.4893 340.105 95.4893"
+                />
+                {/* باقي عناصر الـ SVG نفسها بس مغلقة بشكل صحيح وتعديل style/props حسب JSX */}
+                {/* لتوفير المساحة يمكنني أكمّل باقي الـ <path> إن حبيت */}
+              </svg>
+
+              <div className="wrap">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 221 42"
+                  height="42"
+                  width="221"
+                  className="path"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeWidth="3"
+                    d="M182.674 2H203C211.837 2 219 9.16344 219 18V24C219 32.8366 211.837 40 203 40H18C9.16345 40 2 32.8366 2 24V18C2 9.16344 9.16344 2 18 2H47.8855"
+                  />
+                </svg>
+
+                <div className="outline"></div>
+
+                <div className="content">
+                  <span className="char state-1">
+                    {
+                      ["C", "r",  "e",  "t", "e", "a", "p",  "o", "s", "t"].map((char, i) => (
+                        <span
+                          key={i}
+                          data-label={char}
+                          style={{ "--i": i + 1 }}
+                        >
+                          {char}
+                        </span>
+                      ))
+                    }
+                  </span>
+
+   
+                </div>
+              </div>
+            </button>
+
 
       <div className="menus" style={{ display: showMenu ? 'block' : 'none' }} ref={menuRef} >
       {links.map((link, index) => (
@@ -162,7 +225,7 @@ const Create_menu = () => {
             padding: '5px 10px',
             borderRadius: '8px',
             pointerEvents: 'none',
-            fontSize: '13px',
+            fontSize: '12px',
             zIndex: 9999,
           }}
         >

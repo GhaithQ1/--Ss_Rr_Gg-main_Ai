@@ -1,4 +1,3 @@
-
 .main_profile_post {
   display: flex;
   flex-direction: column;
@@ -51,11 +50,11 @@
 .main_profile_post .profile .profile_all img {
   width: 100px;
   position: absolute;
-  top: -80px;
+  top: -50px;
   padding: 5px;
   background-color: white;
   border-radius: 50%;
-  left: 10px;
+  left: 20px;
   /* transform: translateX(-50%); */
   border: 1px solid #ddd;
 }
@@ -101,6 +100,7 @@
   background-color: var(--box-color);
     border-radius: var(--border-radius);
   padding: 20px;
+  text-align: center;
   color: var(--title-color);
 }
 
@@ -330,6 +330,33 @@ background-color:rgb(231 151 151) !important;
 .description_profile h3 {
   color: var(--title-color);
 }
-.description_profile p {
-  color: var(--text-color);
+
+
+.buttom_F{
+  display: flex;
+  justify-content: end;
+}
+
+.buttom_F p {
+background-color: var(--body-color);
+padding: 10px ;
+border-radius: 10px;
+    font-size: var(--text-size);
+}
+.buttom_F .accept_G{
+  width: auto;
+  gap: 10px;
+}
+
+.buttom_F .accept_G button{
+  transition: all 0.3s;
+}
+
+.buttom_F .accept_G button:nth-child(1) {
+background-color: var(--body-color);
+color: black
+}
+
+.buttom_F .accept_G button:nth-child(2):hover {
+    box-shadow: 0 0 8px var(--main-color);
 }

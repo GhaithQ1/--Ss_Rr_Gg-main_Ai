@@ -24,7 +24,6 @@
      border-radius: var(--border-radius);
      border: none;
      background-color: var(--box-color);
-     font-size: var(--text-size);
      border: 2px solid transparent;
      color: var(--text-color);
      resize: none ;
@@ -54,18 +53,7 @@
     color: var(--main-color);
   }
  .Create_Bost_Video_and_image > button{
-    padding: 10px 20px;
-    font-size: 16px;
-    /* margin-top: 15px; */
-    cursor: pointer;
-    background-color: var(--main-color);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    margin-left: auto;
-    display: block;
     margin-top: 20px;
-    font-size: var(--text-size);
  }
 
 
@@ -84,19 +72,22 @@
  .img_vid_flex {
    display: flex;
    flex-wrap: wrap;
-   gap: 15px;
+   gap: 2px;
+   border-radius: var(--border-radius);
+   overflow: hidden;
  }
  
  .remove-btn {
-   position: absolute;
-   top: -8px;
-   right: -8px;
-   background: red;
-   color: white;
-   border: none;
-   border-radius: 50%;
-   width: 24px;
-   height: 24px;
-   cursor: pointer;
-   font-size: 18px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: var(--body-color);
+    color: red;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 10000;
  }

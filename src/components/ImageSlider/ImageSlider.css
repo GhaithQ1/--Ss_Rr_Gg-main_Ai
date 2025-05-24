@@ -45,7 +45,13 @@
     border: 2px solid var(--main-color);
   }
 
+  @media(max-width:767px){
+    .shoole .img_shoole img {
+      width: 90px;
+      height: 90px;
 
+    }
+  }
 
 
   /* تغيير لون النقاط عند التحديد */
@@ -65,23 +71,3 @@
   }
   
 /* ImageSlider */
-
-
-  @media(max-width:767px){
-    .shoole .slick-list{
-      padding-top: 30px;
-    }
-    .shoole .img_shoole img {
-      width: 100%;
-      height: 150px;
-    }
-    .shoole .img_shoole{
-      width: 95% !important;
-    }
-    .shoole .img_shoole img.log{
-      top: -25px;
-    }
-    .shoole .img_shoole .transparent_layer{
-      width: 100%;
-    }
-  }

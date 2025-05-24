@@ -216,11 +216,6 @@
 }
 
 
-
-
-
-
-
 .log_and_sign .container .window_signin button{
     display: flex;
     align-items: center;
@@ -246,23 +241,43 @@ margin: 0;
 .log_and_sign .container .window_signin img{
 }
 
+/* ============================================================== */
+
+
+.log_and_sign .container form .hidden{
+    display: none;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.log_and_sign .container form .hidden span{
+    color: var(--main-color);
+    font-size: 16px;
+}
+
 @media(max-width:767px){
-    .log_and_sign{
-        padding: 0 10px;
-    }
-    .log_and_sign .container form{
-        padding: 0 10px;
-    }
     .log_and_sign .toggle-container{
         display: none;
     }
+
     .log_and_sign .sign-in{
         width: 100%;
     }
-    .log_and_sign .container.active .sign-up{
-        transform: translateX(0);
-    }
+
     .log_and_sign .sign-up{
         width: 100%;
     }
+    .log_and_sign .container.active .sign-up {
+        transform: translateX(0);
+    }
+
+    .log_and_sign .container form .hidden{
+        display: block;
+    }
+
+    .log_and_sign .container {
+        min-height: 550px;
+    }
+
 }
+

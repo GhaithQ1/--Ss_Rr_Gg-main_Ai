@@ -1,13 +1,4 @@
-/* From Uiverse.io by S4tyendra */ 
-.containerr {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin-left: -18px;
-  margin-right: 23px;
 
-}
 
 .containerr .preloader {
   animation: rotate 2.3s cubic-bezier(0.75, 0, 0.5, 1) infinite;
@@ -27,8 +18,8 @@
   --c: #f23f3f;
   position: absolute;
   display: block;
-  height: 15px;
-  width: 15px;
+  height:10px;
+  width: 10px;
   background: var(--c);
   border: 1px solid var(--c);
   border-radius: 100%;

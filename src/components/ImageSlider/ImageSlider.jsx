@@ -12,14 +12,13 @@ const ImageSlider = () => {
   const [cookies, setCookies] = useCookies(["token"]);
   const Navigate = useNavigate();
   const { setGatUserById } = useUser();
-      const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
 
   const [AllImageShoole, SetAllImageShoole] = useState([]);
   const [load_img, SetLoad_img] = useState(false);
   useEffect(() => {
     SetLoad_img(true)
     axios
-      .get(`${API}/user`, {
+      .get(`backendprojecr-production.up.railway.app/api/v2/user`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -35,27 +34,17 @@ const ImageSlider = () => {
         console.error("Error fetching data", error);
       });
   }, []);
-const settings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 4000,
-  arrows: false,
-  swipeToSlide: true,
-  responsive: [
-    {
-      breakpoint: 776,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 1,
-      },
-    },
-  ],
-};
-
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    arrows: false,
+    swipeToSlide: true,
+  };
 
   const images = [
     "./image/test.jpg",
@@ -82,7 +71,7 @@ const settings = {
               className="log"
                src={
                   src.profilImage
-                    ? `https://backendprojecr-production.up.railway.app/user/${src.profilImage}`
+                    ? `backendprojecr-production.up.railway.app/user/${src.profilImage}`
                     : "/image/test.jpg"
                 } alt="" />
               
@@ -92,7 +81,7 @@ const settings = {
                 }}
                 src={
                   src.Cover_image
-                    ? `https://backendprojecr-production.up.railway.app/user/${src.Cover_image}`
+                    ? `backendprojecr-production.up.railway.app/user/${src.Cover_image}`
                     : "/image/test.jpg"
                 }
                 alt={`Image of ${src.name}`}

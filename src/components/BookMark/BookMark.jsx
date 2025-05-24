@@ -27,10 +27,11 @@ import Loading_main from "../Loading_Main/Loading_main";
 import Loading_coment from "../Loading_coment/Loading_coment";
 
 import { createPortal } from "react-dom";
-
+import Info_menu from "../Info_menu/Info_menu";
+import Shools from "../Shools/Shools";
 const MediaGalleryModal = ({ isOpen, onClose, media, currentIndex, setCurrentIndex }) => {
   if (!isOpen) return null;
-    const API = 'https://backendprojecr-production.up.railway.app/api/v2'; 
+  
   const handlePrevious = () => {
     setCurrentIndex(prev => (prev === 0 ? media.length - 1 : prev - 1));
   };
@@ -151,7 +152,7 @@ const BookMark = () => {
     try {
       setrelod_coment(true)
       const res = await axios.post(
-        `${API}/post/create_post_comments/${id}`,
+        `backendprojecr-production.up.railway.app/api/v2/post/create_post_comments/${id}`,
         {
           comment: commentValue,
         },
@@ -173,7 +174,7 @@ const BookMark = () => {
 
   useEffect(() => {
     axios
-      .get(`${API}/auth/get_date_my`, {
+      .get(`backendprojecr-production.up.railway.app/api/v2/auth/get_date_my`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -197,7 +198,7 @@ const BookMark = () => {
     try {
       setRelod_likee(true);
       await axios.post(
-        `${API}/post/toggle_post_like/${id}`,
+        `backendprojecr-production.up.railway.app/api/v2/post/toggle_post_like/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
@@ -216,7 +217,7 @@ const BookMark = () => {
     const fetchMyData = async () => {
       try {
         const res = await axios.get(
-          `${API}/auth/get_date_my`,
+          "backendprojecr-production.up.railway.app/api/v2/auth/get_date_my",
           {
             headers: { Authorization: `Bearer ${cookies.token}` },
           }
@@ -238,7 +239,7 @@ const BookMark = () => {
   const bookMarks = async (id) => {
     try {
       await axios.post(
-        `${API}/auth/toggleSavedPost/${id}`,
+        `backendprojecr-production.up.railway.app/api/v2/auth/toggleSavedPost/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${cookies.token}` },
@@ -271,7 +272,7 @@ const BookMark = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `${API}/post/post_3_chick`, // URL الخاص بالـ API
+        `backendprojecr-production.up.railway.app/api/v2/post/post_3_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -299,7 +300,7 @@ const BookMark = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `${API}/post/post_2_chick`, // URL الخاص بالـ API
+        `backendprojecr-production.up.railway.app/api/v2/post/post_2_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -349,7 +350,7 @@ const BookMark = () => {
 
       // إرسال البيانات إلى API
       const res = await axios.post(
-        `${API}/post/post_4_chick`, // URL الخاص بالـ API
+        `backendprojecr-production.up.railway.app/api/v2/post/post_4_chick`, // URL الخاص بالـ API
         {
           postId: IdPost,
           answers,
@@ -390,7 +391,10 @@ const BookMark = () => {
   return (
     <div className="home">
       <div className="container">
-        <Menu />
+                  <div className="flexinfo">
+          <Info_menu/>
+            <Shools/>
+          </div>
         <div className="bosts">
         <MediaGalleryModal 
             isOpen={galleryModalOpen} 
@@ -449,7 +453,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `https://backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
+                            ? `backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt=""
@@ -462,7 +466,7 @@ const BookMark = () => {
                       </div>
                     </div>
 
-                    <h2>Click on the image and listen</h2>
+                    <h2>Click/Tap the image to hear audio.</h2>
 
                     <div className="click_listen">
                       {currentBoxes.map((pos) => {
@@ -483,7 +487,7 @@ const BookMark = () => {
                             <img
                               src={
                                 pos
-                                  ? `https://backendprojecr-production.up.railway.app/posts/${pos.postImage}`
+                                  ? `backendprojecr-production.up.railway.app/posts/${pos.postImage}`
                                   : null
                               }
                               alt={`Image ${pos._id}`}
@@ -492,7 +496,7 @@ const BookMark = () => {
                               id={pos._id}
                               src={
                                 pos
-                                  ? `https://backendprojecr-production.up.railway.app/posts/${pos.postAudio}`
+                                  ? `backendprojecr-production.up.railway.app/posts/${pos.postAudio}`
                                   : null
                               }
                             ></audio>
@@ -599,7 +603,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
+                                    : `backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -642,7 +646,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `https://backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
+                            ? `backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt={`Image of ${post.post.name}`}
@@ -871,7 +875,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
+                                    : `backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -914,7 +918,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `https://backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
+                            ? `backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt=""
@@ -926,7 +930,7 @@ const BookMark = () => {
                         </span>
                       </div>
                     </div>
-                    <h2>True Or False!!!</h2>
+                    <h2>True or false.</h2>
                     {(() => {
                       if (!post.post || !post.post.questions) return null;
 
@@ -1149,7 +1153,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
+                                    : `backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -1187,7 +1191,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `https://backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
+                            ? `backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt=""
@@ -1259,10 +1263,10 @@ const BookMark = () => {
 
                             return (
                               <div className="image_answer" key={item._id}>
-                                <h2>What's in the picture?</h2>
+                                {item.question ? <h2>{item.question}</h2> : null}
                                 <div className="img_ans">
                                   <img
-                                    src={`https://backendprojecr-production.up.railway.app/posts/${item.img}`}
+                                    src={`backendprojecr-production.up.railway.app/posts/${item.img}`}
                                     alt="Question"
                                   />
                                   <div className="anwser">
@@ -1413,7 +1417,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
+                                    : `backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -1451,7 +1455,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `https://backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
+                            ? `backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt=""
@@ -1470,14 +1474,14 @@ const BookMark = () => {
                       {/* <img
                         src={
                           post.post.img_post
-                            ? `https://backendprojecr-production.up.railway.app/posts/${post.post.img_post}`
+                            ? `backendprojecr-production.up.railway.app/posts/${post.post.img_post}`
                             : null
                         }
                         alt=""
                       />
                       {post.post.video_post ? (
                         <video
-                          src={`https://backendprojecr-production.up.railway.app/posts/${post.post.video_post}`}
+                          src={`backendprojecr-production.up.railway.app/posts/${post.post.video_post}`}
                           controls
                         ></video>
                       ) : null} */}
@@ -1491,7 +1495,7 @@ const BookMark = () => {
         post.post.video_post.forEach((video, index) => {
           allMedia.push({
             type: 'video',
-            src: `https://backendprojecr-production.up.railway.app/posts/${video}`,
+            src: `backendprojecr-production.up.railway.app/posts/${video}`,
             key: `video-${index}`
           });
         });
@@ -1502,7 +1506,7 @@ const BookMark = () => {
         post.post.img_post.forEach((img, index) => {
           allMedia.push({
             type: 'image',
-            src: `https://backendprojecr-production.up.railway.app/posts/${img}`,
+            src: `backendprojecr-production.up.railway.app/posts/${img}`,
             key: `img-${index}`
           });
         });
@@ -1685,7 +1689,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
+                                    : `backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
@@ -1723,7 +1727,7 @@ const BookMark = () => {
                       <img
                         src={
                           post.post.user
-                            ? `https://backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
+                            ? `backendprojecr-production.up.railway.app/user/${post.post.user.profilImage}`
                             : "/image/pngegg.png"
                         }
                         alt=""
@@ -1736,7 +1740,7 @@ const BookMark = () => {
                       </div>
                     </div>
                     <div className="ifrem">
-                      <h2>What's in the picture?</h2>
+                      {/* <h2>What's in the picture?</h2> */}
                       <p>{post.post.ifrem.des}</p>
                       <iframe
                         src={post.post.ifrem ? post.post.ifrem.url : null}
@@ -1821,7 +1825,7 @@ const BookMark = () => {
                                 com.user_comment?.profilImage
                                   ? com.user_comment.profilImage.startsWith("http")
                                     ? com.user_comment.profilImage
-                                    : `https://backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
+                                    : `backendprojecr-production.up.railway.app/user/${com.user_comment.profilImage}`
                                   : "/image/pngegg.png"
                               }
                               alt={`Image of ${com.user_comment?.name || "user"}`}
