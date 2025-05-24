@@ -14,7 +14,7 @@ export default defineConfig({
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#6746e4',
-        description: 'تطبيق ويب تفاعلي يشتغل كأنه تطبيق حقيقي!',
+        description: 'An interactive web application that works like a real application!',
         icons: [
           {
             src: 'icons/icon-256.png',
