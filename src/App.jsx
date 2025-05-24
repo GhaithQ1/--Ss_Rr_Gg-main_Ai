@@ -35,9 +35,7 @@ function AppContent() {
   useEffect(() => {
     if (token && !cookies.token) {
       setCookies("token", token, { path: "/" });
-    } else if (!token) {
-      navigate("/signandlog");
-    }
+    } 
   }, [token, cookies, navigate, setCookies]);
 
   const location = useLocation();
