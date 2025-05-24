@@ -13,7 +13,7 @@ export default defineConfig({
         start_url: '.',
         display: 'standalone',
         background_color: '#ffffff',
-        theme_color: '#4CAF50',
+        theme_color: '#6746e4',
         description: 'تطبيق ويب تفاعلي يشتغل كأنه تطبيق حقيقي!',
         icons: [
           {
