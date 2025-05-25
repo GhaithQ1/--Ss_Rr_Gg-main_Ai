@@ -15,15 +15,20 @@ const Menu = () => {
     return storedTheme === 'dark';
   });
 
-  useEffect(() => {
-    if (isToggled) {
-      document.body.classList.add('root_da');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.body.classList.remove('root_da');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [isToggled]);
+useEffect(() => {
+  const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+  if (isToggled) {
+    document.body.classList.add('root_da');
+    localStorage.setItem('theme', 'dark');
+    if (themeColorMeta) themeColorMeta.setAttribute('content', '#1f1a32'); // لون الدارك
+  } else {
+    document.body.classList.remove('root_da');
+    localStorage.setItem('theme', 'light');
+    if (themeColorMeta) themeColorMeta.setAttribute('content', '#f0edf5'); // لون اللايت
+  }
+}, [isToggled]);
+
 
   const handleToggle = () => {
     setIsToggled((prev) => !prev);
