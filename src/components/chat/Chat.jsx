@@ -255,9 +255,9 @@ const Chat = () => {
                 <img
                   src={
                     friend?.profilImage
-                      ? friend.profilImage.startsWith("http")
-                        ? friend.profilImage
-                        : `backendprojecr-production.up.railway.app/user/${friend.profilImage}`
+                      ? friend?.profilImage.startsWith("http")
+                        ? friend?.profilImage
+                        : `backendprojecr-production.up.railway.app/user/${friend?.profilImage}`
                       : "/image/pngegg.png"
                   }
                   alt={`Image of ${friend?.name}`}
@@ -288,15 +288,15 @@ const Chat = () => {
                 <div className="img_req">
                   <img
                     src={
-                      friend.profilImage
-                        ? friend.profilImage.startsWith("http")
-                          ? friend.profilImage
-                          : `backendprojecr-production.up.railway.app/user/${friend.profilImage}`
+                      friend?.profilImage
+                        ? friend?.profilImage.startsWith("http")
+                          ? friend?.profilImage
+                          : `backendprojecr-production.up.railway.app/user/${friend?.profilImage}`
                         : "/image/pngegg.png"
                     }
-                    alt={`Image of ${friend.name}`}
+                    alt={`Image of ${friend?.name}`}
                   />
-                  <p>{friend.name}</p>
+                  <p>{friend?.name}</p>
                 </div>
                 <div className="accept">
                   {/* <button onClick={() => rejectRequest(friend._id)}>
@@ -306,16 +306,16 @@ const Chat = () => {
                    <button
                               type="submit"
                               onClick={() => {
-                                rejectRequest(friend._id);
+                                rejectRequest(friend?._id);
                               }}
                               className="button reject_"
                               style={{
                                 opacity:
-                                  reqLoading && reqLoadingId === friend._id
+                                  reqLoading && reqLoadingId === friend?._id
                                     ? 0.6
                                     : 1,
                                 pointerEvents:
-                                  reqLoading && reqLoadingId === friend._id
+                                  reqLoading && reqLoadingId === friend?._id
                                     ? "none"
                                     : "auto",
                                 position: "relative",
@@ -365,7 +365,7 @@ const Chat = () => {
 
                                 <div className="content">
                                   <span className="char state-1">
-                                    {reqLoading && reqLoadingId === friend._id ? (
+                                    {reqLoading && reqLoadingId === friend?._id ? (
                                       <Loading_button />
                                     ) : (
                                       ["R", "e", "j", "e", "c", "t"].map(
@@ -388,15 +388,15 @@ const Chat = () => {
 
                              <button
                               type="submit"
-                              onClick={() => acceptRequest(friend._id)}
+                              onClick={() => acceptRequest(friend?._id)}
                               className="button"
                               style={{
                                 opacity:
-                                  reqLoading && reqLoadingId === friend._id
+                                  reqLoading && reqLoadingId === friend?._id
                                     ? 0.6
                                     : 1,
                                 pointerEvents:
-                                  reqLoading && reqLoadingId === friend._id
+                                  reqLoading && reqLoadingId === friend?._id
                                     ? "none"
                                     : "auto",
                                 position: "relative",
@@ -446,7 +446,7 @@ const Chat = () => {
 
                                 <div className="content">
                                   <span className="char state-1">
-                                    {reqLoading && reqLoadingId === friend._id ? (
+                                    {reqLoading && reqLoadingId === friend?._id ? (
                                       <Loading_button />
                                     ) : (
                                       ["A", "c", "c", "e", "p", "t"].map(
@@ -489,33 +489,33 @@ const Chat = () => {
         <div className="general">
           {allUsers?.length ? (
             allUsers
-              .filter((user) => user._id !== myData?._id) // تصفية المستخدم الذي يتوافق مع myData
+              .filter((user) => user?._id !== myData?._id) // تصفية المستخدم الذي يتوافق مع myData
               .map((user, i) => (
                 <div key={i} className="req">
                   <div
                     className="img_req"
-                    onClick={() => Navigate(`/Get_Shoole_By/${user._id}`)}
+                    onClick={() => Navigate(`/Get_Shoole_By/${user?._id}`)}
                   >
                     {/* {console.log(user)} */}
                     <img
                       src={
-                        user.profilImage
-                          ? user.profilImage.startsWith("http")
-                            ? user.profilImage
-                            : `backendprojecr-production.up.railway.app/user/${user.profilImage}`
+                        user?.profilImage
+                          ? user?.profilImage.startsWith("http")
+                            ? user?.profilImage
+                            : `backendprojecr-production.up.railway.app/user/${user?.profilImage}`
                           : "/image/pngegg.png"
                       }
-                      alt={`Image of ${user.name}`}
+                      alt={`Image of ${user?.name}`}
                     />
-                    <p>{user.name}</p>
+                    <p>{user?.name}</p>
                   </div>
                   <div className="accept">
                     {friends.some((f) => f.friend?._id === user?._id) ? (
                       <p>Friends</p>
                     ) : null}
-                    {friendRequests.some((f) => f.friend._id === user._id) ? (
+                    {friendRequests.some((f) => f.friend._id === user?._id) ? (
                       <div className="accept_G">
-                        {rejectedIds.includes(user._id) ? (
+                        {rejectedIds.includes(user?._id) ? (
                           <p >
                             Request rejected
                           </p>
@@ -525,16 +525,16 @@ const Chat = () => {
                             <button
                               type="submit"
                               onClick={() => {
-                                rejectRequest(user._id);
+                                rejectRequest(user?._id);
                               }}
                               className="button reject_"
                               style={{
                                 opacity:
-                                  reqLoading && reqLoadingId === user._id
+                                  reqLoading && reqLoadingId === user?._id
                                     ? 0.6
                                     : 1,
                                 pointerEvents:
-                                  reqLoading && reqLoadingId === user._id
+                                  reqLoading && reqLoadingId === user?._id
                                     ? "none"
                                     : "auto",
                                 position: "relative",
@@ -584,7 +584,7 @@ const Chat = () => {
 
                                 <div className="content">
                                   <span className="char state-1">
-                                    {reqLoading && reqLoadingId === user._id ? (
+                                    {reqLoading && reqLoadingId === user?._id ? (
                                       <Loading_button />
                                     ) : (
                                       ["R", "e", "j", "e", "c", "t"].map(
@@ -609,17 +609,17 @@ const Chat = () => {
                             <button
                               type="submit"
                               onClick={() => {
-                                acceptRequest(user._id);
-                                setReqLoadingId(user._id);
+                                acceptRequest(user?._id);
+                                setReqLoadingId(user?._id);
                               }}
                               className="button"
                               style={{
                                 opacity:
-                                  reqLoading && reqLoadingId === user._id
+                                  reqLoading && reqLoadingId === user?._id
                                     ? 0.6
                                     : 1,
                                 pointerEvents:
-                                  reqLoading && reqLoadingId === user._id
+                                  reqLoading && reqLoadingId === user?._id
                                     ? "none"
                                     : "auto",
                                 position: "relative",
@@ -669,7 +669,7 @@ const Chat = () => {
 
                                 <div className="content">
                                   <span className="char state-1">
-                                    {reqLoading && reqLoadingId === user._id ? (
+                                    {reqLoading && reqLoadingId === user?._id ? (
                                       <Loading_button />
                                     ) : (
                                       ["A", "c", "c", "e", "p", "t"].map(
@@ -692,7 +692,7 @@ const Chat = () => {
                         )}
                       </div>
                     ) : null}
-                    {user.Friend_requests.some(
+                    {user?.Friend_requests.some(
                       (f) => f.friend === myData?._id
                     ) ? (
                       <p>You have sent a friend request</p>
@@ -702,23 +702,23 @@ const Chat = () => {
                     ) : null}
                     {!friends.some((f) => f.friend?._id === user?._id) &&
                     !friendRequests.some((f) => f.friend._id === user._id) &&
-                    !user.Friend_requests.some(
+                    !user?.Friend_requests.some(
                       (f) => f.friend === myData?._id
                     ) &&
                     !user.followers.some((f) => f.friend === myData?._id) ? (
                       <button
                         type="submit"
                         onClick={() => {
-                          handleSendRequest(user._id);
-                          setLoadid(user._id);
+                          handleSendRequest(user?._id);
+                          setLoadid(user?._id);
                         }}
                         className="button"
                         style={{
-                          opacity: load && loadid === user._id ? 0.6 : 1,
+                          opacity: load && loadid === user?._id ? 0.6 : 1,
                           pointerEvents:
-                            load && loadid === user._id ? "none" : "auto",
+                            load && loadid === user?._id ? "none" : "auto",
                           position: "relative",
-                          width: user.role === "employee" ? "80px" : "120px",
+                          width: user?.role === "employee" ? "80px" : "120px",
                         }}
                       >
                         <div className="bg"></div>
@@ -765,9 +765,9 @@ const Chat = () => {
 
                           <div className="content">
                             <span className="char state-1">
-                              {load && loadid === user._id ? (
+                              {load && loadid === user?._id ? (
                                 <Loading_button />
-                              ) : user.role === "employee" ? (
+                              ) : user?.role === "employee" ? (
                                 ["F", "o", "l", "l", "o", "w"].map(
                                   (char, i) => (
                                     <span
